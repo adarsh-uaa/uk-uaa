@@ -9,7 +9,7 @@ useHead({ link: [{ rel: 'canonical', href: url }] })
         <main>
             <section class="interior-hero">
                 <div class="container"><span class="luxe-kicker">THE ART OF EFFORTLESS TRAVEL</span>
-                    <h1>Arrange your <em>journey.</em></h1>
+                    <h1 style="color: #F4EADF;">Arrange your <em>journey.</em></h1>
                     <p>Tell us a little about your plans. We’ll help coordinate the finer details.</p>
                 </div>
             </section>
