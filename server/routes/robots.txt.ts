@@ -1,0 +1,1 @@
+export default defineEventHandler(()=>{const site=useRuntimeConfig().public.siteUrl;return `User-agent: *\nAllow: /\nDisallow: /api/\nSitemap: ${site}/sitemap.xml\n`})

@@ -1,0 +1,1 @@
+Add your licensed, optimized hero video here as `hero.mp4` (ideally muted, 8–15 seconds, 1080p, under ~4 MB if feasible). The hero currently uses `/images/hero-poster.svg` until that file is provided. Never use the reference site's media without a license.
