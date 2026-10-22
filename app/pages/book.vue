@@ -19,9 +19,9 @@ useHead({ link: [{ rel: 'canonical', href: url }] })
                     <aside class="booking-aside"><span class="luxe-kicker">A MORE CONSIDERED JOURNEY</span>
                         <h2>Exclusively yours.</h2>
                         <p>Premium meet and assist services across the United Kingdom, tailored to your airport and
-                            journey.</p><img src="/images/hero-poster.svg" alt="Air travel-inspired illustration" />
-                        <p class="subtle-note">This is a request form. Supplier confirmation is required before any
-                            booking is final.</p>
+                            journey.</p><img src="/images/airport.webp" alt="Air travel-inspired illustration" />
+                        <!-- <p class="subtle-note">This is a request form. Supplier confirmation is required before any
+                            booking is final.</p> -->
                     </aside>
                 </div>
             </section>
