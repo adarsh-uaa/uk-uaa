@@ -15,9 +15,14 @@ const year = new Date().getFullYear()
     <div class="container">
       <div class="uaa-footer-top">
         <div class="uaa-footer-brand">
-          <NuxtLink to="/" class="uaa-footer-logo">
-            <span>UK</span>
-            <small>AIRPORT ASSISTANCE</small>
+          <NuxtLink to="/" class="uaa-footer-logo footer-brand-logo">
+            <img
+              src="/images/uk-airport-assistance-logo.png"
+              alt="UK Airport Assistance – Powered By"
+              width="2020"
+              height="779"
+              loading="lazy"
+            />
           </NuxtLink>
 
           <p>
