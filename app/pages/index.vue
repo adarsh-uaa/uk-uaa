@@ -47,7 +47,7 @@ function toggleSound() { muted.value = !muted.value; if (vid.value) vid.value.mu
                     </div>
                     <h1 class="luxe-hero-heading">
                         <span class="line-reveal" style="color: #F4EADF;">The art of</span>
-                        <span class="line-reveal" style="--line-delay: .15s;">
+                        <span class="line-reveal" style="--line-delay: .05s;">
                             <em style="color: #DCC5A5;">arriving.</em>
                         </span>
                     </h1>
@@ -63,15 +63,18 @@ function toggleSound() { muted.value = !muted.value; if (vid.value) vid.value.mu
                     <div class="luxe-hero-foot"><a href="#experience" class="luxe-scroll">
                             <!-- <ArrowDown :size="17" /> SCROLL TO EXPLORE -->
                         </a>
-                        <div class="luxe-video-controls"><button v-if="!videoFailed" @click="toggleVideo"
+                        <div class="luxe-video-controls">
+                            <!-- <button v-if="!videoFailed" @click="toggleVideo"
                                 :aria-label="playing ? 'Pause video' : 'Play video'">
                                 <Pause v-if="playing" :size="17" />
                                 <Play v-else :size="17" />
-                            </button><button v-if="!videoFailed" @click="toggleSound"
-                                :aria-label="muted ? 'Unmute' : 'Mute'">
+                            </button>
+                            <button v-if="!videoFailed" @click="toggleSound" :aria-label="muted ? 'Unmute' : 'Mute'">
                                 <VolumeX v-if="muted" :size="17" />
                                 <Volume2 v-else :size="17" />
-                            </button><span>UNITED KINGDOM · VIP CONCIERGE</span></div>
+                            </button> -->
+                            <span>UNITED KINGDOM · VIP CONCIERGE</span>
+                        </div>
                     </div>
                 </div>
             </section>

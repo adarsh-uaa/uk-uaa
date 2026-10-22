@@ -35,21 +35,17 @@ body {
 .luxe-page h2,
 .luxe-page h3 {
   font-family: "Playfair Display", Georgia, serif;
-
   font-weight: 400;
-
   letter-spacing: -0.055em;
 }
 
 .luxe-page h2 {
   font-size: clamp(3.3rem, 6.7vw, 7.6rem);
-
   line-height: 1.04;
 }
 
 .luxe-page h2 em {
   font-weight: 400;
-
   color: #a28a65;
 }
 
@@ -63,23 +59,16 @@ body {
 
 .luxe-kicker {
   font-size: 10px;
-
   letter-spacing: 0.22em;
-
   text-transform: uppercase;
-
   font-weight: 700;
-
   color: #967a56;
 }
 
 .luxe-link {
   display: inline-flex;
-
   gap: 34px;
-
   align-items: center;
-
   padding-bottom: 13px;
   border-bottom: 1px solid #a28a65;
   font-size: 12px;
@@ -104,7 +93,6 @@ body {
 
 .luxe-page .site-header.header-scrolled .nav-cta {
   color: #2d2924;
-
   border-color: #b4a48a;
 }
 
@@ -130,15 +118,10 @@ body {
 
 .luxe-hero {
   min-height: 760px;
-
   height: min(900px, 100svh);
-
   position: relative;
-
   color: white;
-
   background: #40433f;
-
   overflow: hidden;
 }
 
@@ -146,11 +129,8 @@ body {
 .luxe-video,
 .luxe-hero-shade {
   position: absolute;
-
   inset: 0;
-
   height: 100%;
-
   width: 100%;
 }
 
@@ -171,120 +151,85 @@ body {
 
 .luxe-hero-content {
   position: relative;
-
   height: 100%;
-
   padding-top: clamp(205px, 17vw, 250px);
 }
 
 .luxe-mini {
   display: flex;
-
   align-items: center;
-
   gap: 15px;
-
   font-size: 10px;
-
   font-weight: 600;
-
   letter-spacing: 0.19em;
-
   color: #f4eae0;
 }
 
 .luxe-mini > span:last-child {
   margin-left: auto;
-
   font-size: 9px;
-
   opacity: 0.8;
 }
 
 .luxe-rule {
   width: 39px;
-
   height: 1px;
-
   background: #e4c7a3;
 }
 
 .luxe-hero-heading {
   font-size: clamp(5.6rem, 11.7vw, 12.4rem);
-
   line-height: 0.93;
-
   margin: 40px 0 32px;
-
   max-width: 1040px;
 }
 
 .luxe-hero-heading em {
   color: #ead9c5;
-
   font-weight: 400;
 }
 
 .line-reveal {
   display: block;
-
   clip-path: inset(0 0 100% 0);
-
   transform: translateY(35px);
-
   animation: lineUp 1.1s cubic-bezier(0.2, 0.8, 0.2, 1)
-    calc(3s + var(--line-delay, 0s)) both;
+    calc(2s + var(--line-delay, 0s)) both;
 }
 
 @keyframes lineUp {
   to {
     clip-path: inset(0 0 0 0);
-
     transform: translateY(0);
   }
 }
 
 .luxe-hero-lead {
   font-size: 16px;
-
   max-width: 470px;
-
   color: #eeeae4;
-
   line-height: 1.85;
 }
 
 .luxe-hero-actions {
   display: flex;
-
   align-items: center;
-
   gap: 32px;
-
   margin-top: 30px;
-
   flex-wrap: wrap;
 }
 
 .luxe-button {
   display: inline-flex;
-
   align-items: center;
-
   gap: 45px;
-
   padding: 19px 23px;
-
   justify-content: space-between;
-
   transition:
     background 0.3s,
     transform 0.3s;
-
   white-space: nowrap;
-
   font-size: 12px;
-
   font-weight: 650;
 }
 
@@ -1106,8 +1051,8 @@ body {
   place-items: center;
 
   transition:
-    opacity 0.45s ease,
-    visibility 0.45s ease;
+    opacity 0.3s ease,
+    visibility 0.3s ease;
 }
 
 .flight-loader.loader-exit {
@@ -1194,7 +1139,7 @@ body {
 
   color: #e3cba6;
 
-  animation: planeTrip 3s cubic-bezier(0.25, 0.1, 0.7, 0.95) forwards;
+  animation: planeTrip 1.5s cubic-bezier(0.25, 0.1, 0.7, 0.95) forwards;
 }
 
 .loader-overline {
@@ -1238,7 +1183,7 @@ body {
 
   transform-origin: left;
 
-  animation: loaderFill 3s linear forwards;
+  animation: loaderFill 1.5s linear forwards;
 }
 
 .loader-bottom {
