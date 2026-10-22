@@ -194,7 +194,7 @@ body {
   clip-path: inset(0 0 100% 0);
   transform: translateY(35px);
   animation: lineUp 1.1s cubic-bezier(0.2, 0.8, 0.2, 1)
-    calc(2s + var(--line-delay, 0s)) both;
+    calc(0.2s + var(--line-delay, 0s)) both;
 }
 
 @keyframes lineUp {
@@ -313,7 +313,7 @@ body {
 }
 
 .fade-up {
-  animation: fadeU 0.9s ease 3.25s both;
+  animation: fadeU 0.3s ease 1.25s both;
 }
 
 @keyframes fadeU {
@@ -1857,8 +1857,23 @@ body {
   margin: 24px 0;
 }
 
-.interior-hero {
+/* .interior-hero {
   background: #272825;
+  color: #f8f4eb;
+  padding: 180px 0 100px;
+} */
+.interior-hero {
+  position: relative;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(17, 30, 47, 0.9) 0%,
+      rgba(17, 30, 47, 0.75) 50%,
+      rgba(17, 30, 47, 0.45) 100%
+    ),
+    url("/images/hero-cover.webp") center center / cover no-repeat;
+
   color: #f8f4eb;
   padding: 180px 0 100px;
 }
