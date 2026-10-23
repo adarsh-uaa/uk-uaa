@@ -3979,3 +3979,202 @@ body {
     font-size: 22px;
   }
 }
+
+/* ===========================================
+   BOOKING FORM — REFERENCE LAYOUT
+   =========================================== */
+
+.reference-booking {
+  width: 100%;
+  min-width: 0;
+}
+
+.reference-booking .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 18px;
+  row-gap: 18px;
+  align-items: start;
+}
+
+.reference-booking .premium-field {
+  min-width: 0;
+}
+
+.reference-booking .premium-field > span,
+.reference-booking .premium-field > label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.reference-booking .premium-field > input,
+.reference-booking .premium-field > select {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  border-radius: 5px;
+}
+
+.reference-booking .reference-flight-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 18px;
+}
+
+.reference-services-select {
+  position: relative;
+  width: 100%;
+}
+
+.reference-services-trigger {
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  gap: 10px;
+  border: 1px solid #d8d2c7;
+  border-radius: 5px;
+  background: #fff;
+  color: #182a40;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.reference-services-trigger:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.reference-services-menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #fff;
+  border: 1px solid #dedad2;
+  border-radius: 6px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.reference-services-menu > input {
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 13px;
+  border: 0;
+  border-bottom: 1px solid #e6e0d6;
+  border-radius: 0;
+  outline: none;
+}
+
+.reference-services-options {
+  max-height: 230px;
+  overflow-y: auto;
+}
+
+.reference-services-option {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 13px;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.reference-services-option:hover {
+  background: #f7f3ed;
+}
+
+.reference-services-option input[type="checkbox"],
+.reference-communication input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  min-height: 16px;
+  flex: 0 0 16px;
+  padding: 0;
+  margin: 0;
+  accent-color: #182a40;
+}
+
+.reference-selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.reference-selected-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border-radius: 5px;
+  border: 1px solid #dedad2;
+  background: #f9f6f0;
+  color: #182a40;
+  font-size: 11px;
+}
+
+.reference-selected-tag button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #9b1c31;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.reference-communication {
+  margin-top: 23px;
+}
+
+.reference-communication > p {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 13px;
+}
+
+.reference-communication-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 20px;
+}
+
+.reference-communication-options .checkbox-choice {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+}
+
+.reference-booking .consent {
+  margin-top: 20px;
+}
+
+.reference-book-button {
+  width: 100%;
+  min-height: 49px;
+  margin-top: 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 767px) {
+  .reference-booking .form-grid,
+  .reference-booking .reference-flight-grid {
+    grid-template-columns: 1fr;
+    row-gap: 15px;
+  }
+
+  .reference-communication-options {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

@@ -4,113 +4,110 @@ import {
     journeyTypes,
     extrasCatalog,
     selectAirport
-} from '~/data/booking'
+} from "~/data/booking";
 
 import {
     getAirportTerminals,
-    getTerminalDetails,
     getServicePackages,
+    getSelectedServicePackages,
     type TerminalSlug
-} from '~/data/terminalServices'
+} from "~/data/terminalServices";
 
-const props = withDefaults(defineProps<{
-    hideDetails?: boolean
-    airport: string
-    terminal?: TerminalSlug
-    service: string
-    packageSlug?: string
-    extras: string[]
-    showExtras?: boolean
-}>(), {
-    terminal: 'normal',
-    packageSlug: '',
-    showExtras: false
-})
+const props = withDefaults(
+    defineProps<{
+        airport: string;
+        terminal?: TerminalSlug;
+        service: string;
+        packageSlugs?: string[];
+        extras: string[];
+        showExtras?: boolean;
+        hideDetails?: boolean;
+    }>(),
+    {
+        terminal: "normal",
+        packageSlugs: () => [],
+        showExtras: false,
+        hideDetails: false
+    }
+);
 
 const emit = defineEmits<{
-    'update:airport': [value: string]
-    'update:terminal': [value: TerminalSlug]
-    'update:service': [value: string]
-    'update:packageSlug': [value: string]
-    'update:extras': [value: string[]]
-}>()
+    "update:airport": [value: string];
+    "update:terminal": [value: TerminalSlug];
+    "update:service": [value: string];
+    "update:packageSlugs": [value: string[]];
+    "update:extras": [value: string[]];
+}>();
 
-const current = computed(() =>
-    selectAirport(props.airport)
-)
+const dropdownOpen = ref(false);
+const search = ref("");
+const dropdownRef = ref<HTMLElement | null>(null);
+
+const current = computed(() => selectAirport(props.airport));
 
 const terminals = computed(() =>
     getAirportTerminals(props.airport)
-)
+);
 
 const terminalOptions = computed(() => {
-    const options: {
-        slug: TerminalSlug
-        label: string
-    }[] = [
-            {
-                slug: 'normal',
-                label: terminals.value.normal.label
-            }
-        ]
+    const options: { slug: TerminalSlug; label: string }[] = [
+        {
+            slug: "normal",
+            label: terminals.value.normal.label
+        }
+    ];
 
-    const vip = terminals.value.vip
+    const vip = terminals.value.vip;
 
     if (
         vip &&
         Object.values(vip.services).some(
-            items => items && items.length > 0
+            packages => packages && packages.length > 0
         )
     ) {
         options.push({
-            slug: 'vip',
+            slug: "vip",
             label: vip.label
-        })
+        });
     }
 
-    return options
-})
+    return options;
+});
 
 const activeTerminal = computed<TerminalSlug>(() =>
     terminalOptions.value.some(
-        item => item.slug === props.terminal
+        x => x.slug === props.terminal
     )
         ? props.terminal
-        : 'normal'
-)
-
-const terminalConfig = computed(() =>
-    getTerminalDetails(
-        props.airport,
-        activeTerminal.value
-    )
-)
+        : "normal"
+);
 
 const availableTypes = computed(() => {
-    const types = current.value.types as readonly string[]
-
-    if (activeTerminal.value === 'vip') {
-        return journeyTypes.filter(type =>
-            getServicePackages(
-                props.airport,
-                'vip',
-                type.slug
-            ).length > 0
-        )
+    if (activeTerminal.value === "vip") {
+        return journeyTypes.filter(
+            type =>
+                getServicePackages(
+                    props.airport,
+                    "vip",
+                    type.slug
+                ).length > 0
+        );
     }
 
-    return journeyTypes.filter(type =>
-        types.includes(type.slug)
-    )
-})
+    const allowed = current.value.types as readonly string[];
+
+    return journeyTypes.filter(
+        type => allowed.includes(type.slug)
+    );
+});
 
 const activeService = computed(() =>
     availableTypes.value.some(
-        item => item.slug === props.service
+        x => x.slug === props.service
     )
         ? props.service
-        : availableTypes.value[0]?.slug || ''
-)
+        : availableTypes.value[0]?.slug ?? ""
+);
 
 const packages = computed(() =>
     getServicePackages(
@@ -118,117 +115,166 @@ const packages = computed(() =>
         activeTerminal.value,
         activeService.value
     )
-)
+);
 
-const selectedPackageSlug = computed(() =>
-    packages.value.some(
-        item => item.slug === props.packageSlug
+const selectedPackages = computed(() =>
+    getSelectedServicePackages(
+        props.airport,
+        activeTerminal.value,
+        activeService.value,
+        props.packageSlugs
     )
-        ? props.packageSlug
-        : packages.value[0]?.slug || ''
-)
+);
 
-const selectedPackage = computed(() =>
-    packages.value.find(
-        item => item.slug === selectedPackageSlug.value
-    )
-)
+const filteredPackages = computed(() => {
+    const q = search.value.trim().toLowerCase();
+
+    return packages.value.filter(
+        item =>
+            item.title.toLowerCase().includes(q) ||
+            item.slug.toLowerCase().includes(q)
+    );
+});
 
 const availableExtras = computed(() =>
-    extrasCatalog.filter(extra =>
-        (current.value.extras as readonly string[])
-            .includes(extra.slug)
+    extrasCatalog.filter(
+        item =>
+            (current.value.extras as readonly string[])
+                .includes(item.slug)
     )
-)
+);
 
 watch(
     [
         () => props.airport,
         () => props.terminal,
         () => props.service,
-        () => props.packageSlug
+        () => props.packageSlugs,
+        () => props.extras
     ],
     () => {
         if (props.terminal !== activeTerminal.value) {
-            emit('update:terminal', activeTerminal.value)
+            emit("update:terminal", activeTerminal.value);
         }
 
         if (props.service !== activeService.value) {
-            emit('update:service', activeService.value)
+            emit("update:service", activeService.value);
         }
 
-        if (props.packageSlug !== selectedPackageSlug.value) {
-            emit('update:packageSlug', selectedPackageSlug.value)
+        const allowedPackages = new Set(
+            packages.value.map(item => item.slug)
+        );
+
+        const validPackages = [
+            ...new Set(
+                props.packageSlugs.filter(
+                    slug => allowedPackages.has(slug)
+                )
+            )
+        ];
+
+        if (
+            JSON.stringify(validPackages) !==
+            JSON.stringify(props.packageSlugs)
+        ) {
+            emit("update:packageSlugs", validPackages);
         }
 
-        const allowed = props.extras.filter(slug =>
-            availableExtras.value.some(item => item.slug === slug)
-        )
+        const allowedExtras = new Set(
+            availableExtras.value.map(x => x.slug)
+        );
 
-        if (allowed.length !== props.extras.length) {
-            emit('update:extras', allowed)
+        const validExtras = props.extras.filter(
+            slug => allowedExtras.has(slug)
+        );
+
+        if (validExtras.length !== props.extras.length) {
+            emit("update:extras", validExtras);
         }
     },
     { immediate: true }
-)
+);
 
 function changeAirport(event: Event) {
-    emit(
-        'update:airport',
-        (event.target as HTMLSelectElement).value
-    )
-    emit('update:terminal', 'normal')
-    emit('update:packageSlug', '')
-    emit('update:extras', [])
+    const value = (event.target as HTMLSelectElement).value;
+
+    emit("update:airport", value);
+    emit("update:terminal", "normal");
+    emit("update:packageSlugs", []);
+    emit("update:extras", []);
 }
 
 function changeTerminal(event: Event) {
     emit(
-        'update:terminal',
+        "update:terminal",
         (event.target as HTMLSelectElement).value as TerminalSlug
-    )
-    emit('update:packageSlug', '')
-    emit('update:extras', [])
+    );
+
+    emit("update:packageSlugs", []);
+    emit("update:extras", []);
 }
 
 function changeService(event: Event) {
     emit(
-        'update:service',
+        "update:service",
         (event.target as HTMLSelectElement).value
-    )
-    emit('update:packageSlug', '')
-    emit('update:extras', [])
+    );
+
+    emit("update:packageSlugs", []);
+    emit("update:extras", []);
+}
+
+function togglePackage(slug: string) {
+    const selected = props.packageSlugs.includes(slug);
+
+    emit(
+        "update:packageSlugs",
+        selected
+            ? props.packageSlugs.filter(x => x !== slug)
+            : [...props.packageSlugs, slug]
+    );
 }
 
 function toggleExtra(slug: string, checked: boolean) {
     emit(
-        'update:extras',
+        "update:extras",
         checked
             ? [...new Set([...props.extras, slug])]
-            : props.extras.filter(item => item !== slug)
-    )
+            : props.extras.filter(x => x !== slug)
+    );
 }
 
-function formatPrice(
-    amount: number,
-    currency: string
-) {
-    return new Intl.NumberFormat('en-GB', {
-        style: 'currency',
+function handleOutside(event: PointerEvent) {
+    if (
+        dropdownRef.value &&
+        !dropdownRef.value.contains(event.target as Node)
+    ) {
+        dropdownOpen.value = false;
+    }
+}
+
+function formatPrice(amount: number, currency: string) {
+    return new Intl.NumberFormat("en-GB", {
+        style: "currency",
         currency,
         maximumFractionDigits: 0
-    }).format(amount)
+    }).format(amount);
 }
+
+onMounted(() => {
+    document.addEventListener("pointerdown", handleOutside);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener("pointerdown", handleOutside);
+});
 </script>
 
 <template>
     <div class="airport-service-selector">
-
         <div class="linked-fields">
-
             <label class="premium-field">
                 <span>Airport *</span>
-
                 <select :value="airport" required @change="changeAirport">
                     <option v-for="item in airportsCatalog" :key="item.slug" :value="item.slug">
                         {{ item.name }} ({{ item.code }})
@@ -238,7 +284,6 @@ function formatPrice(
 
             <label class="premium-field">
                 <span>Terminal Type *</span>
-
                 <select :value="activeTerminal" required @change="changeTerminal">
                     <option v-for="item in terminalOptions" :key="item.slug" :value="item.slug">
                         {{ item.label }}
@@ -248,118 +293,95 @@ function formatPrice(
 
             <label class="premium-field">
                 <span>Journey Type *</span>
-
-                <select :value="activeService" :disabled="!availableTypes.length" required @change="changeService">
+                <select :value="activeService" required :disabled="!availableTypes.length" @change="changeService">
                     <option v-for="item in availableTypes" :key="item.slug" :value="item.slug">
                         {{ item.name }}
                     </option>
                 </select>
             </label>
-
         </div>
 
-        <section v-if="packages.length" class="terminal-packages" aria-label="Available service packages">
-            <div class="terminal-packages-heading">
-                <span class="micro-label">
-                    AVAILABLE SERVICES
-                </span>
+        <div class="premium-field terminal-multi-field">
+            <span>Service Packages</span>
 
-                <h3>Choose your preferred service</h3>
-
-                <p>
-                    Select a package to view its inclusions
-                    and available pricing.
-                </p>
-            </div>
-
-            <div class="terminal-package-grid">
-                <button v-for="item in packages" :key="item.slug" type="button" class="terminal-package-card" :class="{
-                    'is-selected': selectedPackageSlug === item.slug
-                }" :aria-pressed="selectedPackageSlug === item.slug" @click="emit('update:packageSlug', item.slug)">
-                    <span class="terminal-package-status">
-                        {{ selectedPackageSlug === item.slug
-                            ? 'SELECTED'
-                            : 'VIEW SERVICE' }}
+            <div ref="dropdownRef" class="terminal-multi" @keydown.esc="dropdownOpen = false">
+                <button type="button" class="terminal-multi-trigger" :aria-expanded="dropdownOpen"
+                    aria-controls="terminal-package-options" :disabled="!packages.length"
+                    @click="dropdownOpen = !dropdownOpen">
+                    <span>
+                        {{
+                            selectedPackages.length
+                                ? `${selectedPackages.length} services selected`
+                                : packages.length
+                                    ? "Select service packages"
+                                    : "No packages configured"
+                        }}
                     </span>
 
-                    <strong>{{ item.title }}</strong>
-
-                    <span class="terminal-package-info">
-                        {{ item.inclusions.length }}
-                        service inclusions
-                    </span>
-
-                    <span class="terminal-package-price">
-                        <template v-if="item.price">
-                            {{ formatPrice(
-                                item.price.amount,
-                                item.price.currency
-                            ) }}
-                            <small>
-                                Up to {{ item.price.upToPassengers }}
-                                passengers
-                            </small>
-                        </template>
-
-                        <template v-else>
-                            Price on request
-                        </template>
-                    </span>
-
-                    <span class="terminal-package-select">
-                        {{ selectedPackageSlug === item.slug
-                            ? '✓ Selected'
-                            : 'Select package →' }}
-                    </span>
+                    <span aria-hidden="true">⌄</span>
                 </button>
+
+                <div v-if="dropdownOpen" id="terminal-package-options" class="terminal-multi-menu">
+                    <input v-model="search" type="search" placeholder="Search services..."
+                        aria-label="Search service packages" autocomplete="off" />
+
+                    <div class="terminal-multi-options">
+                        <label v-for="item in filteredPackages" :key="item.slug" class="terminal-multi-option">
+                            <input type="checkbox" :checked="packageSlugs.includes(item.slug)"
+                                @change="togglePackage(item.slug)" />
+
+                            <span>{{ item.title }}</span>
+                        </label>
+
+                        <p v-if="!filteredPackages.length" class="subtle-note terminal-multi-empty">
+                            No matching services
+                        </p>
+                    </div>
+                </div>
             </div>
 
-            <div v-if="selectedPackage && !hideDetails" class="terminal-service-details">
+            <div v-if="selectedPackages.length" class="terminal-selected-tags">
+                <span v-for="item in selectedPackages" :key="item.slug" class="terminal-selected-tag">
+                    {{ item.title }}
+
+                    <button type="button" :aria-label="`Remove ${item.title}`" @click="togglePackage(item.slug)">
+                        ×
+                    </button>
+                </span>
+            </div>
+        </div>
+
+        <div v-if="!hideDetails && selectedPackages.length" class="terminal-selected-details">
+            <article v-for="item in selectedPackages" :key="item.slug" class="terminal-service-details">
                 <span class="micro-label">
-                    {{ terminalConfig?.label }}
-                    / {{ current.code }}
+                    {{ current.code }} / {{ activeTerminal }}
                 </span>
 
-                <h3>{{ selectedPackage.title }}</h3>
+                <h3>{{ item.title }}</h3>
 
                 <ul>
-                    <li v-for="(item, index) in selectedPackage.inclusions" :key="index">
-                        {{ item }}
+                    <li v-for="(inclusion, index) in item.inclusions" :key="index">
+                        {{ inclusion }}
                     </li>
                 </ul>
 
-                <p v-if="selectedPackage.additionalService">
+                <p v-if="item.additionalService">
                     <strong>Additional Service:</strong>
-                    {{ selectedPackage.additionalService }}
+                    {{ item.additionalService }}
                 </p>
 
-                <p v-if="selectedPackage.price" class="terminal-service-price">
-                    {{ selectedPackage.price.data }}
+                <p v-if="item.price" class="terminal-service-price">
+                    {{ item.price.data || "Package price:" }}
+
                     <strong>
-                        {{ formatPrice(
-                            selectedPackage.price.amount,
-                            selectedPackage.price.currency
-                        ) }}
+                        {{ formatPrice(item.price.amount, item.price.currency) }}
                     </strong>
                 </p>
-            </div>
-        </section>
-
-        <p v-else class="subtle-note terminal-service-pending">
-            Detailed packages and pricing for this
-            journey are available on request,
-            subject to supplier confirmation.
-        </p>
+            </article>
+        </div>
 
         <!-- <div v-if="showExtras && availableExtras.length" class="optional-services">
-            <p class="micro-label">
-                AVAILABLE ADD-ONS FOR {{ current.code }}
-            </p>
-
-            <p class="subtle-note">
-                Add-on availability depends on the selected
-                airport, terminal and service.
-            </p>
+            <p class="micro-label">ADDITIONAL SERVICES</p>
 
             <div class="choice-grid">
                 <label v-for="extra in availableExtras" :key="extra.slug" class="checkbox-choice">
@@ -367,7 +389,6 @@ function formatPrice(
                         extra.slug,
                         ($event.target as HTMLInputElement).checked
                     )" />
-
                     {{ extra.name }}
                 </label>
             </div>
