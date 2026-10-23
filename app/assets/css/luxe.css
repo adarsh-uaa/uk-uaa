@@ -1,18 +1,31 @@
 /* Optimized UK Airport Assistance CSS — all original rules and breakpoints retained. */
 :root {
   --ink: #182a40;
+
   --brand-navy: #182a40;
+
   --brand-navy-hover: #253f5d;
+
   --brand-red: #9b1c31;
+
   --brand-red-hover: #761426;
+
   --brand-blue: #008fd3;
+
   --brand-blue-hover: #0074ad;
+
   --sub: #77746d;
+
   --cream: #f8f6f1;
+
   --paper: #fffefa;
+
   --burgundy: #38332d;
+
   --gold: #a28a65;
+
   --dark: #20211e;
+
   --line: #dedad2;
 }
 
@@ -22,12 +35,15 @@ html {
 
 body {
   background: #f8f6f1;
+
   color: #272722;
+
   font-family: "DM Sans", sans-serif;
 }
 
 .luxe-page {
   overflow: clip;
+
   background: #f8f6f1;
 }
 
@@ -35,17 +51,21 @@ body {
 .luxe-page h2,
 .luxe-page h3 {
   font-family: "Playfair Display", Georgia, serif;
+
   font-weight: 400;
+
   letter-spacing: -0.055em;
 }
 
 .luxe-page h2 {
   font-size: clamp(3.3rem, 6.7vw, 7.6rem);
+
   line-height: 1.04;
 }
 
 .luxe-page h2 em {
   font-weight: 400;
+
   color: #a28a65;
 }
 
@@ -59,20 +79,31 @@ body {
 
 .luxe-kicker {
   font-size: 10px;
+
   letter-spacing: 0.22em;
+
   text-transform: uppercase;
+
   font-weight: 700;
+
   color: #967a56;
 }
 
 .luxe-link {
   display: inline-flex;
+
   gap: 34px;
+
   align-items: center;
+
   padding-bottom: 13px;
+
   border-bottom: 1px solid #a28a65;
+
   font-size: 12px;
+
   font-weight: 600;
+
   transition: gap 0.3s;
 }
 
@@ -86,13 +117,17 @@ body {
 
 .luxe-page .site-header.header-scrolled {
   background: rgba(247, 244, 238, 0.97);
+
   color: #282924;
+
   box-shadow: 0 10px 25px #00000009;
+
   backdrop-filter: blur(18px);
 }
 
 .luxe-page .site-header.header-scrolled .nav-cta {
   color: #2d2924;
+
   border-color: #b4a48a;
 }
 
@@ -118,10 +153,15 @@ body {
 
 .luxe-hero {
   min-height: 760px;
+
   height: min(900px, 100svh);
+
   position: relative;
+
   color: white;
+
   background: #40433f;
+
   overflow: hidden;
 }
 
@@ -129,8 +169,11 @@ body {
 .luxe-video,
 .luxe-hero-shade {
   position: absolute;
+
   inset: 0;
+
   height: 100%;
+
   width: 100%;
 }
 
@@ -151,48 +194,67 @@ body {
 
 .luxe-hero-content {
   position: relative;
+
   height: 100%;
+
   padding-top: clamp(205px, 17vw, 250px);
 }
 
 .luxe-mini {
   display: flex;
+
   align-items: center;
+
   gap: 15px;
+
   font-size: 10px;
+
   font-weight: 600;
+
   letter-spacing: 0.19em;
+
   color: #f4eae0;
 }
 
 .luxe-mini > span:last-child {
   margin-left: auto;
+
   font-size: 9px;
+
   opacity: 0.8;
 }
 
 .luxe-rule {
   width: 39px;
+
   height: 1px;
+
   background: #e4c7a3;
 }
 
 .luxe-hero-heading {
   font-size: clamp(5.6rem, 11.7vw, 12.4rem);
+
   line-height: 0.93;
+
   margin: 40px 0 32px;
+
   max-width: 1040px;
 }
 
 .luxe-hero-heading em {
   color: #ead9c5;
+
   font-weight: 400;
 }
 
 .line-reveal {
   display: block;
+
   clip-path: inset(0 0 100% 0);
+
   transform: translateY(35px);
+
   animation: lineUp 1.1s cubic-bezier(0.2, 0.8, 0.2, 1)
     calc(0.2s + var(--line-delay, 0s)) both;
 }
@@ -200,36 +262,52 @@ body {
 @keyframes lineUp {
   to {
     clip-path: inset(0 0 0 0);
+
     transform: translateY(0);
   }
 }
 
 .luxe-hero-lead {
   font-size: 16px;
+
   max-width: 470px;
+
   color: #eeeae4;
+
   line-height: 1.85;
 }
 
 .luxe-hero-actions {
   display: flex;
+
   align-items: center;
+
   gap: 32px;
+
   margin-top: 30px;
+
   flex-wrap: wrap;
 }
 
 .luxe-button {
   display: inline-flex;
+
   align-items: center;
+
   gap: 45px;
+
   padding: 19px 23px;
+
   justify-content: space-between;
+
   transition:
     background 0.3s,
     transform 0.3s;
+
   white-space: nowrap;
+
   font-size: 12px;
+
   font-weight: 650;
 }
 
@@ -789,7 +867,7 @@ body {
 }
 
 .luxe-airport-row:hover,
-.luxe-airport-row.active {
+.luxe-airport-row\.active {
   background: #eae4d9;
 
   padding-left: 17px;
@@ -1858,10 +1936,15 @@ body {
 }
 
 /* .interior-hero {
+
   background: #272825;
+
   color: #f8f4eb;
+
   padding: 180px 0 100px;
+
 } */
+
 .interior-hero {
   position: relative;
 
@@ -1869,12 +1952,15 @@ body {
     linear-gradient(
       90deg,
       rgba(17, 30, 47, 0.9) 0%,
+
       rgba(17, 30, 47, 0.75) 50%,
+
       rgba(17, 30, 47, 0.45) 100%
     ),
     url("/images/hero-cover.webp") center center / cover no-repeat;
 
   color: #f8f4eb;
+
   padding: 180px 0 100px;
 }
 
@@ -3036,59 +3122,92 @@ body {
 }
 
 /* ==========================================================
+
    UK AIRPORT ASSISTANCE — TRANSPARENT LOGO + BRAND ACCENTS
+
    Designed for the transparent PNG in public/images/.
+
    Existing header, scroll effects, booking and page rules remain.
+
    ========================================================== */
 
 /* Transparent header logo: no white card, border or padding */
+
 .site-header .brand-logo,
 .luxe-page .site-header .brand-logo,
 .site-header.header-scrolled .brand-logo,
 .luxe-page .site-header.header-scrolled .brand-logo {
   display: inline-flex;
+
   align-items: center;
+
   flex-shrink: 0;
+
   min-width: 0;
+
   max-width: 100%;
+
   padding: 0 !important;
+
   border: 0 !important;
+
   border-radius: 0 !important;
+
   background: transparent !important;
+
   box-shadow: none !important;
+
   text-decoration: none;
+
   line-height: 0;
 }
 
 .site-header .brand-logo img,
 .luxe-page .site-header .brand-logo img {
   display: block;
+
   width: clamp(175px, 18vw, 235px);
+
   max-width: 100%;
+
   height: auto;
+
   object-fit: contain;
 }
 
 /* Footer logo is also transparent */
+
 .uaa-footer-logo.footer-brand-logo,
 .site-footer .footer-brand-logo {
   display: inline-flex;
+
   align-items: center;
+
   align-self: flex-start;
+
   max-width: 100%;
+
   padding: 0 !important;
+
   border: 0 !important;
+
   border-radius: 0 !important;
+
   background: transparent !important;
+
   box-shadow: none !important;
+
   line-height: 0;
 }
 
 .uaa-footer-logo.footer-brand-logo img,
 .site-footer .footer-brand-logo img {
   display: block;
+
   width: min(100%, 280px);
+
   height: auto;
+
   object-fit: contain;
 }
 
@@ -3107,15 +3226,21 @@ body {
 }
 
 /* ================================================================
+
    PREMIUM NAVY + MUTED RED — CONTROLLED BRAND REFINEMENT
+
    Original luxury cream/gold backgrounds and page layouts retained.
+
    Red is a selective accent, not a dominant background color.
+
    ================================================================ */
 
 /* Premium editorial typography and high contrast */
+
 body {
   color: #253044;
 }
+
 .luxe-page h1,
 .luxe-page h2,
 .luxe-page h3,
@@ -3125,7 +3250,9 @@ body {
 }
 
 /* Muted burgundy accents — original warm gold is intentionally kept
+
    on other ornamental elements to preserve the premium feel. */
+
 .luxe-kicker,
 .luxe-booking .booking-field > span,
 .luxe-booking .micro-label,
@@ -3142,20 +3269,24 @@ body {
 }
 
 /* Lines and active states: subtle rather than bright red */
+
 .luxe-link,
 .luxe-airport-more,
 .uaa-footer-column .uaa-footer-enquire {
   border-bottom-color: var(--brand-red);
 }
+
 .uaa-airport-item.is-active .uaa-airport-chevron {
   color: var(--brand-red);
 }
+
 .uaa-inline-extra input,
 .checkbox-choice input {
   accent-color: var(--brand-red);
 }
 
 /* Dark navy main actions; restrained red hover */
+
 .luxe-booking .booking-submit,
 .premium-submit,
 .uaa-quick-button,
@@ -3164,12 +3295,15 @@ body {
 .uaa-inline-types button.active {
   background: var(--brand-navy);
 }
+
 .premium-submit {
   border-color: var(--brand-navy);
 }
+
 .uaa-quick-button {
   border-color: var(--brand-navy);
 }
+
 .premium-submit:hover:not(:disabled),
 .uaa-quick-button:hover,
 .uaa-inline-continue:hover,
@@ -3177,11 +3311,13 @@ body {
 .uaa-inline-types button.active {
   background: var(--brand-navy-hover);
 }
+
 .uaa-quick-button:hover {
   border-color: var(--brand-navy-hover);
 }
 
 /* Editorial links and footer details */
+
 .uaa-footer-column > a:hover,
 .uaa-footer-legal a:hover,
 .uaa-footer-contact svg {
@@ -3189,17 +3325,20 @@ body {
 }
 
 /* Scrolled glass header remains unchanged apart from text accents */
+
 .site-header.header-scrolled .desktop-nav a,
 .site-header.header-scrolled .menu-toggle,
 .site-header.header-scrolled .nav-cta {
   color: var(--brand-navy) !important;
 }
+
 .site-header .desktop-nav a:hover,
 .site-header.header-scrolled .desktop-nav a:hover {
   color: var(--brand-red) !important;
 }
 
 /* Premium dark sections subtly navy; retain existing photography */
+
 .luxe-quote,
 .flight-loader,
 .interior-hero {
@@ -3207,6 +3346,7 @@ body {
 }
 
 /* Maintain transparency on BOTH header states, and footer logo. */
+
 .site-header .brand-logo,
 .site-header.header-scrolled .brand-logo,
 .luxe-page .site-header .brand-logo,
@@ -3214,22 +3354,29 @@ body {
 .uaa-footer-logo.footer-brand-logo,
 .site-footer .footer-brand-logo {
   background: transparent !important;
+
   border: 0 !important;
+
   box-shadow: none !important;
 }
 
 /* =========================================
+
    LOGO — GLASS AT TOP, CLEAR ON SCROLL
+
    ========================================= */
 
 /* Initial position — glass background */
+
 .site-header:not(.header-scrolled) .brand-logo {
   background: rgba(255, 255, 255, 0.441) !important;
 
   -webkit-backdrop-filter: blur(18px) saturate(150%);
+
   backdrop-filter: blur(18px) saturate(150%);
 
   border: 1px solid rgba(255, 255, 255, 0.35) !important;
+
   border-radius: 6px !important;
 
   padding: 7px 12px !important;
@@ -3243,28 +3390,37 @@ body {
 }
 
 /* Scrolled — no logo background */
+
 .site-header.header-scrolled .brand-logo {
   background: transparent !important;
 
   -webkit-backdrop-filter: none !important;
+
   backdrop-filter: none !important;
 
   border: 1px solid transparent !important;
+
   box-shadow: none !important;
 
   /* Preserve padding to avoid layout shifting */
+
   padding: 7px 12px !important;
 }
 
 /* Logo image */
+
 .site-header .brand-logo img {
   display: block;
+
   width: 235px;
+
   height: auto;
+
   object-fit: contain;
 }
 
 /* Tablet */
+
 @media (max-width: 1024px) {
   .site-header .brand-logo img {
     width: 180px;
@@ -3272,6 +3428,7 @@ body {
 }
 
 /* Mobile */
+
 @media (max-width: 767px) {
   .site-header .brand-logo img {
     width: 150px;
@@ -3279,17 +3436,190 @@ body {
 }
 
 /* Reduced motion */
+
 @media (prefers-reduced-motion: reduce) {
   .site-header .brand-logo {
     transition: none !important;
   }
 }
+
 /* Reduce logo glass container height */
+
 .site-header:not(.header-scrolled) .brand-logo {
   padding: 2px 12px !important;
 }
 
 /* Scrolled — keep consistent dimensions */
+
 .site-header.header-scrolled .brand-logo {
   padding: 2px 12px !important;
+}
+
+/* Searchable phone country selector */
+
+.premium-field .phone-input-group {
+  display: flex !important;
+
+  flex-direction: row !important;
+
+  align-items: stretch;
+
+  width: 100%;
+
+  gap: 0;
+}
+
+.country-dropdown {
+  position: relative;
+
+  flex: 0 0 95px;
+
+  width: 95px;
+
+  z-index: 20;
+}
+
+.country-trigger {
+  width: 100%;
+
+  height: 52px;
+
+  padding: 0 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  background: #fffefa;
+
+  color: #182a40;
+
+  border: 1px solid #dcd5ca;
+
+  border-right: 0;
+
+  border-radius: 5px 0 0 5px;
+
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+.country-chevron {
+  font-size: 16px;
+
+  color: #77746d;
+}
+
+.premium-field .phone-input-group input[type="tel"] {
+  flex: 1 1 0 !important;
+
+  width: 0 !important;
+
+  min-width: 0 !important;
+
+  height: 52px;
+
+  border-radius: 0 5px 5px 0;
+}
+
+.country-dropdown-menu {
+  position: absolute;
+
+  top: calc(100% + 6px);
+
+  left: 0;
+
+  width: 290px;
+
+  max-width: calc(100vw - 40px);
+
+  background: #fffefa;
+
+  border: 1px solid #dedad2;
+
+  border-radius: 8px;
+
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.14);
+
+  overflow: hidden;
+
+  z-index: 9999;
+}
+
+.premium-field .country-search {
+  width: 100%;
+
+  padding: 13px 14px;
+
+  border: 0;
+
+  border-bottom: 1px solid #dedad2;
+
+  outline: none;
+
+  font-size: 13px;
+
+  background: #fffefa;
+}
+
+.country-options {
+  max-height: 230px;
+
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+}
+
+.country-option {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  align-items: center;
+
+  text-align: left;
+
+  padding: 11px 14px;
+
+  background: #fffefa;
+
+  border: none;
+
+  color: #182a40;
+
+  cursor: pointer;
+
+  font-size: 12px;
+}
+
+.country-option:hover,
+.country-option.active {
+  background: #f0ebe3;
+}
+
+.country-empty {
+  padding: 12px 14px;
+
+  font-size: 12px;
+
+  color: #77746d;
+}
+
+@media (max-width: 767px) {
+  .country-dropdown {
+    flex-basis: 85px;
+
+    width: 85px;
+  }
+
+  .country-dropdown-menu {
+    width: 265px;
+  }
 }

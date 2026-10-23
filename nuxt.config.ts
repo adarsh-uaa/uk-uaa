@@ -1,7 +1,107 @@
+const siteUrl = (
+  process.env.NUXT_PUBLIC_SITE_URL || "https://uk-uaa-test.onrender.com"
+).replace(/\/+$/, "");
+
+const hostname = new URL(siteUrl).hostname;
+
+const isStaging =
+  hostname === "localhost" ||
+  hostname === "127.0.0.1" ||
+  hostname.endsWith(".onrender.com") ||
+  process.env.NUXT_PUBLIC_ALLOW_INDEXING !== "true";
+
 export default defineNuxtConfig({
- compatibilityDate:'2026-10-01',
- css:['~/assets/css/main.css','~/assets/css/luxe.css'],
- devtools:{enabled:false},
- app:{head:{htmlAttrs:{lang:'en-GB'},title:'UK Airport Assistance | VIP Meet & Greet',meta:[{name:'theme-color',content:'#f6f2eb'},{name:'color-scheme',content:'light'}],link:[{rel:'preconnect',href:'https://fonts.googleapis.com'},{rel:'preconnect',href:'https://fonts.gstatic.com',crossorigin:''},{rel:'stylesheet',href:'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;1,400&display=swap'}]}},
- runtimeConfig:{bookingApiUrl:process.env.BOOKING_API_URL||'https://abc.api.com/abc-test',bookingApiEnabled:process.env.BOOKING_API_ENABLED==='true',bookingApiToken:process.env.BOOKING_API_TOKEN||'',public:{siteUrl:process.env.NUXT_PUBLIC_SITE_URL||'http://localhost:3000'}}
-})
+  compatibilityDate: "2026-10-01",
+
+  ssr: true,
+
+  devtools: {
+    enabled: false,
+  },
+
+  css: ["~/assets/css/main.css", "~/assets/css/luxe.css"],
+
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: "en-GB",
+      },
+
+      title: "UK Airport Assistance | VIP Meet & Greet",
+
+      meta: [
+        {
+          name: "description",
+          content:
+            "Premium UK airport meet and greet assistance for arrivals, departures and connections. Explore airport-specific services and book your journey.",
+        },
+        {
+          name: "theme-color",
+          content: "#182a40",
+        },
+        {
+          name: "color-scheme",
+          content: "light",
+        },
+        ...(isStaging
+          ? [
+              {
+                name: "robots",
+                content: "noindex, follow",
+              },
+            ]
+          : []),
+      ],
+
+      link: [
+        {
+          rel: "preconnect",
+          href: "https://fonts.googleapis.com",
+        },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossorigin: "anonymous",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;1,400&display=swap",
+        },
+      ],
+    },
+  },
+
+  routeRules: {
+    "/api/**": {
+      headers: {
+        "X-Robots-Tag": "noindex, nofollow",
+      },
+    },
+
+    "/images/**": {
+      headers: {
+        "Cache-Control": "public, max-age=604800",
+      },
+    },
+
+    "/video/**": {
+      headers: {
+        "Cache-Control": "public, max-age=604800",
+      },
+    },
+  },
+
+  runtimeConfig: {
+    bookingApiUrl:
+      process.env.BOOKING_API_URL || "https://abc.api.com/abc-test",
+
+    bookingApiEnabled: process.env.BOOKING_API_ENABLED === "true",
+
+    bookingApiToken: process.env.BOOKING_API_TOKEN || "",
+
+    public: {
+      siteUrl,
+      isStaging,
+    },
+  },
+});
