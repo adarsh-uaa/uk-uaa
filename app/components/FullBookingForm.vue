@@ -8,6 +8,12 @@ import {
   selectAirport,
   formatApiDate,
 } from "~/data/booking";
+import {
+  getTerminalDetails,
+  getServiceDetails,
+  type TerminalSlug
+} from '~/data/terminalServices'
+
 import countryCodes from "~/data/countryCodes.json";
 
 const route = useRoute();
@@ -18,7 +24,11 @@ const input = reactive({
   email: "",
   mobile: "",
   airport: String(route.query.airport || "heathrow"),
+  terminal: (
+    route.query.terminal === 'vip' ? 'vip' : 'normal'
+  ) as TerminalSlug,
   service: String(route.query.service || "arrival"),
+  packageSlug: String(route.query.package || ''),
   arrivalFlight: "",
   arrivalDate: "",
   arrivalTime: "",
@@ -71,7 +81,15 @@ const payload = computed(() => ({
   email: input.email.trim(),
   mobile: fullMobile.value,
   service_types_id:
-    journeyTypes.find((x) => x.slug === input.service)?.id || "",
+    currentServiceDetails.value?.apiServiceId ||
+    (
+      input.terminal === 'normal' &&
+        !input.packageSlug
+        ? journeyTypes.find(
+          x => x.slug === input.service
+        )?.id || ''
+        : ''
+    ),
   arrival_flight_number:
     input.service !== "departure" ? input.arrivalFlight.trim() : "",
   arrival_date:
@@ -94,6 +112,12 @@ const payload = computed(() => ({
   childrens_count: String(input.children),
   infants_count: String(input.infants),
   adults_count: String(input.adults),
+  ...(input.terminal === 'vip'
+    ? {
+      terminal_type: input.terminal,
+      terminal_id: currentTerminal.value?.apiTerminalId || ''
+    }
+    : {}),
 }));
 const selectedCountry = ref("GB");
 
@@ -114,6 +138,28 @@ const fullMobile = computed(() => {
 
   return `${selectedDialCode.value}${digits}`;
 });
+
+const currentTerminal = computed(() =>
+  getTerminalDetails(
+    input.airport,
+    input.terminal
+  )
+)
+
+const currentServiceDetails = computed(() =>
+  getServiceDetails(
+    input.airport,
+    input.terminal,
+    input.service
+  )
+)
+
+watch(
+  () => input.airport,
+  () => {
+    input.terminal = 'normal'
+  }
+)
 
 const countryDropdownOpen = ref(false);
 const countrySearch = ref("");
@@ -167,6 +213,26 @@ async function submit() {
       "This airport has not been connected to its supplier ID. Configure app/data/booking.ts before submitting.";
     return;
   }
+
+  if (!currentTerminal.value) {
+    error.value =
+      'The selected terminal is not configured for this airport.'
+    return
+  }
+
+  if (input.terminal === 'vip') {
+    if (
+      !currentServiceDetails.value ||
+      !currentTerminal.value.apiEnabled ||
+      !currentTerminal.value.apiTerminalId ||
+      !currentServiceDetails.value.apiServiceId
+    ) {
+      error.value =
+        'VIP Terminal bookings are not connected to the supplier API yet. Please contact our team to enquire.'
+      return
+    }
+  }
+
   const mobileDigits = input.mobile.replace(/\D/g, "");
 
   if (!/^\d{4,15}$/.test(mobileDigits)) {
@@ -192,6 +258,34 @@ async function submit() {
     error.value = "Departure flight, date, and time are required.";
     return;
   }
+
+  if (
+    input.packageSlug &&
+    !currentServiceDetails.value
+  ) {
+    error.value = 'Please select a valid service package.'
+    return
+  }
+
+  if (
+    input.packageSlug &&
+    !currentServiceDetails.value?.apiServiceId
+  ) {
+    error.value =
+      'This service package is not yet connected to the booking supplier. Please contact our team.'
+    return
+  }
+
+  if (
+    currentServiceDetails.value?.price &&
+    input.adults + input.children + input.infants >
+    currentServiceDetails.value.price.upToPassengers
+  ) {
+    error.value =
+      'This package price covers fewer passengers than selected. Please request a custom quotation.'
+    return
+  }
+
   sending.value = true;
   try {
     const res = await $fetch<{ success: boolean; message: string }>(
@@ -264,8 +358,11 @@ async function submit() {
       <span class="micro-label">02 / AIRPORT & SERVICES</span>
       <h2>Make it yours</h2>
     </div>
-    <AirportServices v-model:airport="input.airport" v-model:service="input.service" v-model:extras="input.extras"
-      :show-extras="true" />
+
+
+    <AirportServices v-model:airport="input.airport" v-model:terminal="input.terminal" v-model:service="input.service"
+      v-model:packageSlug="input.packageSlug" v-model:extras="input.extras" :show-extras="true" />
+
     <div class="form-grid" style="margin-top: 18px">
       <label class="premium-field"><span>Class of travel *</span><select v-model="input.travelClass" required>
           <option v-for="x in classes" :key="x.id" :value="x.id">

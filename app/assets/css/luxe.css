@@ -3623,3 +3623,359 @@ body {
     width: 265px;
   }
 }
+
+/* Airport-specific terminal and service details */
+
+.airport-service-selector {
+  width: 100%;
+  min-width: 0;
+}
+
+.airport-service-selector .linked-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.terminal-service-details {
+  margin-top: 24px;
+  padding: clamp(22px, 3vw, 36px);
+  background: #fffefa;
+  border: 1px solid #dedad2;
+  border-radius: 8px;
+}
+
+.terminal-service-details h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(25px, 3vw, 36px);
+  line-height: 1.2;
+  font-weight: 400;
+  color: #182a40;
+  margin: 15px 0 20px;
+}
+
+.terminal-service-details ul {
+  padding-left: 21px;
+  margin: 0 0 22px;
+}
+
+.terminal-service-details li {
+  padding-left: 4px;
+  margin-bottom: 11px;
+  color: #5c5a54;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.terminal-service-details li::marker {
+  color: #a28a65;
+}
+
+.terminal-service-details p {
+  color: #5c5a54;
+  font-size: 14px;
+  line-height: 1.75;
+  margin: 14px 0 0;
+}
+
+.terminal-service-details p strong {
+  color: #182a40;
+}
+
+.terminal-service-price {
+  padding-top: 17px;
+  border-top: 1px solid #dedad2;
+}
+
+.terminal-service-price strong {
+  font-size: 18px;
+  font-weight: 700;
+  margin-left: 5px;
+}
+
+.terminal-service-pending {
+  margin-top: 18px;
+}
+
+@media (max-width: 1024px) {
+  .airport-service-selector .linked-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .airport-service-selector .linked-fields {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .terminal-service-details {
+    padding: 21px 18px;
+  }
+
+  .terminal-service-details h3 {
+    font-size: 26px;
+  }
+
+  .terminal-service-details li {
+    font-size: 13px;
+  }
+}
+
+/* Multiple airport service cards */
+
+.terminal-packages {
+  margin-top: 30px;
+}
+
+.terminal-packages-heading {
+  margin-bottom: 22px;
+}
+
+.terminal-packages-heading h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(27px, 3vw, 36px);
+  font-weight: 400;
+  color: #182a40;
+  margin: 12px 0;
+}
+
+.terminal-packages-heading p {
+  color: #77746d;
+  font-size: 14px;
+}
+
+.terminal-package-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.terminal-package-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: 25px;
+  min-width: 0;
+  border: 1px solid #dedad2;
+  border-radius: 8px;
+  background: #fffefa;
+  color: #182a40;
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.terminal-package-card:hover {
+  border-color: #a28a65;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+}
+
+.terminal-package-card.is-selected {
+  border: 2px solid #a28a65;
+  background: #f9f6ef;
+}
+
+.terminal-package-status {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: #987c58;
+  margin-bottom: 20px;
+}
+
+.terminal-package-card strong {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.terminal-package-info {
+  margin-top: 13px;
+  color: #77746d;
+  font-size: 12px;
+}
+
+.terminal-package-price {
+  margin-top: 24px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.terminal-package-price small {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  font-weight: 400;
+  color: #77746d;
+}
+
+.terminal-package-select {
+  margin-top: 22px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9b1c31;
+}
+
+.terminal-package-card:focus-visible {
+  outline: 3px solid #a28a65;
+  outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+  .terminal-package-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .terminal-package-card {
+    padding: 20px;
+  }
+}
+
+/* ==========================================
+   AIRPORT JOURNEY — COMPACT SPLIT LAYOUT
+   ========================================== */
+
+.airport-journey-compact {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+
+.airport-journey-compact .journey-panel-selection {
+  min-width: 0;
+}
+
+.airport-journey-compact .journey-panel-summary {
+  min-width: 0;
+  align-self: start;
+  height: auto;
+  min-height: 0;
+  padding: 0 0 0 28px;
+  border-left: 1px solid #e2dbd1;
+}
+
+.airport-journey-compact .journey-panel-summary > h3 {
+  margin: 12px 0 20px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(27px, 3vw, 36px);
+  font-weight: 400;
+  color: #182a40;
+}
+
+/* Selected service details */
+
+.journey-selected-service {
+  margin: 0 0 22px;
+}
+
+.journey-selected-service h4 {
+  margin: 12px 0 18px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(22px, 2.4vw, 29px);
+  font-weight: 400;
+  line-height: 1.25;
+  color: #182a40;
+}
+
+.journey-selected-service ul {
+  padding-left: 19px;
+  margin: 0 0 18px;
+}
+
+.journey-selected-service li {
+  padding-left: 3px;
+  margin-bottom: 9px;
+  color: #68645e;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.journey-selected-service li::marker {
+  color: #a28a65;
+}
+
+.journey-additional-service {
+  padding: 14px 0;
+  border-top: 1px solid #e2dbd1;
+  color: #68645e;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.journey-additional-service strong {
+  color: #182a40;
+}
+
+/* Pricing */
+
+.journey-selected-price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 17px 0;
+  margin-top: 15px;
+  border-top: 1px solid #e2dbd1;
+  border-bottom: 1px solid #e2dbd1;
+}
+
+.journey-selected-price span {
+  color: #77746d;
+  font-size: 12px;
+}
+
+.journey-selected-price strong {
+  font-size: 25px;
+  font-weight: 600;
+  color: #182a40;
+  white-space: nowrap;
+}
+
+/* Booking button */
+
+.airport-journey-compact .journey-panel-summary .premium-submit {
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* Tablet */
+
+@media (max-width: 1024px) {
+  .airport-journey-compact {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .airport-journey-compact .journey-panel-summary {
+    border-left: 0;
+    border-top: 1px solid #e2dbd1;
+    padding: 25px 0 0;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 767px) {
+  .airport-journey-compact {
+    gap: 22px;
+  }
+
+  .journey-selected-service h4 {
+    font-size: 25px;
+  }
+
+  .journey-selected-service li {
+    font-size: 13px;
+  }
+
+  .journey-selected-price strong {
+    font-size: 22px;
+  }
+}
