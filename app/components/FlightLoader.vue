@@ -27,7 +27,7 @@ onBeforeUnmount(() => {
   <div v-if="visible" class="flight-loader" :class="{ 'loader-exit': exiting }" role="status"
     aria-label="Opening UK Airport Assistance">
     <div class="flight-loader-inner">
-      <div class="loader-brand">UK AIRPORT <span>—</span> ASSISTANCE</div>
+      <div class="loader-brand">UK AIRPORT ASSISTANCE</div>
       <div class="flight-map" aria-hidden="true">
         <span class="flight-origin"></span>
         <span class="flight-route"></span>
