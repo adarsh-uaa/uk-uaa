@@ -23,6 +23,27 @@ Add your licensed video at `public/video/hero.mp4`. A poster image is shown if u
 7. Booking button will report demo mode until IDs and enabling are configured. No fake success confirmation.
 8. Contact form is a **design placeholder** and explicitly does not transmit messages. Connect it before launch.
 
+## Booking Audit Logs
+
+Every booking submission attempt (whether successful or failed) is automatically recorded with complete details in the `logs/` directory:
+
+- **`logs/bookings.csv`**: Tabular format with headers, ready to open in Microsoft Excel or Google Sheets.
+- **`logs/bookings.jsonl`**: Machine-readable JSON Lines with the complete raw payload, nested journey info, and supplier response data.
+- **`logs/bookings.log`**: Human-readable audit trail formatted block-by-block with timestamps and status tags.
+
+### Details Captured
+- **Status & Diagnostics**: `SUCCESS` vs `FAILED`, HTTP status code (200, 400, 502, 503, 500), error category (`DEMO_MODE_DISABLED`, `VALIDATION_ERROR`, `UPSTREAM_SUPPLIER_ERROR`, `INTERNAL_SERVER_ERROR`), and specific error message.
+- **Traveler & Contact**: Traveler full name, email address, mobile number with country code, preferred communication channels.
+- **Journey & Services**: Airport ID, service type (arrival/departure/transit), selected add-on service IDs, travel class.
+- **Flight Details**: Arrival flight number, arrival date, arrival time, departure flight number, departure date, departure time.
+- **Party & Luggage**: Adults count, children count, infants count, luggage count.
+- **Metadata**: Unique booking ID (`bkg_...`), UTC & UK timestamps, client IP address, user-agent, source URL.
+
+To test the logging system without making real API calls, run:
+```bash
+node --experimental-strip-types scripts/test-booking-logger.mjs
+```
+
 ## SEO
 
 Unique page titles, descriptions, canonical URLs, SSR, robots, sitemap, hierarchy, airport internal linking, FAQ content, UK localized language, and Organization JSON-LD are included. Submit the production sitemap to Search Console and measure real Core Web Vitals. **No code can guarantee rank #1 or an A grade on every external SEO audit.** Replace generic photos, develop original airport-specific information and include verified legal / company / contact details before publishing.

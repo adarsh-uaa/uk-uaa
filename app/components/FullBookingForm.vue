@@ -52,7 +52,10 @@ const input = reactive({
 const sending = ref(false)
 const submitted = ref(false)
 const error = ref('')
+const enquiryReference = ref<string | null>(null)
 const payloadPreview = ref(false)
+const toast = useToast()
+
 
 // ------------------------------------------
 // AIRPORT-SPECIFIC SERVICES
@@ -264,7 +267,8 @@ if (/^\d{4}-\d{2}-\d{2}$/.test(dateQ)) {
 
 const payload = computed(() => ({
   airport_name: travelName.value,
-  airport_name_id: selectAirport(input.airport).id,
+  // airport_name_id: selectAirport(input.airport).id,
+  airport_name_id: "1846",
 
   email: input.email.trim(),
   mobile: fullMobile.value,
@@ -337,110 +341,122 @@ async function submit() {
     !input.email.trim()
   ) {
     error.value = 'Please complete passenger details.'
+    toast.error(error.value)
     return
   }
 
-  if (!selectAirport(input.airport).id) {
-    error.value =
-      'The selected airport needs a configured supplier ID.'
-    return
-  }
+  // if (!selectAirport(input.airport).id) {
+  //   error.value =
+  //     'The selected airport needs a configured supplier ID.'
+  //   toast.error(error.value)
+  //   return
+  // }
 
   if (
-    !availableJourneys.value.some(
+  !availableJourneys.value.some(
       item => item.slug === input.journey
-    )
+  )
   ) {
     error.value =
-      'Please select an available service type.'
-    return
+    'Please select an available service type.'
+    toast.error(error.value)
+  return
   }
 
   if (!input.services.length) {
     error.value =
-      'Please select at least one service.'
-    return
+    'Please select at least one service.'
+    toast.error(error.value)
+  return
   }
 
   if (
-    selectedServices.value.length !==
-    new Set(input.services).size
+  selectedServices.value.length !==
+  new Set(input.services).size
   ) {
     error.value =
-      'One or more selected services are invalid.'
-    return
+    'One or more selected services are invalid.'
+    toast.error(error.value)
+  return
   }
 
   if (
     selectedServices.value.some(item => !item.id)
   ) {
     error.value =
-      'A selected service is missing its supplier ID. Configure it in bookingServices.json.'
-    return
+    'A selected service is missing its supplier ID. Configure it in bookingServices.json.'
+    toast.error(error.value)
+  return
   }
 
   if (!input.travelClass) {
     error.value =
-      'Please select your class of travel.'
-    return
+    'Please select your class of travel.'
+    toast.error(error.value)
+  return
   }
 
   const passengerCounts = [
-    input.adults,
-    input.children,
-    input.infants,
-    input.luggages
+  input.adults,
+  input.children,
+  input.infants,
+  input.luggages
   ].map(Number)
 
   if (
-    passengerCounts.some(
+  passengerCounts.some(
       value => !Number.isInteger(value) || value < 0
-    ) ||
-    Number(input.adults) < 1
+  ) ||
+  Number(input.adults) < 1
   ) {
     error.value =
-      'Please enter valid passenger and luggage counts.'
-    return
+    'Please enter valid passenger and luggage counts.'
+    toast.error(error.value)
+  return
   }
 
   if (!input.communication.length) {
     error.value =
-      'Please select at least one contact method.'
-    return
+    'Please select at least one contact method.'
+    toast.error(error.value)
+  return
   }
 
   if (
-    requiresArrival.value &&
-    (
-      !input.arrivalFlight.trim() ||
-      !input.arrivalDate ||
-      !input.arrivalTime
-    )
+  requiresArrival.value &&
+  (
+  !input.arrivalFlight.trim() ||
+  !input.arrivalDate ||
+  !input.arrivalTime
+  )
   ) {
     error.value =
-      'Complete all required arrival flight fields.'
-    return
+    'Complete all required arrival flight fields.'
+    toast.error(error.value)
+  return
   }
 
   if (
-    requiresDeparture.value &&
-    (
-      !input.departureFlight.trim() ||
-      !input.departureDate ||
-      !input.departureTime
-    )
+  requiresDeparture.value &&
+  (
+  !input.departureFlight.trim() ||
+  !input.departureDate ||
+  !input.departureTime
+  )
   ) {
     error.value =
-      'Complete all required departure flight fields.'
-    return
+    'Complete all required departure flight fields.'
+    toast.error(error.value)
+  return
   }
 
   const phoneDigits = fullMobile.value.replace(/\D/g, '')
 
-  if (!/^\d{8,15}$/.test(phoneDigits)) {
+  if (!/^\d{8, 15}$/.test(phoneDigits)) {
     error.value =
-      'Please enter a valid phone number with country code.'
-    return
+    'Please enter a valid phone number with country code.'
+    toast.error(error.value)
+  return
   }
 
   sending.value = true
@@ -448,32 +464,59 @@ async function submit() {
   try {
     const result = await $fetch<{
       success: boolean
-      message?: string
+  message?: string
+  enquiryReference?: string | null
+  bookingId?: string
+  data?: any
     }>('/api/booking', {
-      method: 'POST',
-      body: payload.value
+    method: 'POST',
+  body: payload.value
     })
 
-    if (result.success) {
-      submitted.value = true
+  if (result.success) {
+    submitted.value = true
+      enquiryReference.value =
+  result.enquiryReference ||
+  result.data?.result?.airport_enquiry ||
+  null
+
+  toast.success({
+    title: 'Booking Request Received',
+  message: result.message || 'Your booking enquiry has been received by our concierge team.',
+  enquiryRef: enquiryReference.value,
+  duration: 9000
+      })
     } else {
-      error.value =
-        result.message ||
-        'Booking request could not be submitted.'
+      const errMsg =
+  result.message ||
+  'Booking request could not be submitted.'
+  error.value = errMsg
+  toast.error({
+    title: 'Booking Request Failed',
+  message: errMsg,
+  duration: 8000
+      })
     }
   } catch (err: any) {
-    error.value =
-      err?.data?.statusMessage ||
-      err?.data?.message ||
-      'Unable to submit your request. Please try again.'
+    const errMsg =
+  err?.data?.statusMessage ||
+  err?.data?.message ||
+  err?.message ||
+  'Unable to submit your request. Please try again.'
+  error.value = errMsg
+  toast.error({
+    title: 'Booking Request Failed',
+  message: errMsg,
+  duration: 8000
+    })
   } finally {
     sending.value = false
   }
 }
 </script>
 
-<template>
-  <form class="full-booking reference-booking" @submit.prevent="submit">
+  <template>
+    <form class="full-booking reference-booking" @submit.prevent="submit">
     <div class="form-section-title">
       <span class="micro-label">01 / PASSENGER DETAILS</span>
       <h2>Your details</h2>
@@ -499,52 +542,52 @@ async function submit() {
         <span>Airport *</span>
         <select v-model="input.airport" required>
           <option v-for="airport in airportsCatalog" :key="airport.slug" :value="airport.slug">
-            {{ airport.name }} ({{ airport.code }})
-          </option>
-        </select>
-      </label>
+          {{ airport.name }} ({{ airport.code }})
+        </option>
+      </select>
+    </label>
 
-      <div class="premium-field">
-        <label for="booking-phone">Phone / Mobile *</label>
+    <div class="premium-field">
+      <label for="booking-phone">Phone / Mobile *</label>
 
-        <div class="phone-input-group">
-          <div ref="countryDropdownRef" class="country-dropdown" @keydown.esc="countryOpen = false">
-            <button type="button" class="country-trigger" aria-label="Choose calling code" :aria-expanded="countryOpen"
+      <div class="phone-input-group">
+        <div ref="countryDropdownRef" class="country-dropdown" @keydown.esc="countryOpen = false">
+        <button type="button" class="country-trigger" aria-label="Choose calling code" :aria-expanded="countryOpen"
               @click="countryOpen = !countryOpen">
-              <span>{{ selectedDialCode }}</span>
-              <span class="country-chevron">⌄</span>
-            </button>
+        <span>{{ selectedDialCode }}</span>
+        <span class="country-chevron">⌄</span>
+      </button>
 
-            <div v-if="countryOpen" class="country-dropdown-menu">
-              <input v-model="countrySearch" type="search" class="country-search"
-                placeholder="Search country or code" />
+      <div v-if="countryOpen" class="country-dropdown-menu">
+        <input v-model="countrySearch" type="search" class="country-search"
+          placeholder="Search country or code" />
 
-              <div class="country-options">
-                <button v-for="country in filteredCountries" :key="country.code" type="button" class="country-option"
+        <div class="country-options">
+          <button v-for="country in filteredCountries" :key="country.code" type="button" class="country-option"
                   @click="chooseCountry(country.code)">
-                  <span>{{ country.name }}</span>
-                  <span>{{ country.dial_code }}</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <input id="booking-phone" v-model="input.mobile" type="tel" inputmode="tel" autocomplete="tel-national"
-            placeholder="Mobile Number" required />
-        </div>
+          <span>{{ country.name }}</span>
+          <span>{{ country.dial_code }}</span>
+        </button>
       </div>
-
-      <label class="premium-field">
-        <span>Service Type *</span>
-        <select v-model="input.journey" :disabled="!availableJourneys.length" required>
-          <option value="" disabled>- Select -</option>
-
-          <option v-for="type in availableJourneys" :key="type.slug" :value="type.slug">
-            {{ type.name }}
-          </option>
-        </select>
-      </label>
     </div>
+  </div>
+
+  <input id="booking-phone" v-model="input.mobile" type="tel" inputmode="tel" autocomplete="tel-national"
+    placeholder="Mobile Number" required />
+        </div >
+      </div >
+
+  <label class="premium-field">
+    <span>Service Type *</span>
+    <select v-model="input.journey" :disabled="!availableJourneys.length" required>
+    <option value="" disabled>- Select -</option>
+
+    <option v-for="type in availableJourneys" :key="type.slug" :value="type.slug">
+    {{ type.name }}
+  </option>
+        </select >
+      </label >
+    </div >
 
     <div class="form-section-title">
       <span class="micro-label">02 / FLIGHT DETAILS</span>
@@ -630,29 +673,29 @@ async function submit() {
               </p>
             </div>
           </div>
-        </div>
+        </div >
 
-        <div v-if="selectedServices.length" class="reference-selected-tags">
-          <span v-for="item in selectedServices" :key="item.slug" class="reference-selected-tag">
-            {{ item.name }}
+  <div v-if="selectedServices.length" class="reference-selected-tags">
+    <span v-for="item in selectedServices" :key="item.slug" class="reference-selected-tag">
+    {{ item.name }}
 
-            <button type="button" :aria-label="`Remove ${item.name}`" @click="removeService(item.slug)">
-              ×
-            </button>
-          </span>
-        </div>
-      </div>
+    <button type="button" :aria-label="`Remove ${item.name}`" @click="removeService(item.slug)">
+    ×
+  </button>
+          </span >
+        </div >
+      </div >
 
-      <label class="premium-field">
-        <span>Class of Travel *</span>
-        <select v-model="input.travelClass" required>
-          <option value="" disabled>- Select -</option>
+  <label class="premium-field">
+    <span>Class of Travel *</span>
+    <select v-model="input.travelClass" required>
+      <option value="" disabled>- Select -</option>
 
-          <option v-for="travelClass in [...classes].reverse()" :key="travelClass.id" :value="travelClass.id">
-            {{ travelClass.name }}
-          </option>
-        </select>
-      </label>
+      <option v-for="travelClass in [...classes].reverse()" :key="travelClass.id" :value="travelClass.id">
+      {{ travelClass.name }}
+    </option>
+  </select>
+      </label >
 
       <label class="premium-field">
         <span>No of Adults (Above 12 years) *</span>
@@ -673,22 +716,22 @@ async function submit() {
         <span>No of Luggages *</span>
         <input v-model.number="input.luggages" type="number" min="0" max="100" required />
       </label>
-    </div>
+    </div >
 
-    <div class="reference-communication">
-      <p>
-        Please select mode of communication methods *
-      </p>
+  <div class="reference-communication">
+    <p>
+      Please select mode of communication methods *
+    </p>
 
-      <div class="reference-communication-options">
-        <label v-for="method in communicationMethods" :key="method" class="checkbox-choice">
-          <input type="checkbox" :checked="input.communication.includes(method)"
+    <div class="reference-communication-options">
+      <label v-for="method in communicationMethods" :key="method" class="checkbox-choice">
+      <input type="checkbox" :checked="input.communication.includes(method)"
             @change="toggleCommunication(method)" />
 
-          <span>{{ method }}</span>
-        </label>
-      </div>
-    </div>
+      <span>{{ method }}</span>
+    </label>
+  </div>
+    </div >
 
     <p class="subtle-note">
       Availability and services are subject to supplier
@@ -709,10 +752,12 @@ async function submit() {
       {{ error }}
     </p>
 
-    <p v-if="submitted" class="form-success" role="status">
-      Your request has been received by the configured API.
-      Please await confirmation.
-    </p>
+    <div v-if="submitted" class="form-success" role="status">
+      <p style="margin: 0;">Your request has been received by our concierge service. Please await confirmation.</p>
+      <p v-if="enquiryReference" style="margin: 8px 0 0; font-weight: 700; color: #182a40; font-size: 13px;">
+        Enquiry Reference: <span style="background: rgba(177, 139, 101, 0.25); padding: 2px 8px; border-radius: 4px; font-family: monospace;">{{ enquiryReference }}</span>
+      </p>
+    </div>
 
     <button type="submit" class="premium-submit reference-book-button" :disabled="sending || submitted">
       {{
@@ -724,11 +769,11 @@ async function submit() {
       }}
     </button>
 
-    <button type="button" class="payload-toggle" @click="payloadPreview = !payloadPreview">
-      {{ payloadPreview ? 'Hide' : 'View' }}
+    <button type="button" class="payload-toggle" @click="payloadPreview = !payloadPreview" >
+  {{ payloadPreview ? 'Hide' : 'View' }}
       API payload preview
-    </button>
+    </button >
 
-    <pre v-if="payloadPreview" class="payload-preview">{{ JSON.stringify(payload, null, 2) }}</pre>
-  </form>
-</template>
+  <pre v-if="payloadPreview" class="payload-preview">{{ JSON.stringify(payload, null, 2) }}</pre>
+  </form >
+</template >
