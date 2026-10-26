@@ -25,7 +25,7 @@ const availableServices = computed(() =>
 
 const availableExtras = computed(() =>
   extrasCatalog.filter(extra =>
-    (currentAirport.value.extras as readonly string[])
+    ((currentAirport.value.extras || []) as readonly string[])
       .includes(extra.slug)
   )
 )

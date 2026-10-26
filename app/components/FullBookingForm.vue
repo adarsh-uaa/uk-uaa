@@ -61,19 +61,24 @@ const toast = useToast()
 // AIRPORT-SPECIFIC SERVICES
 // ------------------------------------------
 
-const availableJourneys = computed(() =>
-  journeyTypes.filter(type =>
-    (servicesConfig[input.airport]?.[
-      type.slug as BookingJourney
-    ] || []).length > 0
-  )
-)
+const availableJourneys = computed(() => {
+  const airportServices = servicesConfig[input.airport]
+  if (airportServices) {
+    const list = journeyTypes.filter(type =>
+      (airportServices[type.slug as BookingJourney] || []).length > 0
+    )
+    if (list.length > 0) return list
+  }
+  return journeyTypes
+})
 
-const availableServices = computed<BookingService[]>(() =>
-  servicesConfig[input.airport]?.[
-  input.journey as BookingJourney
-  ] || []
-)
+const availableServices = computed<BookingService[]>(() => {
+  const configured = servicesConfig[input.airport]?.[
+    input.journey as BookingJourney
+  ]
+  if (configured && configured.length > 0) return configured
+  return servicesConfig['heathrow']?.[input.journey as BookingJourney] || []
+})
 
 const selectedServices = computed(() =>
   availableServices.value.filter(item =>
@@ -267,8 +272,7 @@ if (/^\d{4}-\d{2}-\d{2}$/.test(dateQ)) {
 
 const payload = computed(() => ({
   airport_name: travelName.value,
-  // airport_name_id: selectAirport(input.airport).id,
-  airport_name_id: "1846",
+  airport_name_id: selectAirport(input.airport).id,
 
   email: input.email.trim(),
   mobile: fullMobile.value,
@@ -345,12 +349,12 @@ async function submit() {
     return
   }
 
-  // if (!selectAirport(input.airport).id) {
-  //   error.value =
-  //     'The selected airport needs a configured supplier ID.'
-  //   toast.error(error.value)
-  //   return
-  // }
+  if (!selectAirport(input.airport).id) {
+    error.value =
+      'The selected airport needs a configured supplier ID.'
+    toast.error(error.value)
+    return
+  }
 
   if (
   !availableJourneys.value.some(
@@ -452,7 +456,7 @@ async function submit() {
 
   const phoneDigits = fullMobile.value.replace(/\D/g, '')
 
-  if (!/^\d{8, 15}$/.test(phoneDigits)) {
+  if (!/^\d{8,15}$/.test(phoneDigits)) {
     error.value =
     'Please enter a valid phone number with country code.'
     toast.error(error.value)
@@ -538,14 +542,14 @@ async function submit() {
         <input v-model="input.email" type="email" placeholder="Email Address" autocomplete="email" required />
       </label>
 
-      <label class="premium-field">
-        <span>Airport *</span>
-        <select v-model="input.airport" required>
-          <option v-for="airport in airportsCatalog" :key="airport.slug" :value="airport.slug">
-          {{ airport.name }} ({{ airport.code }})
-        </option>
-      </select>
-    </label>
+      <div class="premium-field">
+        <label id="booking-airport-label">Airport *</label>
+        <AirportSearchSelect
+          v-model="input.airport"
+          aria-labelledby="booking-airport-label"
+          placeholder="Search airport or code (e.g. LHR, EDI)..."
+        />
+      </div>
 
     <div class="premium-field">
       <label for="booking-phone">Phone / Mobile *</label>
@@ -733,11 +737,6 @@ async function submit() {
   </div>
     </div >
 
-    <p class="subtle-note">
-      Availability and services are subject to supplier
-      confirmation. Submitting this form does not
-      constitute a confirmed booking.
-    </p>
 
     <label class="checkbox-choice consent">
       <input type="checkbox" required />
@@ -769,11 +768,11 @@ async function submit() {
       }}
     </button>
 
-  //   <button type="button" class="payload-toggle" @click="payloadPreview = !payloadPreview" >
-  // {{ payloadPreview ? 'Hide' : 'View' }}
-  //     API payload preview
-  //   </button >
-
-  // <pre v-if="payloadPreview" class="payload-preview">{{ JSON.stringify(payload, null, 2) }}</pre>
+    <!--
+    < button type = "button" class="payload-toggle" @click="payloadPreview = !payloadPreview" >
+  {{ payloadPreview ? 'Hide' : 'View' }} API payload preview
+    </button >
+  <pre v-if="payloadPreview" class="payload-preview">{{ JSON.stringify(payload, null, 2) }}</pre>
+-->
   </form >
 </template >

@@ -53,18 +53,14 @@ function continueBooking() {
     </div>
 
     <div class="uaa-quick-grid">
-      <label class="premium-field">
+      <div class="premium-field">
         <span>Choose Airport *</span>
-        <select v-model="airport" required>
-          <option
-            v-for="item in airportsCatalog"
-            :key="item.slug"
-            :value="item.slug"
-          >
-            {{ item.name }} ({{ item.code }})
-          </option>
-        </select>
-      </label>
+        <AirportSearchSelect
+          v-model="airport"
+          size="large"
+          placeholder="Search airport or code..."
+        />
+      </div>
 
       <label class="premium-field">
         <span>Service Type *</span>
