@@ -1,1 +1,6 @@
-<template><NuxtPage/><ClientOnly><FlightLoader/></ClientOnly></template>
+<template>
+    <NuxtPage />
+    <ClientOnly>
+        <FlightLoader />
+    </ClientOnly>
+</template>

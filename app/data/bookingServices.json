@@ -1,0 +1,57 @@
+{
+  "heathrow": {
+    "arrival": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
+      { "slug": "vip-terminal", "name": "VIP Terminal", "id": "" },
+      { "slug": "fast-track", "name": "VIP Fast Track Assistance", "id": "" },
+      { "slug": "lounge", "name": "Airport Lounge", "id": "" },
+      { "slug": "baggage", "name": "Baggage Handling", "id": "" },
+      { "slug": "limousine", "name": "Premium Taxi/Limousine", "id": "" }
+    ],
+    "departure": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
+      { "slug": "checkin", "name": "Check-in Assistance", "id": "" },
+      { "slug": "fast-track", "name": "VIP Fast Track Assistance", "id": "" },
+      { "slug": "lounge", "name": "Airport Lounge", "id": "" },
+      { "slug": "limousine", "name": "Premium Taxi/Limousine", "id": "" }
+    ],
+    "transit": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
+      { "slug": "lounge", "name": "Airport Lounge", "id": "" }
+    ]
+  },
+  "gatwick": {
+    "arrival": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
+      { "slug": "baggage", "name": "Baggage Handling", "id": "" }
+    ],
+    "departure": [{ "slug": "meet-greet", "name": "Meet and Greet", "id": "" }],
+    "transit": []
+  },
+  "manchester": {
+    "arrival": [],
+    "departure": [],
+    "transit": []
+  },
+  "edinburgh": {
+    "arrival": [],
+    "departure": [],
+    "transit": []
+  },
+  "birmingham": {
+    "arrival": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
+      { "slug": "baggage", "name": "Baggage Handling", "id": "" }
+    ],
+    "departure": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
+      { "slug": "checkin", "name": "Check-in Assistance", "id": "" }
+    ],
+    "transit": []
+  },
+  "stansted": {
+    "arrival": [],
+    "departure": [],
+    "transit": []
+  }
+}

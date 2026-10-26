@@ -1,1 +1,33 @@
-<script setup lang="ts">import {airports} from '~/data/site';const url=useRuntimeConfig().public.siteUrl;useSeoMeta({title:'UK Airports & VIP Services | UK Airport Assistance',description:'Explore personalised arrival, departure and transit assistance options for Heathrow, Gatwick, Manchester, Edinburgh, Birmingham and Stansted.'});useHead({link:[{rel:'canonical',href:url+'/airports'}]})</script><template><div class="luxe-page"><SiteHeader/><main><section class="interior-hero"><div class="container"><span class="luxe-kicker">OUR AIRPORTS</span><h1>Choose your <em>gateway.</em></h1><p>Each airport offers a distinct selection of services. Explore a destination and select what suits you.</p></div></section><section class="luxe-pad"><div class="container"><AirportJourneyPanel/><div class="airport-cards"><NuxtLink v-for="a in airports" :key="a.slug" :to="'/airports/'+a.slug" class="airport-card"><img :src="a.image" :alt="a.name+' travel gateway'" loading="lazy"/><div><span>{{a.code}}</span><h2>{{a.name}}</h2><span>Explore airport →</span></div></NuxtLink></div></div></section></main><SiteFooter/></div></template>
+<script setup
+    lang="ts">    import { airports } from '~/data/site'; const url = useRuntimeConfig().public.siteUrl; useSeoMeta({ title: 'UK Airports & VIP Services | UK Airport Assistance', description: 'Explore personalised arrival, departure and transit assistance options for Heathrow, Gatwick, Manchester, Edinburgh, Birmingham and Stansted.' }); useHead({ link: [{ rel: 'canonical', href: url + '/airports' }] })</script>
+<template>
+    <div class="luxe-page">
+        <SiteHeader />
+        <main>
+            <section class="interior-hero">
+                <div class="container"><span class="luxe-kicker">OUR AIRPORTS</span>
+                    <h1>
+                        <span style="color: #F4EADF;">Choose your </span>
+                        <em>gateway.</em>
+                    </h1>
+                    <p>Each airport offers a distinct selection of services. Explore a destination and select what suits
+                        you.</p>
+                </div>
+            </section>
+            <section class="luxe-pad">
+                <div class="container">
+                    <AirportJourneyPanel />
+                    <div class="airport-cards">
+                        <NuxtLink v-for="a in airports" :key="a.slug" :to="'/airports/' + a.slug" class="airport-card">
+                            <img :src="a.image" :alt="a.name + ' travel gateway'" loading="lazy" />
+                            <div><span>{{ a.code }}</span>
+                                <h2>{{ a.name }}</h2><span>Explore airport →</span>
+                            </div>
+                        </NuxtLink>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <SiteFooter />
+    </div>
+</template>

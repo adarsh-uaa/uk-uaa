@@ -12,7 +12,7 @@ const videoFailed = ref(false)
 const playing = ref(true)
 const muted = ref(true)
 const currentAirport = computed(
-  () => airports[chosenAirport.value >= 0 ? chosenAirport.value : 0]!
+    () => airports[chosenAirport.value >= 0 ? chosenAirport.value : 0]!
 )
 const currentService = computed(() => services[selectedService.value]!)
 const faqs = [
@@ -23,8 +23,8 @@ const faqs = [
 ]
 const steps = [{ num: '01', name: 'Choose your journey', desc: 'Select your airport, travel date and the assistance that suits you.' }, { num: '02', name: 'Leave the details to us', desc: 'We review your itinerary and confirm which premium services are available.' }, { num: '03', name: 'Travel beautifully', desc: 'Receive your confirmed arrangements and enjoy a more considered airport experience.' }]
 function changeAirport(n: number) {
-  const current = chosenAirport.value < 0 ? 0 : chosenAirport.value
-  chosenAirport.value = (current + n + airports.length) % airports.length
+    const current = chosenAirport.value < 0 ? 0 : chosenAirport.value
+    chosenAirport.value = (current + n + airports.length) % airports.length
 }
 async function toggleVideo() { if (!vid.value) return; if (vid.value.paused) { try { await vid.value.play(); playing.value = true } catch { videoFailed.value = true } } else { vid.value.pause(); playing.value = false } }
 function toggleSound() { muted.value = !muted.value; if (vid.value) vid.value.muted = muted.value }
@@ -43,9 +43,14 @@ function toggleSound() { muted.value = !muted.value; if (vid.value) vid.value.mu
                 <div class="luxe-hero-shade"></div>
                 <div class="container luxe-hero-content">
                     <div class="luxe-mini fade-up"><span class="luxe-rule"></span> THE ART OF EFFORTLESS TRAVEL
-                        <span>EST. FOR THE EXCEPTIONAL</span></div>
-                    <h1 class="luxe-hero-heading"><span class="line-reveal">The art of</span><span class="line-reveal"
-                            style="--line-delay:.15s"><em>arriving.</em></span></h1>
+                        <span>EST. FOR THE EXCEPTIONAL</span>
+                    </div>
+                    <h1 class="luxe-hero-heading">
+                        <span class="line-reveal" style="color: #F4EADF;">The art of</span>
+                        <span class="line-reveal" style="--line-delay: .05s;">
+                            <em style="color: #DCC5A5;">arriving.</em>
+                        </span>
+                    </h1>
                     <p class="luxe-hero-lead fade-up">Discreet, personal airport assistance for those who value every
                         moment of their journey.</p>
                     <div class="luxe-hero-actions fade-up">
@@ -56,17 +61,20 @@ function toggleSound() { muted.value = !muted.value; if (vid.value) vid.value.mu
                         </a>
                     </div>
                     <div class="luxe-hero-foot"><a href="#experience" class="luxe-scroll">
-                            <ArrowDown :size="17" /> SCROLL TO EXPLORE
+                            <!-- <ArrowDown :size="17" /> SCROLL TO EXPLORE -->
                         </a>
-                        <div class="luxe-video-controls"><button v-if="!videoFailed" @click="toggleVideo"
+                        <div class="luxe-video-controls">
+                            <!-- <button v-if="!videoFailed" @click="toggleVideo"
                                 :aria-label="playing ? 'Pause video' : 'Play video'">
                                 <Pause v-if="playing" :size="17" />
                                 <Play v-else :size="17" />
-                            </button><button v-if="!videoFailed" @click="toggleSound"
-                                :aria-label="muted ? 'Unmute' : 'Mute'">
+                            </button>
+                            <button v-if="!videoFailed" @click="toggleSound" :aria-label="muted ? 'Unmute' : 'Mute'">
                                 <VolumeX v-if="muted" :size="17" />
                                 <Volume2 v-else :size="17" />
-                            </button><span>UNITED KINGDOM · VIP CONCIERGE</span></div>
+                            </button> -->
+                            <span>UNITED KINGDOM · VIP CONCIERGE</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -114,8 +122,8 @@ function toggleSound() { muted.value = !muted.value; if (vid.value) vid.value.mu
                         <div class="luxe-airport-photo">
                             <Transition name="luxe-fade" mode="out-in"><img :key="currentAirport.slug"
                                     :src="currentAirport.image" :alt="currentAirport.name + ' destination'"
-                                    loading="lazy" /></Transition><span
-                                class="luxe-airport-code">{{ currentAirport.code }}</span>
+                                    loading="lazy" /></Transition><span class="luxe-airport-code">{{ currentAirport.code
+                                    }}</span>
                             <div class="luxe-airport-arrows"><button type="button" aria-label="Previous airport"
                                     @click="changeAirport(-1)">
                                     <ChevronLeft />
@@ -124,43 +132,29 @@ function toggleSound() { muted.value = !muted.value; if (vid.value) vid.value.mu
                                 </button></div>
                         </div>
                         <div class="luxe-airport-menu uaa-airport-menu">
-                        <div
-                            v-for="(airport, i) in airports"
-                            :key="airport.slug"
-                            class="uaa-airport-item"
-                            :class="{ 'is-active': chosenAirport === i }"
-                        >
-                            <button
-                            type="button"
-                            class="luxe-airport-row"
-                            :class="{ active: chosenAirport === i }"
-                            :aria-expanded="chosenAirport === i"
-                            @click="chosenAirport = chosenAirport === i ? -1 : i"
-                            >
-                            <span>0{{ i + 1 }}</span>
-                            <strong>{{ airport.name }}</strong>
-                            <small>{{ airport.code }}</small>
+                            <div v-for="(airport, i) in airports" :key="airport.slug" class="uaa-airport-item"
+                                :class="{ 'is-active': chosenAirport === i }">
+                                <button type="button" class="luxe-airport-row" :class="{ active: chosenAirport === i }"
+                                    :aria-expanded="chosenAirport === i"
+                                    @click="chosenAirport = chosenAirport === i ? -1 : i">
+                                    <span>0{{ i + 1 }}</span>
+                                    <strong>{{ airport.name }}</strong>
+                                    <small>{{ airport.code }}</small>
 
-                            <ChevronRight
-                                :size="18"
-                                class="uaa-airport-chevron"
-                            />
-                            </button>
+                                    <ChevronRight :size="18" class="uaa-airport-chevron" />
+                                </button>
 
-                            <div class="uaa-airport-expand">
-                            <div v-if="chosenAirport === i">
-                                <AirportInlineServices :airport="airport.slug" />
+                                <div class="uaa-airport-expand">
+                                    <div v-if="chosenAirport === i">
+                                        <AirportInlineServices :airport="airport.slug" />
 
-                                <NuxtLink
-                                :to="'/airports/' + airport.slug"
-                                class="uaa-airport-details"
-                                >
-                                Explore {{ airport.name }}
-                                <ArrowUpRight :size="16" />
-                                </NuxtLink>
+                                        <NuxtLink :to="'/airports/' + airport.slug" class="uaa-airport-details">
+                                            Explore {{ airport.name }}
+                                            <ArrowUpRight :size="16" />
+                                        </NuxtLink>
+                                    </div>
+                                </div>
                             </div>
-                            </div>
-                        </div>
                         </div>
                     </div>
                     <!-- <div class="airport-combined-panel">
@@ -202,8 +196,8 @@ function toggleSound() { muted.value = !muted.value; if (vid.value) vid.value.mu
                     </div>
                     <div class="luxe-faq-items">
                         <div v-for="(item, i) in faqs" :key="item.q" class="luxe-faq-item"><button
-                                :aria-expanded="openedFaq === i"
-                                @click="openedFaq = openedFaq === i ? -1 : i"><span>0{{ i + 1 }}</span><strong>{{ item.q }}</strong>
+                                :aria-expanded="openedFaq === i" @click="openedFaq = openedFaq === i ? -1 : i"><span>0{{
+                                    i + 1 }}</span><strong>{{ item.q }}</strong>
                                 <Minus v-if="openedFaq === i" :size="18" />
                                 <Plus v-else :size="18" />
                             </button>
@@ -214,9 +208,14 @@ function toggleSound() { muted.value = !muted.value; if (vid.value) vid.value.mu
             </section>
             <section class="luxe-final">
                 <div class="luxe-final-photo"></div>
-                <div class="container luxe-final-content" v-reveal><span class="luxe-kicker">A MORE BEAUTIFUL WAY TO
-                        TRAVEL</span>
-                    <h2>Your journey,<br><em>reimagined.</em></h2>
+                <div class="container luxe-final-content" v-reveal>
+                    <span class="luxe-kicker" style="color: #DCC5A5;">
+                        A MORE BEAUTIFUL WAY TO TRAVEL
+                    </span>
+                    <h2>
+                        <span style="color: #F4EADF;">Your journey,</span><br>
+                        <em style="color: #DCC5A5;">reimagined.</em>
+                    </h2>
                     <p>Allow us to take care of the details so you can focus on what matters most.</p>
                     <NuxtLink to="/book" class="luxe-button luxe-button-cream">Enquire about your journey
                         <ArrowUpRight :size="18" />
