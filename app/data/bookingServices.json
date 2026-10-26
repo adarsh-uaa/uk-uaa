@@ -1,57 +1,100 @@
 {
   "heathrow": {
     "arrival": [
-      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
-      { "slug": "vip-terminal", "name": "VIP Terminal", "id": "" },
-      { "slug": "fast-track", "name": "VIP Fast Track Assistance", "id": "" },
-      { "slug": "lounge", "name": "Airport Lounge", "id": "" },
-      { "slug": "baggage", "name": "Baggage Handling", "id": "" },
-      { "slug": "limousine", "name": "Premium Taxi/Limousine", "id": "" }
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "vip-terminal", "name": "VIP Terminal", "id": "11" },
+      { "slug": "fast-track", "name": "VIP Fast Track Assistance", "id": "3" },
+      { "slug": "lounge", "name": "Airport Lounge", "id": "4" },
+      { "slug": "baggage", "name": "Baggage Handling", "id": "6" },
+      { "slug": "limousine", "name": "Premium Taxi/Limousine", "id": "5" }
     ],
     "departure": [
-      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
-      { "slug": "checkin", "name": "Check-in Assistance", "id": "" },
-      { "slug": "fast-track", "name": "VIP Fast Track Assistance", "id": "" },
-      { "slug": "lounge", "name": "Airport Lounge", "id": "" },
-      { "slug": "limousine", "name": "Premium Taxi/Limousine", "id": "" }
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "checkin", "name": "Check-in Assistance", "id": "2" },
+      { "slug": "fast-track", "name": "VIP Fast Track Assistance", "id": "3" },
+      { "slug": "lounge", "name": "Airport Lounge", "id": "4" },
+      { "slug": "limousine", "name": "Premium Taxi/Limousine", "id": "5" }
     ],
     "transit": [
-      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
-      { "slug": "lounge", "name": "Airport Lounge", "id": "" }
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "fast-track", "name": "VIP Fast Track Assistance", "id": "3" },
+      { "slug": "lounge", "name": "Airport Lounge", "id": "4" }
     ]
   },
   "gatwick": {
     "arrival": [
-      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
-      { "slug": "baggage", "name": "Baggage Handling", "id": "" }
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "fast-track", "name": "VIP Fast Track Assistance", "id": "3" },
+      { "slug": "baggage", "name": "Baggage Handling", "id": "6" }
     ],
-    "departure": [{ "slug": "meet-greet", "name": "Meet and Greet", "id": "" }],
+    "departure": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "checkin", "name": "Check-in Assistance", "id": "2" },
+      { "slug": "fast-track", "name": "VIP Fast Track Assistance", "id": "3" }
+    ],
     "transit": []
   },
   "manchester": {
-    "arrival": [],
-    "departure": [],
-    "transit": []
+    "arrival": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "fast-track", "name": "VIP Fast Track Assistance", "id": "3" },
+      { "slug": "baggage", "name": "Baggage Handling", "id": "6" }
+    ],
+    "departure": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "checkin", "name": "Check-in Assistance", "id": "2" },
+      { "slug": "lounge", "name": "Airport Lounge", "id": "4" }
+    ],
+    "transit": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "lounge", "name": "Airport Lounge", "id": "4" }
+    ]
   },
   "edinburgh": {
-    "arrival": [],
-    "departure": [],
+    "arrival": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "baggage", "name": "Baggage Handling", "id": "6" }
+    ],
+    "departure": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "checkin", "name": "Check-in Assistance", "id": "2" }
+    ],
     "transit": []
   },
   "birmingham": {
     "arrival": [
-      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
-      { "slug": "baggage", "name": "Baggage Handling", "id": "" }
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "fast-track", "name": "VIP Fast Track Assistance", "id": "3" },
+      { "slug": "baggage", "name": "Baggage Handling", "id": "6" }
     ],
     "departure": [
-      { "slug": "meet-greet", "name": "Meet and Greet", "id": "" },
-      { "slug": "checkin", "name": "Check-in Assistance", "id": "" }
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "checkin", "name": "Check-in Assistance", "id": "2" }
     ],
     "transit": []
   },
   "stansted": {
-    "arrival": [],
-    "departure": [],
+    "arrival": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "baggage", "name": "Baggage Handling", "id": "6" }
+    ],
+    "departure": [
+      { "slug": "meet-greet", "name": "Meet and Greet", "id": "1" },
+      { "slug": "vip-meet-greet", "name": "VIP Meet & Greet", "id": "10" },
+      { "slug": "checkin", "name": "Check-in Assistance", "id": "2" }
+    ],
     "transit": []
   }
 }

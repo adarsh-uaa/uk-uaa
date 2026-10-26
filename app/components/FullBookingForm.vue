@@ -769,11 +769,11 @@ async function submit() {
       }}
     </button>
 
-    <button type="button" class="payload-toggle" @click="payloadPreview = !payloadPreview" >
-  {{ payloadPreview ? 'Hide' : 'View' }}
-      API payload preview
-    </button >
+  //   <button type="button" class="payload-toggle" @click="payloadPreview = !payloadPreview" >
+  // {{ payloadPreview ? 'Hide' : 'View' }}
+  //     API payload preview
+  //   </button >
 
-  <pre v-if="payloadPreview" class="payload-preview">{{ JSON.stringify(payload, null, 2) }}</pre>
+  // <pre v-if="payloadPreview" class="payload-preview">{{ JSON.stringify(payload, null, 2) }}</pre>
   </form >
 </template >
