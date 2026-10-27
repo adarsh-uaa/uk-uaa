@@ -5,6 +5,13 @@ const menuOpen = ref(false)
 const scrolled = ref(false)
 const route = useRoute()
 const { siteName } = useSiteMeta()
+const { handleHomeClick } = useHomeNavigation()
+
+function onHeaderHomeClick(e: MouseEvent) {
+  handleHomeClick(e, () => {
+    menuOpen.value = false
+  })
+}
 
 function syncScroll() {
   scrolled.value = window.scrollY > 36
@@ -31,7 +38,12 @@ onBeforeUnmount(() => {
     :class="{ 'header-scrolled': scrolled, 'menu-is-open': menuOpen }"
   >
     <div class="container nav-wrap">
-      <NuxtLink to="/" class="wordmark brand-logo" :aria-label="`${siteName} home`">
+      <NuxtLink
+        to="/"
+        class="wordmark brand-logo"
+        :aria-label="`${siteName} home`"
+        @click="onHeaderHomeClick"
+      >
         <img
           src="/images/uk-airport-assistance-logo.webp"
           :alt="siteName"
@@ -43,7 +55,7 @@ onBeforeUnmount(() => {
       </NuxtLink>
 
       <nav class="desktop-nav" aria-label="Primary navigation">
-        <NuxtLink to="/">Home</NuxtLink>
+        <NuxtLink to="/" @click="onHeaderHomeClick">Home</NuxtLink>
         <NuxtLink to="/airports">Airports &amp; Services</NuxtLink>
         <NuxtLink to="/vip-experience">VIP Experience</NuxtLink>
         <NuxtLink to="/about">About</NuxtLink>
@@ -75,7 +87,7 @@ onBeforeUnmount(() => {
       class="mobile-nav"
       aria-label="Mobile navigation"
     >
-      <NuxtLink to="/">Home</NuxtLink>
+      <NuxtLink to="/" @click="onHeaderHomeClick">Home</NuxtLink>
       <NuxtLink to="/airports">Airports &amp; Services</NuxtLink>
       <NuxtLink to="/vip-experience">VIP Experience</NuxtLink>
       <NuxtLink to="/about">About</NuxtLink>

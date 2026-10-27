@@ -9,6 +9,7 @@ import {
 
 const year = new Date().getFullYear()
 const { siteName } = useSiteMeta()
+const { handleHomeClick } = useHomeNavigation()
 </script>
 
 <template>
@@ -16,7 +17,11 @@ const { siteName } = useSiteMeta()
     <div class="container">
       <div class="uaa-footer-top">
         <div class="uaa-footer-brand">
-          <NuxtLink to="/" class="uaa-footer-logo footer-brand-logo">
+          <NuxtLink
+            to="/"
+            class="uaa-footer-logo footer-brand-logo"
+            @click="handleHomeClick"
+          >
             <img
               src="/images/uk-airport-assistance-logo.webp"
               :alt="`${siteName} – Powered By`"
@@ -40,7 +45,7 @@ const { siteName } = useSiteMeta()
 
         <div class="uaa-footer-column">
           <h3>Explore</h3>
-          <NuxtLink to="/">Home</NuxtLink>
+          <NuxtLink to="/" @click="handleHomeClick">Home</NuxtLink>
           <NuxtLink to="/airports">UK Airports</NuxtLink>
           <NuxtLink to="/vip-experience">VIP Experience</NuxtLink>
           <NuxtLink to="/about">About Us</NuxtLink>
