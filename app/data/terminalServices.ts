@@ -51,380 +51,6 @@ export interface AirportTerminalConfig {
 }
 
 /* ==========================================================
-   SECONDARY SERVICES BUILDER
-   ========================================================== */
-
-function createStandardSecondaryServices(
-  code: string,
-  currency: string,
-  prices: {
-    vipMeetGreet: number;
-    vipMeetGreetPax?: number;
-    fastTrack: number;
-    baggage: number;
-    baggagePax?: string;
-    lounge: number;
-    checkin: number;
-    limousine: number;
-  }
-) {
-  const prefix = code.toLowerCase();
-  const c = code.toUpperCase();
-
-  return {
-    arrival: [
-
-
-
-
-
-
-
-      {
-        slug: `${prefix}-arrival-vip-meet-greet`,
-        title: `${c} VIP Meet & Greet Service`,
-        inclusions: [
-          "Dedicated senior VIP concierge greeting at arrival gate or aerobridge with personalized nameboard.",
-          "Expedited priority fast-track through immigration & border control.",
-          "Dedicated baggage retrieval and luggage porterage to arrival hall.",
-          "Customs escort and direct coordination with chauffeur or driver."
-        ],
-        price: {
-          amount: prices.vipMeetGreet,
-          currency,
-          upToPassengers: prices.vipMeetGreetPax || 1,
-          data: `Price ${prices.vipMeetGreetPax && prices.vipMeetGreetPax > 1 ? `upto ${prices.vipMeetGreetPax} passengers:` : 'for 1 passenger:'}`
-        },
-        apiServiceId: "10"
-      },
-      {
-        slug: `${prefix}-arrival-fast-track`,
-        title: `${c} VIP Fast Track Assistance`,
-        inclusions: [
-          "Personal greeter meeting at aircraft arrival gate.",
-          "Dedicated priority fast-track access through immigration & passport control.",
-          "Bypass standard passenger queues for swift terminal exit.",
-          "Escort to baggage reclaim hall."
-        ],
-        price: {
-          amount: prices.fastTrack,
-          currency,
-          upToPassengers: 1,
-          data: "Price for 1 passenger:"
-        },
-        apiServiceId: "3"
-      },
-      {
-        slug: `${prefix}-arrival-baggage`,
-        title: `${c} Baggage Handling & Porterage`,
-        inclusions: [
-          "Dedicated luggage porter waiting at baggage carousel.",
-          "Luggage collection and loading onto heavy-duty trolleys.",
-          "Escort through customs inspection.",
-          "Transfer to curbside vehicle, limousine pickup point or train link."
-        ],
-        price: {
-          amount: prices.baggage,
-          currency,
-          upToPassengers: 1,
-          data: prices.baggagePax || "Price for upto 4 luggage:"
-        },
-        apiServiceId: "6"
-      },
-      {
-        slug: `${prefix}-arrival-lounge`,
-        title: `${c} Airport Lounge Access`,
-        inclusions: [
-          "Access to executive arrival lounge.",
-          "Complimentary hot & cold buffet, refreshments and beverages.",
-          "High-speed Wi-Fi, flight display screens and quiet relaxation area.",
-          "Up to 3 hours stay upon arrival."
-        ],
-        price: {
-          amount: prices.lounge,
-          currency,
-          upToPassengers: 1,
-          data: "Price for 1 passenger:"
-        },
-        apiServiceId: "4"
-      },
-      {
-        slug: `${prefix}-arrival-limousine`,
-        title: `${c} Premium Limousine Transfer`,
-        inclusions: [
-          "Private executive chauffeur transfer in luxury Mercedes or equivalent executive vehicle.",
-          "Flight monitoring and curbside meet & assist.",
-          "Direct transfer to your specified destination address.",
-          "Complimentary onboard Wi-Fi, bottled water and luggage handling."
-        ],
-        price: {
-          amount: prices.limousine,
-          currency,
-          upToPassengers: 3,
-          data: "Price upto 3 passengers:"
-        },
-        apiServiceId: "5"
-      }
-    ],
-    departure: [
-
-
-
-
-
-
-
-      {
-        slug: `${prefix}-departure-vip-meet-greet`,
-        title: `${c} VIP Meet & Greet Service`,
-        inclusions: [
-          "Curbside greeting by dedicated senior VIP concierge.",
-          "Dedicated porterage assistance with check-in luggage.",
-          "Expedited check-in and boarding pass formalities.",
-          "Fast-track security and passport clearance.",
-          "Escort to departure lounge and gate accompaniment."
-        ],
-        price: {
-          amount: prices.vipMeetGreet,
-          currency,
-          upToPassengers: prices.vipMeetGreetPax || 1,
-          data: `Price ${prices.vipMeetGreetPax && prices.vipMeetGreetPax > 1 ? `upto ${prices.vipMeetGreetPax} passengers:` : 'for 1 passenger:'}`
-        },
-        apiServiceId: "10"
-      },
-      {
-        slug: `${prefix}-departure-checkin`,
-        title: `${c} Check-in Assistance`,
-        inclusions: [
-          "Dedicated concierge guidance at airline check-in counters.",
-          "Assistance with boarding pass issuance and baggage tagging.",
-          "Support with airline documentation, seat allocation and special requests.",
-          "Escort to the security checkpoint."
-        ],
-        price: {
-          amount: prices.checkin,
-          currency,
-          upToPassengers: 1,
-          data: "Price for 1 passenger:"
-        },
-        apiServiceId: "2"
-      },
-      {
-        slug: `${prefix}-departure-fast-track`,
-        title: `${c} VIP Fast Track Assistance`,
-        inclusions: [
-          "Personal concierge meeting in departures concourse.",
-          "Priority fast-track security channel access.",
-          "Expedited screening through security checkpoints.",
-          "Escort to departure lounge or retail concourse."
-        ],
-        price: {
-          amount: prices.fastTrack,
-          currency,
-          upToPassengers: 1,
-          data: "Price for 1 passenger:"
-        },
-        apiServiceId: "3"
-      },
-      {
-        slug: `${prefix}-departure-baggage`,
-        title: `${c} Baggage Handling & Porterage`,
-        inclusions: [
-          "Dedicated porter assistance from vehicle curbside drop-off.",
-          "Luggage transport on dedicated trolleys to airline check-in desks.",
-          "Assistance with baggage drop and oversized item dispatch."
-        ],
-        price: {
-          amount: prices.baggage,
-          currency,
-          upToPassengers: 1,
-          data: prices.baggagePax || "Price for upto 4 luggage:"
-        },
-        apiServiceId: "6"
-      },
-      {
-        slug: `${prefix}-departure-lounge`,
-        title: `${c} Airport Lounge Access`,
-        inclusions: [
-          "Access to premium executive departure lounge before your flight.",
-          "Selection of gourmet dishes, premium wines, spirits and beverages.",
-          "Comfortable seating, charging stations and high-speed Wi-Fi.",
-          "Up to 3 hours stay prior to departure."
-        ],
-        price: {
-          amount: prices.lounge,
-          currency,
-          upToPassengers: 1,
-          data: "Price for 1 passenger:"
-        },
-        apiServiceId: "4"
-      },
-      {
-        slug: `${prefix}-departure-limousine`,
-        title: `${c} Premium Limousine Transfer`,
-        inclusions: [
-          "Luxury private chauffeur pickup from your residence, hotel or office.",
-          "Premium Mercedes S-Class or executive V-Class MPV.",
-          "Curbside drop-off directly outside your departure terminal.",
-          "Flight tracking and luggage handling by driver."
-        ],
-        price: {
-          amount: prices.limousine,
-          currency,
-          upToPassengers: 3,
-          data: "Price upto 3 passengers:"
-        },
-        apiServiceId: "5"
-      }
-    ],
-    transit: [
-
-
-
-
-
-
-
-      {
-        slug: `${prefix}-transit-vip-meet-greet`,
-        title: `${c} VIP Meet & Greet Service`,
-        inclusions: [
-          "Dedicated VIP concierge meeting at aircraft arrival gate or aerobridge.",
-          "Assistance with inter-terminal transfer if required.",
-          "Fast-track connection security and transit immigration clearance.",
-          "Escort to connecting flight lounge and boarding gate accompaniment.",
-          "Baggage transfer monitoring with airline."
-        ],
-        price: {
-          amount: prices.vipMeetGreet,
-          currency,
-          upToPassengers: prices.vipMeetGreetPax || 1,
-          data: `Price ${prices.vipMeetGreetPax && prices.vipMeetGreetPax > 1 ? `upto ${prices.vipMeetGreetPax} passengers:` : 'for 1 passenger:'}`
-        },
-        apiServiceId: "10"
-      },
-      {
-        slug: `${prefix}-transit-fast-track`,
-        title: `${c} VIP Fast Track Assistance`,
-        inclusions: [
-          "Gate greeting upon arrival on inbound flight.",
-          "Fast-track expedited transfer security clearance.",
-          "Fast-track immigration check if transit requires terminal transfer.",
-          "Escort to connecting flight gate area."
-        ],
-        price: {
-          amount: prices.fastTrack,
-          currency,
-          upToPassengers: 1,
-          data: "Price for 1 passenger:"
-        },
-        apiServiceId: "3"
-      },
-      {
-        slug: `${prefix}-transit-baggage`,
-        title: `${c} Baggage Handling & Porterage`,
-        inclusions: [
-          "Porter assistance with carry-on bags and duty-free purchases during transit.",
-          "Coordination with airline transfer desk for luggage transfers if required.",
-          "Dedicated porter accompaniment throughout connection."
-        ],
-        price: {
-          amount: prices.baggage,
-          currency,
-          upToPassengers: 1,
-          data: prices.baggagePax || "Price for upto 4 luggage:"
-        },
-        apiServiceId: "6"
-      },
-      {
-        slug: `${prefix}-transit-lounge`,
-        title: `${c} Airport Lounge Access`,
-        inclusions: [
-          "Premium transit lounge stay during layover.",
-          "Hot dining, premium refreshments, showers and relaxation suites.",
-          "Flight departure monitors and quiet workspace.",
-          "Up to 3 hours transit access."
-        ],
-        price: {
-          amount: prices.lounge,
-          currency,
-          upToPassengers: 1,
-          data: "Price for 1 passenger:"
-        },
-        apiServiceId: "4"
-      }
-    ]
-  };
-}
-
-const lhrSecondary = createStandardSecondaryServices('LHR', 'USD', {
-  vipMeetGreet: 1450,
-  vipMeetGreetPax: 3,
-  fastTrack: 195,
-  baggage: 95,
-  lounge: 120,
-  checkin: 110,
-  limousine: 220
-});
-
-const lgwSecondary = createStandardSecondaryServices('LGW', 'USD', {
-  vipMeetGreet: 850,
-  fastTrack: 195,
-  baggage: 95,
-  lounge: 110,
-  checkin: 110,
-  limousine: 210
-});
-
-const bhxSecondary = createStandardSecondaryServices('BHX', 'USD', {
-  vipMeetGreet: 450,
-  fastTrack: 165,
-  baggage: 85,
-  lounge: 95,
-  checkin: 95,
-  limousine: 180
-});
-
-const stnSecondary = createStandardSecondaryServices('STN', 'USD', {
-  vipMeetGreet: 990,
-  fastTrack: 180,
-  baggage: 95,
-  baggagePax: "Price for upto 8 luggage:",
-  lounge: 105,
-  checkin: 105,
-  limousine: 195
-});
-
-const ediSecondary = createStandardSecondaryServices('EDI', 'USD', {
-  vipMeetGreet: 590,
-  vipMeetGreetPax: 4,
-  fastTrack: 170,
-  baggage: 85,
-  baggagePax: "Price for upto 3 luggage:",
-  lounge: 95,
-  checkin: 95,
-  limousine: 175
-});
-
-const manSecondary = createStandardSecondaryServices('MAN', 'USD', {
-  vipMeetGreet: 450,
-  fastTrack: 165,
-  baggage: 85,
-  lounge: 95,
-  checkin: 95,
-  limousine: 175
-});
-
-const ukSecondary = createStandardSecondaryServices('UK', 'USD', {
-  vipMeetGreet: 450,
-  fastTrack: 165,
-  baggage: 85,
-  lounge: 95,
-  checkin: 95,
-  limousine: 175
-});
-
-/* ==========================================================
    SERVICE CONFIGURATION
    ========================================================== */
 
@@ -455,12 +81,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 990,
               currency: "USD",
               upToPassengers: 3,
-              data: "Price upto 3 passengers:"
+              data: "Price upto 3 passengers: 990 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...lhrSecondary.arrival],
+        ],
         departure: [
           {
             slug: "lhr-departure-meet-greet",
@@ -481,12 +106,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 560,
               currency: "USD",
               upToPassengers: 3,
-              data: "Price upto 3 passengers:"
+              data: "Price upto 3 passengers: 560 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...lhrSecondary.departure],
+        ],
         transit: [
           {
             slug: "lhr-transit-meet-greet",
@@ -506,12 +130,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 425,
               currency: "USD",
               upToPassengers: 2,
-              data: "Price upto 2 passengers:"
+              data: "Price upto 2 passengers: 425 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...lhrSecondary.transit]
+        ]
       }
     },
 
@@ -613,12 +236,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 560,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1 passenger:"
+              data: "Price for 1 passenger: 560 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...lgwSecondary.arrival],
+        ],
         departure: [
           {
             slug: "lgw-gold-departure-meet-greet",
@@ -637,12 +259,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 560,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1 passenger:"
+              data: "Price for 1 passenger: 560 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...lgwSecondary.departure],
+        ],
         transit: [
           {
             slug: "lgw-gold-transit-meet-greet",
@@ -663,12 +284,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 600,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1 passenger:"
+              data: "Price for 1 passenger: 600 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...lgwSecondary.transit]
+        ]
       }
     },
 
@@ -764,12 +384,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 280,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1 passenger:"
+              data: "Price for 1 passenger: 280 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...bhxSecondary.arrival],
+        ],
         departure: [
           {
             slug: "bhx-departure-meet-greet",
@@ -787,12 +406,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 280,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1 passenger:"
+              data: "Price for 1 passenger: 280 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...bhxSecondary.departure],
+        ],
         transit: [
           {
             slug: "bhx-transit-meet-greet",
@@ -808,12 +426,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 280,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1 passenger:"
+              data: "Price for 1 passenger: 280 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...bhxSecondary.transit]
+        ]
       }
     }
   },
@@ -841,12 +458,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 770,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1st passenger:"
+              data: "Price for 1st passenger: 770 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...stnSecondary.arrival],
+        ],
         departure: [
           {
             slug: "stn-departure-meet-greet",
@@ -865,12 +481,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 770,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1st passenger:"
+              data: "Price for 1st passenger: 770 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...stnSecondary.departure],
+        ],
         transit: [
           {
             slug: "stn-transit-meet-greet",
@@ -888,12 +503,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 565,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1st passenger:"
+              data: "Price for 1st passenger: 565 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...stnSecondary.transit]
+        ]
       }
     }
   },
@@ -921,12 +535,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 380,
               currency: "USD",
               upToPassengers: 4,
-              data: "Price up to 4 passengers:"
+              data: "Price up to 4 passengers: 380 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...ediSecondary.arrival],
+        ],
         departure: [
           {
             slug: "edi-departure-meet-greet",
@@ -945,12 +558,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 430,
               currency: "USD",
               upToPassengers: 4,
-              data: "Price up to 4 passengers:"
+              data: "Price up to 4 passengers: 430 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...ediSecondary.departure],
+        ],
         transit: [
           {
             slug: "edi-transit-meet-greet",
@@ -972,12 +584,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 760,
               currency: "USD",
               upToPassengers: 4,
-              data: "Price up to 4 passengers:"
+              data: "Price up to 4 passengers: 760 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...ediSecondary.transit]
+        ]
       }
     }
   },
@@ -1004,12 +615,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 295,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1 passenger:"
+              data: "Price for 1 passenger: 295 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...manSecondary.arrival],
+        ],
         departure: [
           {
             slug: "man-departure-meet-greet",
@@ -1027,12 +637,11 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 295,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1 passenger:"
+              data: "Price for 1 passenger: 295 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...manSecondary.departure],
+        ],
         transit: [
           {
             slug: "man-transit-meet-greet",
@@ -1049,19 +658,18 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
               amount: 295,
               currency: "USD",
               upToPassengers: 1,
-              data: "Price for 1 passenger:"
+              data: "Price for 1 passenger: 295 USD"
             },
             apiServiceId: "1"
           }
-        ,
-...manSecondary.transit]
+        ]
       }
     }
   }
 };
 
 /* ==========================================================
-   HELPERS
+   HELPERS & FALLBACK
    ========================================================== */
 
 const standardUkAirportConfig: AirportTerminalConfig = {
@@ -1084,12 +692,11 @@ const standardUkAirportConfig: AirportTerminalConfig = {
             amount: 295,
             currency: "USD",
             upToPassengers: 1,
-            data: "Price for 1 passenger:"
+            data: "Price for 1 passenger: 295 USD"
           },
           apiServiceId: "1"
         }
-      ,
-...ukSecondary.arrival],
+      ],
       departure: [
         {
           slug: "uk-departure-meet-greet",
@@ -1107,12 +714,11 @@ const standardUkAirportConfig: AirportTerminalConfig = {
             amount: 295,
             currency: "USD",
             upToPassengers: 1,
-            data: "Price for 1 passenger:"
+            data: "Price for 1 passenger: 295 USD"
           },
           apiServiceId: "1"
         }
-      ,
-...ukSecondary.departure],
+      ],
       transit: [
         {
           slug: "uk-transit-meet-greet",
@@ -1129,12 +735,11 @@ const standardUkAirportConfig: AirportTerminalConfig = {
             amount: 295,
             currency: "USD",
             upToPassengers: 1,
-            data: "Price for 1 passenger:"
+            data: "Price for 1 passenger: 295 USD"
           },
           apiServiceId: "1"
         }
-      ,
-...ukSecondary.transit]
+      ]
     }
   }
 };

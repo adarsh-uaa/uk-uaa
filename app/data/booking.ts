@@ -114,7 +114,7 @@ export const airportsCatalog: readonly AirportOption[] = [
 
 export const journeyTypes = [
   { slug: "arrival", name: "VIP Arrival", id: "1" },
-  { slug: "departure", name: "VIP Dispatch", id: "2" },
+  { slug: "departure", name: "VIP Departure", id: "2" },
   { slug: "transit", name: "VIP Transit", id: "3" },
 ] as const;
 

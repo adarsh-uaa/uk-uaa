@@ -1,9 +1,15 @@
 <script setup lang="ts">
 const name = ref('')
 const email = ref('')
+const phone = ref('')
 const message = ref('')
+const honeypot = ref('')
 const sent = ref(false)
+const loading = ref(false)
+const errorMessage = ref('')
+const successMessage = ref('')
 
+const toast = useToast()
 const { siteName, siteUrl } = useSiteMeta()
 const canonicalUrl = computed(() => `${siteUrl.value}/contact`)
 
@@ -22,8 +28,49 @@ useHead(() => ({
   link: [{ rel: 'canonical', href: canonicalUrl.value }]
 }))
 
-function prepare() {
-  sent.value = true
+async function handleSubmit() {
+  if (loading.value) return
+  errorMessage.value = ''
+  successMessage.value = ''
+  sent.value = false
+
+  loading.value = true
+
+  try {
+    const res = await $fetch<{ success: boolean; message: string }>('/api/contact', {
+      method: 'POST',
+      body: {
+        name: name.value,
+        email: email.value,
+        phone: phone.value,
+        message: message.value,
+        website_check: honeypot.value
+      }
+    })
+
+    sent.value = true
+    successMessage.value = res.message || 'Thank you for contacting us. Our VIP concierge desk will review your enquiry and get back to you promptly.'
+
+    toast.success({
+      title: 'Enquiry Received',
+      message: successMessage.value
+    })
+
+    // Reset form fields
+    name.value = ''
+    email.value = ''
+    phone.value = ''
+    message.value = ''
+  } catch (err: any) {
+    const msg = err?.data?.statusMessage || err?.statusMessage || err?.message || 'Failed to submit enquiry. Please try again later.'
+    errorMessage.value = msg
+    toast.error({
+      title: 'Submission Failed',
+      message: msg
+    })
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -54,28 +101,43 @@ function prepare() {
             </NuxtLink>
           </div>
 
-          <form class="full-booking" @submit.prevent="prepare">
+          <form class="full-booking" @submit.prevent="handleSubmit">
+            <!-- Honeypot field for bot spam deterrence -->
+            <div style="display: none;" aria-hidden="true">
+              <input v-model="honeypot" tabindex="-1" autocomplete="off" name="website_check" />
+            </div>
+
             <label class="premium-field" for="contact-name">
               <span>Your name *</span>
-              <input id="contact-name" v-model="name" autocomplete="name" required />
+              <input id="contact-name" v-model="name" autocomplete="name" required placeholder="e.g. Lord Harrington" />
             </label>
 
             <label class="premium-field" for="contact-email">
               <span>Email address *</span>
-              <input id="contact-email" v-model="email" type="email" autocomplete="email" required />
+              <input id="contact-email" v-model="email" type="email" autocomplete="email" required placeholder="e.g. client@example.com" />
+            </label>
+
+            <label class="premium-field" for="contact-phone">
+              <span>Phone number (optional)</span>
+              <input id="contact-phone" v-model="phone" type="tel" autocomplete="tel" placeholder="e.g. +44 20 7946 0991" />
             </label>
 
             <label class="premium-field" for="contact-message">
               <span>Message *</span>
-              <textarea id="contact-message" v-model="message" rows="6" required></textarea>
+              <textarea id="contact-message" v-model="message" rows="6" required placeholder="Please detail your travel dates, preferred airport, service requirements, or any specific concierge requests..."></textarea>
             </label>
 
-            <button class="premium-submit" type="submit">
-              Send enquiry →
+            <button class="premium-submit" type="submit" :disabled="loading">
+              <span v-if="loading">Sending enquiry...</span>
+              <span v-else>Send enquiry →</span>
             </button>
 
-            <p v-if="sent" role="status" class="subtle-note" style="color: #622a31; font-weight: 600;">
-              Thank you for contacting us. Our VIP concierge desk will review your enquiry and get back to you promptly.
+            <p v-if="errorMessage" role="alert" class="subtle-note" style="color: #c93b2b; font-weight: 600; margin-top: 15px;">
+              {{ errorMessage }}
+            </p>
+
+            <p v-if="sent" role="status" class="subtle-note" style="color: #2e6930; font-weight: 600; margin-top: 15px;">
+              {{ successMessage }}
             </p>
           </form>
         </div>

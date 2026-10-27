@@ -99,22 +99,8 @@ const activeTerminal = computed<TerminalSlug>(() =>
 );
 
 const availableTypes = computed(() => {
-    if (activeTerminal.value === "vip") {
-        return journeyTypes.filter(
-            type =>
-                getServicePackages(
-                    props.airport,
-                    "vip",
-                    type.slug
-                ).length > 0
-        );
-    }
-
-    const allowed = current.value.types as readonly string[];
-
-    return journeyTypes.filter(
-        type => allowed.includes(type.slug)
-    );
+    // Always show all journey types in the booking form regardless of configured packages
+    return [...journeyTypes];
 });
 
 const activeService = computed(() =>
@@ -427,15 +413,11 @@ onBeforeUnmount(() => {
                     <strong>Additional Service:</strong>
                     {{ item.additionalService }}
                 </p>
-
-                <p v-if="item.price" class="terminal-service-price">
-                    {{ item.price.data || "Package price:" }}
-
-                    <strong>
-                        {{ formatPrice(item.price.amount, item.price.currency) }}
-                    </strong>
-                </p>
             </article>
+
+            <p class="terminal-quote-note">
+                Final pricing and service availability are subject to supplier confirmation.
+            </p>
         </div>
     </div>
 </template>
@@ -826,5 +808,16 @@ onBeforeUnmount(() => {
     grid-template-columns: 1fr;
     gap: 14px;
   }
+}
+
+.terminal-quote-note {
+  font-size: 11px;
+  color: #77746d;
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  background: #faf7f2;
+  border: 1px solid #e7ded2;
+  border-radius: 5px;
+  line-height: 1.5;
 }
 </style>

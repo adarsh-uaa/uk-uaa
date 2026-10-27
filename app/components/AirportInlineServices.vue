@@ -96,7 +96,7 @@ function continueBooking() {
       </button>
     </div>
 
-    <!-- Dynamic heading showing the services provided e.g. VIP Arrival / Dispatch -->
+    <!-- Dynamic heading showing the services provided e.g. VIP Arrival / Departure -->
     <div v-if="activeServiceObj" class="uaa-service-heading-box">
       <div class="uaa-service-heading-kicker">SERVICES PROVIDED</div>
       <h4 class="uaa-service-heading-title">{{ activeServiceObj.name }}</h4>

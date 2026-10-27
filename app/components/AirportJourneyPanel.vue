@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { selectAirport, journeyTypes } from '~/data/booking'
 
 import {
@@ -67,41 +67,6 @@ const selectedPackages = computed(() =>
     )
 )
 
-// Combined package prices by currency
-const priceTotals = computed(() => {
-    const totals: Record<string, number> = {}
-
-    for (const item of selectedPackages.value) {
-        if (item.price && item.price.amount > 0) {
-            const currency = item.price.currency
-            totals[currency] =
-                (totals[currency] || 0) + item.price.amount
-        }
-    }
-
-    return Object.entries(totals).map(
-        ([currency, amount]) => ({
-            currency,
-            amount
-        })
-    )
-})
-
-const hasUnpricedPackages = computed(() =>
-    selectedPackages.value.some(item => !item.price || item.price.amount === 0)
-)
-
-function formatPrice(
-    amount: number,
-    currency: string
-) {
-    return new Intl.NumberFormat('en-GB', {
-        style: 'currency',
-        currency,
-        maximumFractionDigits: 0
-    }).format(amount)
-}
-
 function cleanServiceName(title: string): string {
     if (!title) return ''
     return title.replace(/^[A-Z]{2,4}\s*[-–—:]?\s*/i, '').trim()
@@ -168,53 +133,12 @@ function proceed() {
                         {{ item.additionalService }}
                     </p>
 
-                    <div v-if="item.price && item.price.amount > 0" class="journey-selected-price">
-                        <span>
-                            {{
-                                item.price.data ||
-                                (
-                                    item.price.upToPassengers
-                                        ? `Price up to ${item.price.upToPassengers} passengers:`
-                                        : 'Package price:'
-                            )
-                            }}
-                        </span>
-
-                        <strong>
-                            {{ formatPrice(
-                                item.price.amount,
-                                item.price.currency
-                            ) }}
-                        </strong>
-                    </div>
-
-                    <p v-else class="subtle-note">
-                        {{ item.price?.data || 'Pricing available on request.' }}
-                    </p>
-                </div>
-
-                <!-- Total for selected packages -->
-                <div v-if="selectedPackages.length > 1 && priceTotals.length"
-                    class="journey-selected-price journey-total-price">
-                    <span>
-                        Listed package prices
-                        <small v-if="hasUnpricedPackages">
-                            (excludes packages priced on request)
-                        </small>
-                    </span>
-
-                    <div>
-                        <strong v-for="total in priceTotals" :key="total.currency"
-                            style="display: block; text-align: right">
-                            {{ formatPrice(
-                                total.amount,
-                                total.currency
-                            ) }}
-                        </strong>
+                    <div class="journey-quote-badge">
+                        Will be confirmed on quote
                     </div>
                 </div>
 
-                <p class="subtle-note">
+                <p class="subtle-note journey-supplier-note">
                     Final pricing and service availability are subject
                     to supplier confirmation.
                 </p>
@@ -224,7 +148,7 @@ function proceed() {
             <div v-else class="journey-no-packages-box">
                 <p class="journey-no-packages-title">No service package selected</p>
                 <p class="subtle-note">
-                    Please select at least 1 service package from the dropdown to view its inclusions, pricing, and continue to booking.
+                    Please select at least 1 service package from the dropdown to view its inclusions and continue to booking.
                 </p>
             </div>
 
@@ -327,50 +251,28 @@ function proceed() {
   line-height: 1.35;
 }
 
-.journey-selected-price {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 6px 0 0;
-  margin-top: 6px;
-  border-top: 1px solid #e2dbd1;
-  border-bottom: none;
-}
-
-.journey-selected-price span {
-  color: #77746d;
+/* Quote badge replacing price */
+.journey-quote-badge {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 10px;
+  background: #f0ebe2;
+  border: 1px solid #d8cfc3;
+  border-radius: 999px;
   font-size: 10.5px;
-}
-
-.journey-selected-price strong {
-  font-size: 14.5px;
-  font-weight: 700;
-  color: #182a40;
-}
-
-/* Total price summary */
-.journey-total-price {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  margin: 10px 0 8px;
-  background: #ffffff;
-  border: 1px solid #ded5c7;
-  border-radius: 5px;
-}
-
-.journey-total-price span {
-  font-size: 11px;
   font-weight: 600;
-  color: #182a40;
+  color: #7a5c3a;
+  letter-spacing: 0.01em;
 }
 
-.journey-total-price strong {
-  font-size: 16px;
-  font-weight: 700;
-  color: #622a31;
+/* Supplier note */
+.journey-supplier-note {
+  margin-top: 6px;
+  margin-bottom: 6px;
+  padding: 7px 10px;
+  background: #faf7f2;
+  border: 1px solid #e7ded2;
+  border-radius: 5px;
 }
 
 /* Submit button */

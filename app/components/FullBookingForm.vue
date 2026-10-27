@@ -243,7 +243,7 @@ const journeyDisplayOptions = computed(() => {
       else if (type.slug === 'transit') name = 'Normal Transit'
     } else {
       if (type.slug === 'arrival') name = 'VIP Arrival'
-      else if (type.slug === 'departure') name = 'VIP Dispatch'
+      else if (type.slug === 'departure') name = 'VIP Departure'
       else if (type.slug === 'transit') name = 'VIP Transit'
     }
     return {

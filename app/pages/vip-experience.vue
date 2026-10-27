@@ -130,7 +130,7 @@ useHead(() => ({
 
                 <div class="vip-service-badges">
                   <span class="vip-service-pill">VIP Arrival</span>
-                  <span class="vip-service-pill">VIP Dispatch</span>
+                  <span class="vip-service-pill">VIP Departure</span>
                   <span class="vip-service-pill">VIP Transit</span>
                 </div>
 
