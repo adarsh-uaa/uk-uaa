@@ -74,7 +74,7 @@ body {
 }
 
 .luxe-pad {
-  padding: 130px 0;
+  padding: clamp(50px, 6vw, 75px) 0;
 }
 
 .luxe-kicker {
@@ -1345,7 +1345,7 @@ body {
   }
 
   .luxe-pad {
-    padding: 90px 0;
+    padding: 48px 0;
   }
 
   .luxe-hero {
@@ -1416,7 +1416,7 @@ body {
   }
 
   .luxe-pad {
-    padding: 72px 0;
+    padding: 38px 0;
   }
 
   .luxe-page h2 {
@@ -1994,11 +1994,8 @@ body {
 
 .editorial-two {
   display: grid;
-
   grid-template-columns: 1fr 1fr;
-
-  gap: 8vw;
-
+  gap: clamp(28px, 4vw, 56px);
   align-items: center;
 }
 
@@ -2006,27 +2003,21 @@ body {
 .contact-grid h2,
 .inline-cta h2 {
   font-family: "Playfair Display", serif;
-
   font-size: clamp(38px, 5vw, 70px);
-
   line-height: 1.1;
-
   font-weight: 400;
 }
 
 .editorial-two p {
   line-height: 1.9;
-
   color: #69645c;
 }
 
 .editorial-two img {
   width: 100%;
-
-  aspect-ratio: 4/5;
-
+  aspect-ratio: 16 / 10;
+  max-height: 420px;
   object-fit: cover;
-
   border-radius: 5px;
 }
 

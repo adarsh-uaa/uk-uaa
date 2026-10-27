@@ -1,4 +1,4 @@
-import { airports } from "../../app/data/site";
+import { airports, services } from "../../app/data/site";
 
 function escapeXml(value: string) {
   return value
@@ -11,31 +11,47 @@ function escapeXml(value: string) {
 
 export default defineEventHandler((event) => {
   const config = useRuntimeConfig(event);
+  const siteUrl = String(
+    config.public.siteUrl || process.env.NUXT_PUBLIC_SITE_URL || ""
+  ).replace(/\/+$/, "");
 
-  const siteUrl = String(config.public.siteUrl).replace(/\/+$/, "");
+  const today = new Date().toISOString().split("T")[0];
 
-  if (config.public.isStaging === true) {
-    setResponseStatus(event, 404);
-    return "Sitemap unavailable on staging";
-  }
-
-  const paths = [
-    "/",
-    "/airports",
-    "/vip-experience",
-    "/about",
-    "/contact",
-    "/faq",
-    ...airports.map((airport) => `/airports/${airport.slug}`),
+  const staticEntries: { path: string; changefreq: string; priority: string }[] = [
+    { path: "/", changefreq: "daily", priority: "1.0" },
+    { path: "/book", changefreq: "weekly", priority: "0.9" },
+    { path: "/airports", changefreq: "weekly", priority: "0.9" },
+    { path: "/vip-experience", changefreq: "monthly", priority: "0.8" },
+    { path: "/about", changefreq: "monthly", priority: "0.7" },
+    { path: "/faq", changefreq: "monthly", priority: "0.7" },
+    { path: "/contact", changefreq: "monthly", priority: "0.7" },
+    { path: "/privacy", changefreq: "yearly", priority: "0.3" },
   ];
 
-  const urls = [...new Set(paths)]
-    .map((path) => {
-      const absoluteUrl = `${siteUrl}${path}`;
+  const airportEntries = airports.map((a) => ({
+    path: `/airports/${a.slug}`,
+    changefreq: "weekly",
+    priority: "0.8",
+  }));
+
+  const serviceEntries = services.map((s) => ({
+    path: `/services/${s.slug}`,
+    changefreq: "weekly",
+    priority: "0.8",
+  }));
+
+  const allEntries = [...staticEntries, ...airportEntries, ...serviceEntries];
+
+  const urls = allEntries
+    .map((item) => {
+      const absoluteUrl = `${siteUrl}${item.path}`;
 
       return [
         "  <url>",
         `    <loc>${escapeXml(absoluteUrl)}</loc>`,
+        `    <lastmod>${today}</lastmod>`,
+        `    <changefreq>${item.changefreq}</changefreq>`,
+        `    <priority>${item.priority}</priority>`,
         "  </url>",
       ].join("\n");
     })
@@ -50,3 +66,4 @@ export default defineEventHandler((event) => {
     "</urlset>",
   ].join("\n");
 });
+

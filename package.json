@@ -7,16 +7,19 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "typecheck": "tsc --noEmit",
     "start": "node .output/server/index.mjs",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "lucide-vue-next": "^0.468.0",
     "nuxt": "^4.0.0",
     "vue": "^3.5.0",
-    "vue-router": "^4.5.0",
-    "lucide-vue-next": "^0.468.0"
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@vue/typescript-plugin": "^3.3.13",
     "typescript": "^5.7.0"
   },
   "engines": {

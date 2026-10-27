@@ -4,6 +4,7 @@ import { Menu, X, ArrowUpRight } from 'lucide-vue-next'
 const menuOpen = ref(false)
 const scrolled = ref(false)
 const route = useRoute()
+const { siteName } = useSiteMeta()
 
 function syncScroll() {
   scrolled.value = window.scrollY > 36
@@ -30,10 +31,10 @@ onBeforeUnmount(() => {
     :class="{ 'header-scrolled': scrolled, 'menu-is-open': menuOpen }"
   >
     <div class="container nav-wrap">
-      <NuxtLink to="/" class="wordmark brand-logo" aria-label="UK Airport Assistance home">
+      <NuxtLink to="/" class="wordmark brand-logo" :aria-label="`${siteName} home`">
         <img
-          src="/images/uk-airport-assistance-logo.png"
-          alt="UK Airport Assistance"
+          src="/images/uk-airport-assistance-logo.webp"
+          :alt="siteName"
           width="2020"
           height="770"
           fetchpriority="high"

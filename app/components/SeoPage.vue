@@ -3,6 +3,7 @@ const props = defineProps<{
     title: string
     description: string
     path: string
+    keywords?: string
     eyebrow?: string
     heading: string
     intro: string
@@ -36,16 +37,21 @@ const socialImage = computed(() => {
     return `${siteUrl.value}/${props.image.replace(/^\/+/, '')}`
 })
 
+const siteName = computed(() =>
+    String(config.public.siteName || 'UK Airport Assistance')
+)
+
 useSeoMeta({
     title: () => props.title,
     description: () => props.description,
+    keywords: () => props.keywords || 'UK airport assistance, VIP meet and greet, airport concierge UK, fast track, airport lounge',
 
     ogTitle: () => props.title,
     ogDescription: () => props.description,
     ogType: 'website',
     ogUrl: () => absoluteUrl.value,
     ogImage: () => socialImage.value,
-    ogSiteName: 'UK Airport Assistance',
+    ogSiteName: () => siteName.value,
     ogLocale: 'en_GB',
 
     twitterCard: 'summary_large_image',
@@ -68,7 +74,7 @@ useHead(() => ({
     <section class="interior-hero">
         <div class="container">
             <span class="luxe-kicker">
-                {{ eyebrow || 'UK AIRPORT ASSISTANCE' }}
+                {{ eyebrow || siteName.toUpperCase() }}
             </span>
 
             <h1 style="color: #F4EADF;">

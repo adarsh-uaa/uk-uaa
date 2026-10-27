@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ChevronDown, Search, X } from "lucide-vue-next";
 import {
-    airportsCatalog,
     journeyTypes,
     extrasCatalog,
     selectAirport
@@ -47,7 +46,7 @@ const searchInputRef = ref<HTMLInputElement | null>(null);
 
 function cleanServiceName(title: string): string {
     if (!title) return "";
-    return title.replace(/^[A-Z]{3,4}\s*[-–—:]?\s*/i, "").trim();
+    return title.replace(/^[A-Z]{2,4}\s*[-–—:]?\s*/i, "").trim();
 }
 
 function toggleDropdown() {
@@ -148,7 +147,7 @@ const triggerLabel = computed(() => {
         return "No packages configured";
     }
     if (selectedPackages.value.length === 0) {
-        return "Select service packages";
+        return "Select service packages *";
     }
     if (selectedPackages.value.length === 1) {
         return cleanServiceName(selectedPackages.value[0].title);
@@ -233,27 +232,27 @@ function changeAirport(eventOrValue: Event | string) {
 
     emit("update:airport", value);
     emit("update:terminal", "normal");
-    emit("update:packageSlugs", []);
+    const pkgs = getServicePackages(value, "normal", activeService.value);
+    const valid = props.packageSlugs.filter(slug => pkgs.some(p => p.slug === slug));
+    emit("update:packageSlugs", valid);
     emit("update:extras", []);
 }
 
 function changeTerminal(event: Event) {
-    emit(
-        "update:terminal",
-        (event.target as HTMLSelectElement).value as TerminalSlug
-    );
-
-    emit("update:packageSlugs", []);
+    const newTerm = (event.target as HTMLSelectElement).value as TerminalSlug;
+    emit("update:terminal", newTerm);
+    const pkgs = getServicePackages(props.airport, newTerm, activeService.value);
+    const valid = props.packageSlugs.filter(slug => pkgs.some(p => p.slug === slug));
+    emit("update:packageSlugs", valid);
     emit("update:extras", []);
 }
 
 function changeService(event: Event) {
-    emit(
-        "update:service",
-        (event.target as HTMLSelectElement).value
-    );
-
-    emit("update:packageSlugs", []);
+    const newServ = (event.target as HTMLSelectElement).value;
+    emit("update:service", newServ);
+    const pkgs = getServicePackages(props.airport, activeTerminal.value, newServ);
+    const valid = props.packageSlugs.filter(slug => pkgs.some(p => p.slug === slug));
+    emit("update:packageSlugs", valid);
     emit("update:extras", []);
 }
 
@@ -336,18 +335,19 @@ onBeforeUnmount(() => {
             </label>
 
             <div class="field-item terminal-multi-field">
-                <span class="field-label">Service Packages</span>
+                <span class="field-label">Service Packages *</span>
 
                 <div ref="dropdownRef" class="terminal-multi" :class="{ 'is-open': dropdownOpen }" @keydown.esc="dropdownOpen = false">
                     <button
                         type="button"
                         class="terminal-multi-trigger"
+                        :class="{ 'is-empty': selectedPackages.length === 0 }"
                         :aria-expanded="dropdownOpen"
                         aria-controls="terminal-package-options"
                         :disabled="!packages.length"
                         @click="toggleDropdown"
                     >
-                        <span class="trigger-label">{{ triggerLabel }}</span>
+                        <span class="trigger-label" :class="{ 'is-placeholder': selectedPackages.length === 0 }">{{ triggerLabel }}</span>
                         <ChevronDown :size="15" class="trigger-chevron" :class="{ 'rotate-180': dropdownOpen }" />
                     </button>
 
@@ -562,6 +562,11 @@ onBeforeUnmount(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   flex: 1;
+}
+
+.trigger-label.is-placeholder {
+  color: #77746d;
+  font-weight: 400;
 }
 
 .trigger-meta {

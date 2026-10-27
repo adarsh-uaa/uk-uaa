@@ -8,6 +8,11 @@ import {
   formatApiDate
 } from '~/data/booking'
 
+import {
+  getServiceDetails,
+  getAirportTerminals,
+  type TerminalSlug
+} from '~/data/terminalServices'
 import bookingServices from '~/data/bookingServices.json'
 import countryCodes from '~/data/countryCodes.json'
 
@@ -27,14 +32,143 @@ type BookingConfig = Record<
 const servicesConfig = bookingServices as BookingConfig
 const route = useRoute()
 
+function resolveInitialServices(
+  airportSlug: string,
+  journeySlug: string,
+  queryPackages?: unknown,
+  queryServices?: unknown,
+  queryExtras?: unknown,
+  queryTerminal?: unknown
+): string[] {
+  const airportServices =
+    servicesConfig[airportSlug]?.[journeySlug as BookingJourney] ||
+    servicesConfig['heathrow']?.[journeySlug as BookingJourney] ||
+    []
+
+  if (!airportServices.length) return []
+
+  const availableSlugs = new Set(airportServices.map(s => s.slug))
+  const matchedSlugs = new Set<string>()
+
+  // 1. Direct query.services (e.g. ?services=meet-greet,fast-track)
+  if (queryServices) {
+    const rawServices = Array.isArray(queryServices)
+      ? queryServices.join(',')
+      : String(queryServices)
+    for (const token of rawServices.split(',')) {
+      const clean = token.trim().toLowerCase()
+      if (availableSlugs.has(clean)) {
+        matchedSlugs.add(clean)
+      }
+    }
+  }
+
+  // 2. Query.packages (e.g. ?packages=lhr-arrival-meet-greet,lhr-arrival-fast-track)
+  if (queryPackages) {
+    const rawPackages = Array.isArray(queryPackages)
+      ? queryPackages.join(',')
+      : String(queryPackages)
+    const terminalSlug =
+      String(queryTerminal || 'normal').toLowerCase() === 'vip' ? 'vip' : 'normal'
+
+    for (const token of rawPackages.split(',')) {
+      const clean = token.trim().toLowerCase()
+      if (!clean) continue
+
+      // Direct match
+      if (availableSlugs.has(clean)) {
+        matchedSlugs.add(clean)
+        continue
+      }
+
+      // Match via terminalServices apiServiceId
+      const pkg = getServiceDetails(airportSlug, terminalSlug, journeySlug, clean)
+      if (pkg?.apiServiceId) {
+        const found = airportServices.find(s => s.id === pkg.apiServiceId)
+        if (found) {
+          matchedSlugs.add(found.slug)
+          continue
+        }
+      }
+
+      // Semantic / keyword matching fallback
+      if (clean.includes('vip-terminal') || clean.includes('windsor')) {
+        if (availableSlugs.has('vip-terminal')) matchedSlugs.add('vip-terminal')
+        else if (availableSlugs.has('vip-meet-greet')) matchedSlugs.add('vip-meet-greet')
+      } else if (clean.includes('fast-track')) {
+        if (availableSlugs.has('fast-track')) matchedSlugs.add('fast-track')
+      } else if (clean.includes('baggage') || clean.includes('porter')) {
+        if (availableSlugs.has('baggage')) matchedSlugs.add('baggage')
+      } else if (clean.includes('lounge')) {
+        if (availableSlugs.has('lounge')) matchedSlugs.add('lounge')
+      } else if (clean.includes('checkin') || clean.includes('check-in')) {
+        if (availableSlugs.has('checkin')) matchedSlugs.add('checkin')
+      } else if (
+        clean.includes('limousine') ||
+        clean.includes('chauffeur') ||
+        clean.includes('taxi')
+      ) {
+        if (availableSlugs.has('limousine')) matchedSlugs.add('limousine')
+      } else if (clean.includes('vip-meet-greet')) {
+        if (availableSlugs.has('vip-meet-greet')) matchedSlugs.add('vip-meet-greet')
+      } else if (clean.includes('meet-greet')) {
+        if (availableSlugs.has('meet-greet')) matchedSlugs.add('meet-greet')
+      }
+    }
+  }
+
+  // 3. Query.terminal === 'vip'
+  if (queryTerminal && String(queryTerminal).toLowerCase() === 'vip') {
+    if (availableSlugs.has('vip-terminal')) {
+      matchedSlugs.add('vip-terminal')
+    } else if (availableSlugs.has('vip-meet-greet')) {
+      matchedSlugs.add('vip-meet-greet')
+    }
+  }
+
+  // 4. Query.extras (e.g. ?extras=porter,lounge)
+  if (queryExtras) {
+    const rawExtras = Array.isArray(queryExtras)
+      ? queryExtras.join(',')
+      : String(queryExtras)
+    for (const extra of rawExtras.split(',')) {
+      const e = extra.trim().toLowerCase()
+      if (e === 'porter' && availableSlugs.has('baggage')) matchedSlugs.add('baggage')
+      if (e === 'lounge' && availableSlugs.has('lounge')) matchedSlugs.add('lounge')
+      if (e === 'chauffeur' && availableSlugs.has('limousine')) matchedSlugs.add('limousine')
+    }
+  }
+
+  // 5. If matched any, return them
+  if (matchedSlugs.size > 0) {
+    return Array.from(matchedSlugs)
+  }
+
+  // 6. Do not select anything by default; let the user select
+  return []
+}
+
+const initialAirport = selectAirport(String(route.query.airport || 'heathrow')).slug
+const initialTerminal = (String(route.query.terminal || 'normal').toLowerCase() === 'vip' ? 'vip' : 'normal') as TerminalSlug
+const rawJourney = String(route.query.service || route.query.journey || 'arrival').toLowerCase()
+const initialJourney = journeyTypes.some(j => j.slug === rawJourney) ? rawJourney : 'arrival'
+
 const input = reactive({
   firstName: '',
   lastName: '',
   email: '',
   mobile: '',
-  airport: String(route.query.airport || 'heathrow'),
-  journey: String(route.query.service || 'arrival'),
-  services: [] as string[],
+  airport: initialAirport,
+  terminal: initialTerminal,
+  journey: initialJourney,
+  services: resolveInitialServices(
+    initialAirport,
+    initialJourney,
+    route.query.packages,
+    route.query.services,
+    route.query.extras,
+    initialTerminal
+  ),
   arrivalFlight: '',
   arrivalDate: '',
   arrivalTime: '',
@@ -49,17 +183,45 @@ const input = reactive({
   communication: ['Email (Default)'] as string[]
 })
 
+const consent = ref(false)
 const sending = ref(false)
 const submitted = ref(false)
 const error = ref('')
 const enquiryReference = ref<string | null>(null)
 const payloadPreview = ref(false)
 const toast = useToast()
+const { siteName } = useSiteMeta()
 
 
 // ------------------------------------------
-// AIRPORT-SPECIFIC SERVICES
+// TERMINAL & AIRPORT-SPECIFIC SERVICES
 // ------------------------------------------
+
+const terminals = computed(() => getAirportTerminals(input.airport))
+
+const terminalOptions = computed(() => {
+  const options: { slug: TerminalSlug; label: string }[] = [
+    {
+      slug: 'normal',
+      label: terminals.value.normal?.label || 'Normal Terminal'
+    }
+  ]
+
+  const vip = terminals.value.vip
+  if (
+    vip &&
+    Object.values(vip.services).some(
+      pkgs => pkgs && pkgs.length > 0
+    )
+  ) {
+    options.push({
+      slug: 'vip',
+      label: vip.label || 'VIP Terminal'
+    })
+  }
+
+  return options
+})
 
 const availableJourneys = computed(() => {
   const airportServices = servicesConfig[input.airport]
@@ -72,12 +234,38 @@ const availableJourneys = computed(() => {
   return journeyTypes
 })
 
+const journeyDisplayOptions = computed(() => {
+  return availableJourneys.value.map(type => {
+    let name = type.name
+    if (input.terminal === 'normal') {
+      if (type.slug === 'arrival') name = 'Normal Arrival'
+      else if (type.slug === 'departure') name = 'Normal Departure'
+      else if (type.slug === 'transit') name = 'Normal Transit'
+    } else {
+      if (type.slug === 'arrival') name = 'VIP Arrival'
+      else if (type.slug === 'departure') name = 'VIP Dispatch'
+      else if (type.slug === 'transit') name = 'VIP Transit'
+    }
+    return {
+      slug: type.slug,
+      name,
+      id: type.id
+    }
+  })
+})
+
 const availableServices = computed<BookingService[]>(() => {
   const configured = servicesConfig[input.airport]?.[
     input.journey as BookingJourney
   ]
-  if (configured && configured.length > 0) return configured
-  return servicesConfig['heathrow']?.[input.journey as BookingJourney] || []
+  const list = configured && configured.length > 0
+    ? configured
+    : servicesConfig['heathrow']?.[input.journey as BookingJourney] || []
+
+  if (input.terminal === 'normal') {
+    return list.filter(item => item.slug !== 'vip-terminal')
+  }
+  return list
 })
 
 const selectedServices = computed(() =>
@@ -87,25 +275,53 @@ const selectedServices = computed(() =>
 )
 
 watch(
+  () => input.terminal,
+  (newTerm, oldTerm) => {
+    if (newTerm === oldTerm) return
+    if (newTerm === 'vip') {
+      const vipPkg = availableServices.value.find(s => s.slug === 'vip-terminal')
+      if (vipPkg && input.services.includes('meet-greet')) {
+        input.services = ['vip-terminal', ...input.services.filter(s => s !== 'meet-greet' && s !== 'vip-terminal')]
+      }
+    } else {
+      if (input.services.includes('vip-terminal')) {
+        input.services = ['meet-greet', ...input.services.filter(s => s !== 'vip-terminal')]
+      }
+    }
+  }
+)
+
+watch(
   () => input.airport,
-  () => {
+  (newAirport, oldAirport) => {
+    if (newAirport === oldAirport) return
     if (
       !availableJourneys.value.some(
         item => item.slug === input.journey
       )
     ) {
       input.journey =
-        availableJourneys.value[0]?.slug || ''
+        availableJourneys.value[0]?.slug || 'arrival'
     }
-    input.services = []
-  },
-  { immediate: true }
+
+    const hasVip = terminalOptions.value.some(t => t.slug === 'vip')
+    if (input.terminal === 'vip' && !hasVip) {
+      input.terminal = 'normal'
+    }
+
+    input.services = input.services.filter(slug =>
+      availableServices.value.some(item => item.slug === slug)
+    )
+  }
 )
 
 watch(
   () => input.journey,
-  () => {
-    input.services = []
+  (newJourney, oldJourney) => {
+    if (newJourney === oldJourney) return
+    input.services = input.services.filter(slug =>
+      availableServices.value.some(item => item.slug === slug)
+    )
   }
 )
 
@@ -253,16 +469,41 @@ const travelName = computed(() =>
 )
 
 // ------------------------------------------
-// URL PRE-FILL
+// DATE CONSTRAINTS & URL PRE-FILL
 // ------------------------------------------
+
+const minDate = computed(() => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+})
+
+const minDepartureDate = computed(() => {
+  if (input.arrivalDate && input.arrivalDate >= minDate.value) {
+    return input.arrivalDate
+  }
+  return minDate.value
+})
+
+watch(
+  () => input.arrivalDate,
+  (newArrival) => {
+    if (newArrival && input.departureDate && input.departureDate < newArrival) {
+      input.departureDate = newArrival
+    }
+  }
+)
 
 const dateQ = String(route.query.date || '')
 
 if (/^\d{4}-\d{2}-\d{2}$/.test(dateQ)) {
+  const targetDate = dateQ >= minDate.value ? dateQ : minDate.value
   if (input.journey === 'departure') {
-    input.departureDate = dateQ
+    input.departureDate = targetDate
   } else {
-    input.arrivalDate = dateQ
+    input.arrivalDate = targetDate
   }
 }
 
@@ -271,8 +512,9 @@ if (/^\d{4}-\d{2}-\d{2}$/.test(dateQ)) {
 // ------------------------------------------
 
 const payload = computed(() => ({
-  airport_name: travelName.value,
+  airport_name: selectAirport(input.airport).name,
   airport_name_id: selectAirport(input.airport).id,
+  terminal: input.terminal,
 
   email: input.email.trim(),
   mobile: fullMobile.value,
@@ -322,7 +564,7 @@ const payload = computed(() => ({
   no_luggages: String(input.luggages),
   traveler_name: travelName.value,
 
-  uaa_url: 'UK Airport Assistance',
+  uaa_url: siteName.value || 'UK Airport Assistance',
 
   uaa_p_c_method: input.communication.join(', '),
 
@@ -350,117 +592,153 @@ async function submit() {
   }
 
   if (!selectAirport(input.airport).id) {
-    error.value =
-      'The selected airport needs a configured supplier ID.'
+    error.value = 'The selected airport needs a configured supplier ID.'
     toast.error(error.value)
     return
   }
 
   if (
-  !availableJourneys.value.some(
+    !availableJourneys.value.some(
       item => item.slug === input.journey
-  )
+    )
   ) {
-    error.value =
-    'Please select an available service type.'
+    error.value = 'Please select an available service type.'
     toast.error(error.value)
-  return
+    return
   }
+
+  // Filter out any stale service selections that do not match available services
+  input.services = input.services.filter(slug =>
+    availableServices.value.some(item => item.slug === slug)
+  )
 
   if (!input.services.length) {
-    error.value =
-    'Please select at least one service.'
+    error.value = 'Please select at least one service.'
     toast.error(error.value)
-  return
+    return
   }
 
-  if (
-  selectedServices.value.length !==
-  new Set(input.services).size
-  ) {
-    error.value =
-    'One or more selected services are invalid.'
+  if (selectedServices.value.some(item => !item.id)) {
+    error.value = 'A selected service is missing its supplier ID. Configure it in bookingServices.json.'
     toast.error(error.value)
-  return
-  }
-
-  if (
-    selectedServices.value.some(item => !item.id)
-  ) {
-    error.value =
-    'A selected service is missing its supplier ID. Configure it in bookingServices.json.'
-    toast.error(error.value)
-  return
+    return
   }
 
   if (!input.travelClass) {
-    error.value =
-    'Please select your class of travel.'
+    error.value = 'Please select your class of travel.'
     toast.error(error.value)
-  return
+    return
   }
 
   const passengerCounts = [
-  input.adults,
-  input.children,
-  input.infants,
-  input.luggages
+    input.adults,
+    input.children,
+    input.infants,
+    input.luggages
   ].map(Number)
 
   if (
-  passengerCounts.some(
+    passengerCounts.some(
       value => !Number.isInteger(value) || value < 0
-  ) ||
-  Number(input.adults) < 1
+    ) ||
+    Number(input.adults) < 1
   ) {
-    error.value =
-    'Please enter valid passenger and luggage counts.'
+    error.value = 'Please enter valid passenger and luggage counts.'
     toast.error(error.value)
-  return
+    return
   }
 
   if (!input.communication.length) {
-    error.value =
-    'Please select at least one contact method.'
+    error.value = 'Please select at least one contact method.'
     toast.error(error.value)
-  return
+    return
   }
 
   if (
-  requiresArrival.value &&
-  (
-  !input.arrivalFlight.trim() ||
-  !input.arrivalDate ||
-  !input.arrivalTime
-  )
+    requiresArrival.value &&
+    (
+      !input.arrivalFlight.trim() ||
+      !input.arrivalDate ||
+      !input.arrivalTime
+    )
   ) {
-    error.value =
-    'Complete all required arrival flight fields.'
+    error.value = 'Complete all required arrival flight fields.'
     toast.error(error.value)
-  return
+    return
   }
 
   if (
-  requiresDeparture.value &&
-  (
-  !input.departureFlight.trim() ||
-  !input.departureDate ||
-  !input.departureTime
-  )
+    requiresDeparture.value &&
+    (
+      !input.departureFlight.trim() ||
+      !input.departureDate ||
+      !input.departureTime
+    )
   ) {
-    error.value =
-    'Complete all required departure flight fields.'
+    error.value = 'Complete all required departure flight fields.'
     toast.error(error.value)
-  return
+    return
+  }
+
+  if (
+    requiresArrival.value &&
+    input.arrivalDate &&
+    input.arrivalDate < minDate.value
+  ) {
+    error.value = 'Arrival date cannot be in the past.'
+    toast.error(error.value)
+    return
+  }
+
+  if (
+    requiresDeparture.value &&
+    input.departureDate &&
+    input.departureDate < minDate.value
+  ) {
+    error.value = 'Departure date cannot be in the past.'
+    toast.error(error.value)
+    return
+  }
+
+  if (
+    requiresArrival.value &&
+    requiresDeparture.value &&
+    input.arrivalDate &&
+    input.departureDate &&
+    input.departureDate < input.arrivalDate
+  ) {
+    error.value = 'Departure date cannot be earlier than arrival date.'
+    toast.error(error.value)
+    return
+  }
+
+  if (
+    requiresArrival.value &&
+    requiresDeparture.value &&
+    input.arrivalDate &&
+    input.departureDate &&
+    input.arrivalDate === input.departureDate &&
+    input.arrivalTime &&
+    input.departureTime &&
+    input.departureTime <= input.arrivalTime
+  ) {
+    error.value = 'Departure time must be later than arrival time for same-day transit.'
+    toast.error(error.value)
+    return
   }
 
   const phoneDigits = fullMobile.value.replace(/\D/g, '')
 
   if (!/^\d{8,15}$/.test(phoneDigits)) {
-    error.value =
-    'Please enter a valid phone number with country code.'
+    error.value = 'Please enter a valid phone number with country code.'
     toast.error(error.value)
-  return
+    return
+  }
+
+  if (!consent.value) {
+    error.value = 'Please agree to the privacy policy to continue.'
+    toast.error(error.value)
+    return
   }
 
   sending.value = true
@@ -468,50 +746,50 @@ async function submit() {
   try {
     const result = await $fetch<{
       success: boolean
-  message?: string
-  enquiryReference?: string | null
-  bookingId?: string
-  data?: any
+      message?: string
+      enquiryReference?: string | null
+      bookingId?: string
+      data?: any
     }>('/api/booking', {
-    method: 'POST',
-  body: payload.value
+      method: 'POST',
+      body: payload.value
     })
 
-  if (result.success) {
-    submitted.value = true
+    if (result.success) {
+      submitted.value = true
       enquiryReference.value =
-  result.enquiryReference ||
-  result.data?.result?.airport_enquiry ||
-  null
+        result.enquiryReference ||
+        result.data?.result?.airport_enquiry ||
+        null
 
-  toast.success({
-    title: 'Booking Request Received',
-  message: result.message || 'Your booking enquiry has been received by our concierge team.',
-  enquiryRef: enquiryReference.value,
-  duration: 9000
+      toast.success({
+        title: 'Booking Request Received',
+        message: result.message || 'Your booking enquiry has been received by our concierge team.',
+        enquiryRef: enquiryReference.value,
+        duration: 9000
       })
     } else {
       const errMsg =
-  result.message ||
-  'Booking request could not be submitted.'
-  error.value = errMsg
-  toast.error({
-    title: 'Booking Request Failed',
-  message: errMsg,
-  duration: 8000
+        result.message ||
+        'Booking request could not be submitted.'
+      error.value = errMsg
+      toast.error({
+        title: 'Booking Request Failed',
+        message: errMsg,
+        duration: 8000
       })
     }
   } catch (err: any) {
     const errMsg =
-  err?.data?.statusMessage ||
-  err?.data?.message ||
-  err?.message ||
-  'Unable to submit your request. Please try again.'
-  error.value = errMsg
-  toast.error({
-    title: 'Booking Request Failed',
-  message: errMsg,
-  duration: 8000
+      err?.data?.statusMessage ||
+      err?.data?.message ||
+      err?.message ||
+      'Unable to submit your request. Please try again.'
+    error.value = errMsg
+    toast.error({
+      title: 'Booking Request Failed',
+      message: errMsg,
+      duration: 8000
     })
   } finally {
     sending.value = false
@@ -519,8 +797,8 @@ async function submit() {
 }
 </script>
 
-  <template>
-    <form class="full-booking reference-booking" @submit.prevent="submit">
+<template>
+  <form class="full-booking reference-booking" @submit.prevent="submit">
     <div class="form-section-title">
       <span class="micro-label">01 / PASSENGER DETAILS</span>
       <h2>Your details</h2>
@@ -551,47 +829,76 @@ async function submit() {
         />
       </div>
 
-    <div class="premium-field">
-      <label for="booking-phone">Phone / Mobile *</label>
+      <div class="premium-field">
+        <label for="booking-phone">Phone / Mobile *</label>
 
-      <div class="phone-input-group">
-        <div ref="countryDropdownRef" class="country-dropdown" @keydown.esc="countryOpen = false">
-        <button type="button" class="country-trigger" aria-label="Choose calling code" :aria-expanded="countryOpen"
-              @click="countryOpen = !countryOpen">
-        <span>{{ selectedDialCode }}</span>
-        <span class="country-chevron">⌄</span>
-      </button>
+        <div class="phone-input-group">
+          <div ref="countryDropdownRef" class="country-dropdown" @keydown.esc="countryOpen = false">
+            <button
+              type="button"
+              class="country-trigger"
+              aria-label="Choose calling code"
+              :aria-expanded="countryOpen"
+              @click="countryOpen = !countryOpen"
+            >
+              <span>{{ selectedDialCode }}</span>
+              <span class="country-chevron">⌄</span>
+            </button>
 
-      <div v-if="countryOpen" class="country-dropdown-menu">
-        <input v-model="countrySearch" type="search" class="country-search"
-          placeholder="Search country or code" />
+            <div v-if="countryOpen" class="country-dropdown-menu">
+              <input
+                v-model="countrySearch"
+                type="search"
+                class="country-search"
+                placeholder="Search country or code"
+              />
 
-        <div class="country-options">
-          <button v-for="country in filteredCountries" :key="country.code" type="button" class="country-option"
-                  @click="chooseCountry(country.code)">
-          <span>{{ country.name }}</span>
-          <span>{{ country.dial_code }}</span>
-        </button>
+              <div class="country-options">
+                <button
+                  v-for="country in filteredCountries"
+                  :key="country.code"
+                  type="button"
+                  class="country-option"
+                  @click="chooseCountry(country.code)"
+                >
+                  <span>{{ country.name }}</span>
+                  <span>{{ country.dial_code }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <input
+            id="booking-phone"
+            v-model="input.mobile"
+            type="tel"
+            inputmode="tel"
+            autocomplete="tel-national"
+            placeholder="Mobile Number"
+            required
+          />
+        </div>
       </div>
+
+      <label class="premium-field">
+        <span>Terminal Type *</span>
+        <select v-model="input.terminal" required>
+          <option v-for="t in terminalOptions" :key="t.slug" :value="t.slug">
+            {{ t.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="premium-field">
+        <span>Service Type *</span>
+        <select v-model="input.journey" :disabled="!availableJourneys.length" required>
+          <option value="" disabled>- Select -</option>
+          <option v-for="type in journeyDisplayOptions" :key="type.slug" :value="type.slug">
+            {{ type.name }}
+          </option>
+        </select>
+      </label>
     </div>
-  </div>
-
-  <input id="booking-phone" v-model="input.mobile" type="tel" inputmode="tel" autocomplete="tel-national"
-    placeholder="Mobile Number" required />
-        </div >
-      </div >
-
-  <label class="premium-field">
-    <span>Service Type *</span>
-    <select v-model="input.journey" :disabled="!availableJourneys.length" required>
-    <option value="" disabled>- Select -</option>
-
-    <option v-for="type in availableJourneys" :key="type.slug" :value="type.slug">
-    {{ type.name }}
-  </option>
-        </select >
-      </label >
-    </div >
 
     <div class="form-section-title">
       <span class="micro-label">02 / FLIGHT DETAILS</span>
@@ -606,7 +913,7 @@ async function submit() {
 
       <label class="premium-field">
         <span>Arrival Date *</span>
-        <input v-model="input.arrivalDate" type="date" required />
+        <input v-model="input.arrivalDate" type="date" :min="minDate" required />
       </label>
 
       <label class="premium-field">
@@ -623,7 +930,7 @@ async function submit() {
 
       <label class="premium-field">
         <span>Departure Date *</span>
-        <input v-model="input.departureDate" type="date" required />
+        <input v-model="input.departureDate" type="date" :min="minDepartureDate" required />
       </label>
 
       <label class="premium-field">
@@ -639,36 +946,45 @@ async function submit() {
 
     <div class="form-grid">
       <!-- MULTISELECT SERVICES -->
-
       <div class="premium-field">
         <label id="booking-services-label">Services *</label>
 
         <div ref="serviceDropdownRef" class="reference-services-select" @keydown.esc="servicesOpen = false">
-          <button type="button" class="reference-services-trigger" :disabled="!availableServices.length"
-            :aria-expanded="servicesOpen" aria-labelledby="booking-services-label"
-            @click="servicesOpen = !servicesOpen">
+          <button
+            type="button"
+            class="reference-services-trigger"
+            :disabled="!availableServices.length"
+            :aria-expanded="servicesOpen"
+            aria-labelledby="booking-services-label"
+            @click="servicesOpen = !servicesOpen"
+          >
             <span>
               {{
                 selectedServices.length
                   ? `${selectedServices.length} services selected`
                   : availableServices.length
-                    ? 'Select services'
+                    ? 'Select services *'
                     : 'No services configured'
               }}
             </span>
-
             <span aria-hidden="true">⌄</span>
           </button>
 
           <div v-if="servicesOpen" class="reference-services-menu">
-            <input v-model="serviceSearch" type="search" placeholder="Search services..."
-              aria-label="Search services" />
+            <input
+              v-model="serviceSearch"
+              type="search"
+              placeholder="Search services..."
+              aria-label="Search services"
+            />
 
             <div class="reference-services-options">
               <label v-for="item in filteredServices" :key="item.slug" class="reference-services-option">
-                <input type="checkbox" :checked="input.services.includes(item.slug)"
-                  @change="toggleService(item.slug)" />
-
+                <input
+                  type="checkbox"
+                  :checked="input.services.includes(item.slug)"
+                  @change="toggleService(item.slug)"
+                />
                 <span>{{ item.name }}</span>
               </label>
 
@@ -677,29 +993,27 @@ async function submit() {
               </p>
             </div>
           </div>
-        </div >
+        </div>
 
-  <div v-if="selectedServices.length" class="reference-selected-tags">
-    <span v-for="item in selectedServices" :key="item.slug" class="reference-selected-tag">
-    {{ item.name }}
+        <div v-if="selectedServices.length" class="reference-selected-tags">
+          <span v-for="item in selectedServices" :key="item.slug" class="reference-selected-tag">
+            {{ item.name }}
+            <button type="button" :aria-label="`Remove ${item.name}`" @click="removeService(item.slug)">
+              ×
+            </button>
+          </span>
+        </div>
+      </div>
 
-    <button type="button" :aria-label="`Remove ${item.name}`" @click="removeService(item.slug)">
-    ×
-  </button>
-          </span >
-        </div >
-      </div >
-
-  <label class="premium-field">
-    <span>Class of Travel *</span>
-    <select v-model="input.travelClass" required>
-      <option value="" disabled>- Select -</option>
-
-      <option v-for="travelClass in [...classes].reverse()" :key="travelClass.id" :value="travelClass.id">
-      {{ travelClass.name }}
-    </option>
-  </select>
-      </label >
+      <label class="premium-field">
+        <span>Class of Travel *</span>
+        <select v-model="input.travelClass" required>
+          <option value="" disabled>- Select -</option>
+          <option v-for="travelClass in [...classes].reverse()" :key="travelClass.id" :value="travelClass.id">
+            {{ travelClass.name }}
+          </option>
+        </select>
+      </label>
 
       <label class="premium-field">
         <span>No of Adults (Above 12 years) *</span>
@@ -720,27 +1034,25 @@ async function submit() {
         <span>No of Luggages *</span>
         <input v-model.number="input.luggages" type="number" min="0" max="100" required />
       </label>
-    </div >
+    </div>
 
-  <div class="reference-communication">
-    <p>
-      Please select mode of communication methods *
-    </p>
+    <div class="reference-communication">
+      <p>Please select mode of communication methods *</p>
 
-    <div class="reference-communication-options">
-      <label v-for="method in communicationMethods" :key="method" class="checkbox-choice">
-      <input type="checkbox" :checked="input.communication.includes(method)"
-            @change="toggleCommunication(method)" />
-
-      <span>{{ method }}</span>
-    </label>
-  </div>
-    </div >
-
+      <div class="reference-communication-options">
+        <label v-for="method in communicationMethods" :key="method" class="checkbox-choice">
+          <input
+            type="checkbox"
+            :checked="input.communication.includes(method)"
+            @change="toggleCommunication(method)"
+          />
+          <span>{{ method }}</span>
+        </label>
+      </div>
+    </div>
 
     <label class="checkbox-choice consent">
-      <input type="checkbox" required />
-
+      <input v-model="consent" type="checkbox" required />
       <span>
         I agree to be contacted and have read the
         <NuxtLink to="/privacy">privacy policy</NuxtLink>.
@@ -767,12 +1079,5 @@ async function submit() {
             : 'BOOK NOW'
       }}
     </button>
-
-    <!--
-    < button type = "button" class="payload-toggle" @click="payloadPreview = !payloadPreview" >
-  {{ payloadPreview ? 'Hide' : 'View' }} API payload preview
-    </button >
-  <pre v-if="payloadPreview" class="payload-preview">{{ JSON.stringify(payload, null, 2) }}</pre>
--->
-  </form >
-</template >
+  </form>
+</template>

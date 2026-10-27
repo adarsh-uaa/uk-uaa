@@ -8,6 +8,14 @@ const service = ref('arrival')
 const date = ref('')
 const adults = ref(1)
 
+const minDate = computed(() => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+})
+
 const availableServices = computed(() => {
   const selected = selectAirport(airport.value)
   return journeyTypes.filter(item =>
@@ -22,12 +30,13 @@ watch(airport, () => {
 })
 
 function continueBooking() {
+  const targetDate = date.value && date.value >= minDate.value ? date.value : (date.value ? minDate.value : '')
   return navigateTo({
     path: '/book',
     query: {
       airport: airport.value,
       service: service.value,
-      date: date.value,
+      date: targetDate,
       adults: String(adults.value)
     }
   })
@@ -80,6 +89,7 @@ function continueBooking() {
         <input
           v-model="date"
           type="date"
+          :min="minDate"
           required
         />
       </label>

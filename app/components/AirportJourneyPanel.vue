@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { selectAirport } from '~/data/booking'
+import { selectAirport, journeyTypes } from '~/data/booking'
 
 import {
+    getServicePackages,
     getSelectedServicePackages,
     getTerminalDetails,
     type TerminalSlug
@@ -28,12 +29,32 @@ const selected = computed(() =>
     selectAirport(airport.value)
 )
 
+// Active journey type
+const activeJourneyType = computed(() =>
+    journeyTypes.find(t => t.slug === service.value) || { name: 'VIP Arrival', slug: 'arrival' }
+)
+
 // Selected terminal
 const selectedTerminal = computed(() =>
     getTerminalDetails(
         airport.value,
         terminal.value
     )
+)
+
+// Keep only valid packages if airport, terminal, or service changes
+watch(
+    [() => airport.value, () => terminal.value, () => service.value],
+    () => {
+        const available = getServicePackages(
+            airport.value,
+            terminal.value,
+            service.value
+        )
+        packageSlugs.value = packageSlugs.value.filter(slug =>
+            available.some(p => p.slug === slug)
+        )
+    }
 )
 
 // Multiple selected packages
@@ -51,7 +72,7 @@ const priceTotals = computed(() => {
     const totals: Record<string, number> = {}
 
     for (const item of selectedPackages.value) {
-        if (item.price) {
+        if (item.price && item.price.amount > 0) {
             const currency = item.price.currency
             totals[currency] =
                 (totals[currency] || 0) + item.price.amount
@@ -67,7 +88,7 @@ const priceTotals = computed(() => {
 })
 
 const hasUnpricedPackages = computed(() =>
-    selectedPackages.value.some(item => !item.price)
+    selectedPackages.value.some(item => !item.price || item.price.amount === 0)
 )
 
 function formatPrice(
@@ -83,7 +104,7 @@ function formatPrice(
 
 function cleanServiceName(title: string): string {
     if (!title) return ''
-    return title.replace(/^[A-Z]{3,4}\s*[-–—:]?\s*/i, '').trim()
+    return title.replace(/^[A-Z]{2,4}\s*[-–—:]?\s*/i, '').trim()
 }
 
 // Carry selections to booking form
@@ -114,11 +135,13 @@ function proceed() {
 
         <!-- RIGHT: Selected services -->
         <aside class="journey-panel-summary">
-            <span class="luxe-kicker">
-                YOUR AIRPORT EXPERIENCE
-            </span>
-
-            <h3>{{ selected.name }}</h3>
+            <div class="journey-services-provided-heading">
+                <span class="luxe-kicker">SERVICES PROVIDED</span>
+                <h3>{{ activeJourneyType.name }}</h3>
+                <p class="journey-hub-sub">
+                    {{ selected.name }} ({{ selected.code }}) · {{ selectedTerminal?.label }}
+                </p>
+            </div>
 
             <template v-if="selectedPackages.length">
 
@@ -145,7 +168,7 @@ function proceed() {
                         {{ item.additionalService }}
                     </p>
 
-                    <div v-if="item.price" class="journey-selected-price">
+                    <div v-if="item.price && item.price.amount > 0" class="journey-selected-price">
                         <span>
                             {{
                                 item.price.data ||
@@ -166,7 +189,7 @@ function proceed() {
                     </div>
 
                     <p v-else class="subtle-note">
-                        Pricing available on request.
+                        {{ item.price?.data || 'Pricing available on request.' }}
                     </p>
                 </div>
 
@@ -198,14 +221,27 @@ function proceed() {
 
             </template>
 
-            <p v-else class="subtle-note">
-                Select one or more service packages to view
-                their inclusions and available pricing.
-            </p>
+            <div v-else class="journey-no-packages-box">
+                <p class="journey-no-packages-title">No service package selected</p>
+                <p class="subtle-note">
+                    Please select at least 1 service package from the dropdown to view its inclusions, pricing, and continue to booking.
+                </p>
+            </div>
 
-            <button type="button" class="premium-submit" :disabled="!selectedPackages.length" @click="proceed">
-                Continue to booking →
-            </button>
+            <div class="journey-submit-wrapper">
+                <button
+                    type="button"
+                    class="premium-submit"
+                    :disabled="!selectedPackages.length"
+                    :class="{ 'is-disabled': !selectedPackages.length }"
+                    @click="proceed"
+                >
+                    Continue to booking →
+                </button>
+                <p v-if="!selectedPackages.length" class="mandatory-package-notice">
+                    * Minimum 1 service package is mandatory to proceed
+                </p>
+            </div>
         </aside>
 
     </div>
@@ -216,13 +252,26 @@ function proceed() {
   padding: 0 0 0 24px;
 }
 
-.journey-panel-summary > h3 {
-  margin: 6px 0 8px;
+.journey-services-provided-heading {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e7ded2;
+}
+
+.journey-services-provided-heading > h3 {
+  margin: 4px 0 4px;
   font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(20px, 2.2vw, 24px);
-  font-weight: 400;
+  font-size: clamp(22px, 2.4vw, 26px);
+  font-weight: 500;
   color: #182a40;
   line-height: 1.2;
+}
+
+.journey-hub-sub {
+  font-size: 12px;
+  color: #77746d;
+  margin: 0;
+  font-weight: 500;
 }
 
 .subtle-note {
@@ -334,5 +383,43 @@ function proceed() {
   font-weight: 700;
   letter-spacing: 0.04em;
   padding: 0 18px;
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.premium-submit:disabled,
+.premium-submit.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+  box-shadow: none;
+}
+
+.journey-submit-wrapper {
+  margin-top: 4px;
+}
+
+.journey-no-packages-box {
+  padding: 18px 14px;
+  background: #faf7f2;
+  border: 1px dashed #dcd5ca;
+  border-radius: 6px;
+  margin: 0 0 14px;
+  text-align: center;
+}
+
+.journey-no-packages-title {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #182a40;
+}
+
+.mandatory-package-notice {
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #a34848;
+  text-align: center;
+  letter-spacing: 0.01em;
 }
 </style>

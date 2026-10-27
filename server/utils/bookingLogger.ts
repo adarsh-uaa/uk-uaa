@@ -38,6 +38,7 @@ export interface BookingLogEntry {
     airportName: string
     airportId: string
     serviceTypeId: string
+    terminal?: string
     servicesInputId: string
     classOfTravelId: string
     arrivalFlight: string
@@ -205,6 +206,7 @@ export async function logBooking(input: BookingLogInput): Promise<BookingLogEntr
       airportName: String(p.airport_name || '').trim(),
       airportId: String(p.airport_name_id || '').trim(),
       serviceTypeId: String(p.service_types_id || '').trim(),
+      terminal: String(p.terminal || '').trim() || undefined,
       servicesInputId: String(p.servicesinput_id || '').trim(),
       classOfTravelId: String(p.class_of_travel_id || '').trim(),
       arrivalFlight: String(p.arrival_flight_number || '').trim(),
@@ -226,7 +228,7 @@ export async function logBooking(input: BookingLogInput): Promise<BookingLogEntr
     meta: {
       clientIp: input.clientIp || 'unknown',
       userAgent: input.userAgent || 'unknown',
-      sourceUrl: String(p.uaa_url || 'UK Airport Assistance')
+      sourceUrl: String(p.uaa_url || process.env.NUXT_PUBLIC_SITE_NAME || 'UK Airport Assistance')
     },
     rawPayload: input.payload || null
   }

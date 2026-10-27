@@ -8,6 +8,7 @@ import {
 } from 'lucide-vue-next'
 
 const year = new Date().getFullYear()
+const { siteName } = useSiteMeta()
 </script>
 
 <template>
@@ -17,8 +18,8 @@ const year = new Date().getFullYear()
         <div class="uaa-footer-brand">
           <NuxtLink to="/" class="uaa-footer-logo footer-brand-logo">
             <img
-              src="/images/uk-airport-assistance-logo.png"
-              alt="UK Airport Assistance – Powered By"
+              src="/images/uk-airport-assistance-logo.webp"
+              :alt="`${siteName} – Powered By`"
               width="2020"
               height="779"
               loading="lazy"
@@ -73,7 +74,7 @@ const year = new Date().getFullYear()
       </div>
 
       <div class="uaa-footer-bottom">
-        <span>© {{ year }} UK Airport Assistance. All rights reserved.</span>
+        <span>© 2018 – 2026 Universal Travel Assistance LLC. All Rights Reserved</span>
 
         <div class="uaa-footer-legal">
           <NuxtLink to="/privacy">Privacy Policy</NuxtLink>

@@ -2,13 +2,18 @@ const siteUrl = (
   process.env.NUXT_PUBLIC_SITE_URL || "https://uk-uaa-test.onrender.com"
 ).replace(/\/+$/, "");
 
+const siteName =
+  process.env.NUXT_PUBLIC_SITE_NAME || "UK Airport Assistance";
+
 const hostname = new URL(siteUrl).hostname;
 
 const isStaging =
-  hostname === "localhost" ||
-  hostname === "127.0.0.1" ||
-  hostname.endsWith(".onrender.com") ||
-  process.env.NUXT_PUBLIC_ALLOW_INDEXING !== "true";
+  process.env.NUXT_PUBLIC_ALLOW_INDEXING === "true"
+    ? false
+    : (hostname === "localhost" ||
+       hostname === "127.0.0.1" ||
+       hostname.endsWith(".onrender.com") ||
+       process.env.NUXT_PUBLIC_ALLOW_INDEXING === "false");
 
 export default defineNuxtConfig({
   compatibilityDate: "2026-10-01",
@@ -19,6 +24,20 @@ export default defineNuxtConfig({
     enabled: false,
   },
 
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        plugins: [
+          {
+            name: "@vue/typescript-plugin",
+            location: "@vue/typescript-plugin",
+            languages: ["vue"],
+          },
+        ],
+      },
+    },
+  },
+
   css: ["~/assets/css/main.css", "~/assets/css/luxe.css"],
 
   app: {
@@ -27,13 +46,18 @@ export default defineNuxtConfig({
         lang: "en-GB",
       },
 
-      title: "UK Airport Assistance | VIP Meet & Greet",
+      title: `${siteName} | VIP Meet & Greet`,
 
       meta: [
         {
           name: "description",
           content:
-            "Premium UK airport meet and greet assistance for arrivals, departures and connections. Explore airport-specific services and book your journey.",
+            `Premium ${siteName} VIP meet and greet assistance for arrivals, departures and connections. Explore airport-specific services and book your journey.`,
+        },
+        {
+          name: "keywords",
+          content:
+            "UK airport assistance, VIP meet and greet, airport fast track, Heathrow VIP, Gatwick assistance, Manchester airport concierge, Edinburgh airport VIP, airport lounge UK, private airport transfer",
         },
         {
           name: "theme-color",
@@ -43,6 +67,18 @@ export default defineNuxtConfig({
           name: "color-scheme",
           content: "light",
         },
+        {
+          property: "og:site_name",
+          content: siteName,
+        },
+        {
+          property: "og:locale",
+          content: "en_GB",
+        },
+        {
+          name: "twitter:card",
+          content: "summary_large_image",
+        },
         ...(isStaging
           ? [
               {
@@ -50,7 +86,12 @@ export default defineNuxtConfig({
                 content: "noindex, follow",
               },
             ]
-          : []),
+          : [
+              {
+                name: "robots",
+                content: "index, follow",
+              },
+            ]),
       ],
 
       link: [
@@ -120,6 +161,7 @@ export default defineNuxtConfig({
 
     public: {
       siteUrl,
+      siteName,
       isStaging,
     },
   },

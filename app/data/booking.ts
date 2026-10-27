@@ -5,16 +5,17 @@ export interface AirportOption {
   id: string
   types: readonly string[]
   extras?: readonly string[]
+  is_vip?: boolean
 }
 
 export const airportsCatalog: readonly AirportOption[] = [
-  // Primary UK hubs
-  { slug: "heathrow", name: "London Heathrow", code: "LHR", id: "740", types: ["arrival", "departure", "transit"] },
-  { slug: "gatwick", name: "London Gatwick", code: "LGW", id: "739", types: ["arrival", "departure", "transit"] },
-  { slug: "manchester", name: "Manchester Airport", code: "MAN", id: "744", types: ["arrival", "departure", "transit"] },
-  { slug: "edinburgh", name: "Edinburgh Airport", code: "EDI", id: "732", types: ["arrival", "departure", "transit"] },
-  { slug: "birmingham", name: "Birmingham Airport", code: "BHX", id: "725", types: ["arrival", "departure", "transit"] },
-  { slug: "stansted", name: "London Stansted", code: "STN", id: "742", types: ["arrival", "departure", "transit"] },
+  // Primary UK hubs (VIP Hubs)
+  { slug: "heathrow", name: "London Heathrow", code: "LHR", id: "740", types: ["arrival", "departure", "transit"], is_vip: true },
+  { slug: "gatwick", name: "London Gatwick", code: "LGW", id: "739", types: ["arrival", "departure", "transit"], is_vip: true },
+  { slug: "manchester", name: "Manchester Airport", code: "MAN", id: "744", types: ["arrival", "departure", "transit"], is_vip: true },
+  { slug: "edinburgh", name: "Edinburgh Airport", code: "EDI", id: "732", types: ["arrival", "departure", "transit"], is_vip: true },
+  { slug: "birmingham", name: "Birmingham Airport", code: "BHX", id: "725", types: ["arrival", "departure", "transit"], is_vip: true },
+  { slug: "stansted", name: "London Stansted", code: "STN", id: "742", types: ["arrival", "departure", "transit"], is_vip: true },
 
   // Complete UK Airports List
   { slug: "aberdeen-international-airport", name: "Aberdeen International Airport", code: "ABZ", id: "3600", types: ["arrival", "departure", "transit"] },
@@ -113,9 +114,11 @@ export const airportsCatalog: readonly AirportOption[] = [
 
 export const journeyTypes = [
   { slug: "arrival", name: "VIP Arrival", id: "1" },
-  { slug: "departure", name: "VIP Departure", id: "2" },
+  { slug: "departure", name: "VIP Dispatch", id: "2" },
   { slug: "transit", name: "VIP Transit", id: "3" },
 ] as const;
+
+export const vipAirportsCatalog = airportsCatalog.filter((a) => a.is_vip);
 
 export const extrasCatalog = [
   { slug: "porter", name: "Porter & luggage assistance", id: "" },
@@ -138,10 +141,22 @@ export const communicationMethods = [
   "Direct Call",
 ];
 
-export const selectAirport = (slug: string): AirportOption => {
-  const found = airportsCatalog.find((a) => a.slug === slug) || airportsCatalog[0];
+export const selectAirport = (slugOrCode: string): AirportOption => {
+  const query = (slugOrCode || "").trim().toLowerCase();
+  const fallback: AirportOption = airportsCatalog[0] ?? {
+    slug: "heathrow",
+    name: "London Heathrow",
+    code: "LHR",
+    id: "740",
+    types: ["arrival", "departure", "transit"],
+    is_vip: true,
+  };
+  const found = airportsCatalog.find(
+    (a) => a.slug.toLowerCase() === query || a.code.toLowerCase() === query
+  ) ?? fallback;
   return {
     ...found,
+    is_vip: Boolean(found.is_vip),
     types: found.types || ["arrival", "departure", "transit"],
     extras: found.extras || [],
   };
