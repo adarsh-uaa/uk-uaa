@@ -103,7 +103,7 @@ useHead(() => ({
             Still have questions about your upcoming trip?
             <NuxtLink to="/contact">Contact our concierge team</NuxtLink>
             or
-            <NuxtLink to="/book">request airport assistance online</NuxtLink>.
+            <NuxtLink to="/book#booking-form">request airport assistance online</NuxtLink>.
           </p>
         </div>
       </section>

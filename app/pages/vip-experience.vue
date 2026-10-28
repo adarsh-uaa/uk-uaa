@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { vipAirportsCatalog } from '~/data/booking'
+import { featuredAirportsCatalog } from '~/data/booking'
 import { airports } from '~/data/site'
 
 const { siteName, siteUrl } = useSiteMeta()
@@ -8,7 +8,7 @@ const canonicalUrl = computed(() => `${siteUrl.value}/vip-experience`)
 const activeVipAirport = ref('heathrow')
 
 const vipAirports = computed(() => {
-  return vipAirportsCatalog.map(hub => {
+  return featuredAirportsCatalog.map(hub => {
     const siteData = airports.find(a => a.slug === hub.slug)
     return {
       slug: hub.slug,
@@ -16,8 +16,9 @@ const vipAirports = computed(() => {
       code: hub.code,
       id: hub.id,
       types: hub.types,
+      is_vip: Boolean(hub.is_vip),
       image: siteData?.image || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=850&q=82',
-      note: siteData?.note || 'Designated VIP Airport Gateway'
+      note: siteData?.note || (hub.is_vip ? 'Designated VIP Airport Gateway' : 'Premier Meet & Greet Gateway')
     }
   })
 })
@@ -94,10 +95,10 @@ useHead(() => ({
       <section class="luxe-pad vip-airports-section" id="vip-airports">
         <div class="container">
           <div class="vip-airports-header">
-            <span class="luxe-kicker">DESIGNATED VIP GATEWAYS</span>
-            <h2>Featured <em>VIP Airports</em></h2>
+            <span class="luxe-kicker">FEATURED UK GATEWAYS</span>
+            <h2>Featured <em>Airports & Gateways</em></h2>
             <p>
-              Comprehensive VIP Meet & Greet, fast-track clearance, private suites and apron chauffeur transfers are featured across our premier UK gateways.
+              Dedicated VIP suites and tarmac transfers are exclusively available at London Heathrow and London Gatwick. Premier Meet &amp; Greet, fast-track access and luggage assistance are provided across all our featured UK destinations.
             </p>
           </div>
 
@@ -111,27 +112,35 @@ useHead(() => ({
               <div class="vip-card-image-wrap">
                 <img
                   :src="hub.image"
-                  :alt="`${hub.name} (${hub.code}) VIP Airport Gateway`"
+                  :alt="`${hub.name} (${hub.code}) Airport Gateway`"
                   loading="lazy"
                   decoding="async"
                   width="600"
                   height="400"
                 />
-                <div class="vip-badge-tag">VIP HUB</div>
+                <div v-if="hub.is_vip" class="vip-badge-tag">VIP HUB</div>
+                <div v-else class="vip-badge-tag meet-greet-badge">MEET &amp; GREET</div>
                 <div class="vip-code-tag">{{ hub.code }}</div>
               </div>
 
               <div class="vip-card-content">
                 <div class="vip-card-title-row">
                   <h3>{{ hub.name }}</h3>
-                  <span class="vip-id-tag">ID: {{ hub.id }}</span>
+                  <!-- <span class="vip-id-tag">ID: {{ hub.id }}</span> -->
                 </div>
                 <p class="vip-card-note">{{ hub.note }}</p>
 
                 <div class="vip-service-badges">
-                  <span class="vip-service-pill">VIP Arrival</span>
-                  <span class="vip-service-pill">VIP Departure</span>
-                  <span class="vip-service-pill">VIP Transit</span>
+                  <template v-if="hub.is_vip">
+                    <span class="vip-service-pill">VIP Arrival</span>
+                    <span class="vip-service-pill">VIP Departure</span>
+                    <span class="vip-service-pill">VIP Transit</span>
+                  </template>
+                  <template v-else>
+                    <span class="vip-service-pill non-vip-pill">Arrival Assistance</span>
+                    <span class="vip-service-pill non-vip-pill">Departure Assistance</span>
+                    <span class="vip-service-pill non-vip-pill">Transit Assistance</span>
+                  </template>
                 </div>
 
                 <div class="vip-card-actions">
@@ -170,7 +179,7 @@ useHead(() => ({
 
       <section class="container inline-cta">
         <h2>Make time for what matters.</h2>
-        <NuxtLink to="/book" class="luxe-button luxe-button-cream">
+        <NuxtLink to="/book#booking-form" class="luxe-button luxe-button-cream">
           Arrange your experience →
         </NuxtLink>
       </section>
@@ -265,6 +274,12 @@ useHead(() => ({
   text-transform: uppercase;
 }
 
+.vip-badge-tag.meet-greet-badge {
+  background: #20354e;
+  color: #f7f3ec;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
 .vip-code-tag {
   position: absolute;
   bottom: 12px;
@@ -332,6 +347,12 @@ useHead(() => ({
   color: #4b453e;
   padding: 4px 8px;
   border-radius: 4px;
+  border: 1px solid #e3dbce;
+}
+
+.vip-service-pill.non-vip-pill {
+  background: #fdfbf7;
+  color: #49443c;
   border: 1px solid #e3dbce;
 }
 

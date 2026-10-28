@@ -96,7 +96,7 @@ async function handleSubmit() {
               For a complete flight itinerary and booking request, use our comprehensive booking page.
               For bespoke itineraries, corporate accounts, or general questions, submit an enquiry below.
             </p>
-            <NuxtLink to="/book" class="luxe-link">
+            <NuxtLink to="/book#booking-form" class="luxe-link">
               Go to the booking form →
             </NuxtLink>
           </div>

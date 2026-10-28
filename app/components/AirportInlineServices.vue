@@ -4,7 +4,8 @@ import { ArrowUpRight, Check } from 'lucide-vue-next'
 import {
   journeyTypes,
   extrasCatalog,
-  selectAirport
+  selectAirport,
+  getJourneyLabel
 } from '~/data/booking'
 import { getServicePackages } from '~/data/terminalServices'
 
@@ -62,6 +63,7 @@ function toggleExtra(slug: string) {
 function continueBooking() {
   return navigateTo({
     path: '/book',
+    hash: '#booking-form',
     query: {
       airport: props.airport,
       service: selectedService.value,
@@ -91,15 +93,15 @@ function continueBooking() {
         :class="{ active: selectedService === item.slug }"
         @click="selectedService = item.slug"
       >
-        <span>{{ item.name }}</span>
+        <span>{{ getJourneyLabel(item.slug, airport, 'tab') }}</span>
         <Check v-if="selectedService === item.slug" :size="15" />
       </button>
     </div>
 
-    <!-- Dynamic heading showing the services provided e.g. VIP Arrival / Departure -->
+    <!-- Dynamic heading showing the services provided e.g. VIP Arrival / Departure or Arrival Assistance -->
     <div v-if="activeServiceObj" class="uaa-service-heading-box">
       <div class="uaa-service-heading-kicker">SERVICES PROVIDED</div>
-      <h4 class="uaa-service-heading-title">{{ activeServiceObj.name }}</h4>
+      <h4 class="uaa-service-heading-title">{{ getJourneyLabel(activeServiceObj.slug, airport, 'full') }}</h4>
       <span class="uaa-service-heading-sub">{{ currentAirport.name }} ({{ currentAirport.code }})</span>
     </div>
 

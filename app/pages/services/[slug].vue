@@ -136,7 +136,7 @@ useHead(() => ({
                         and supplier.
                     </p>
 
-                    <NuxtLink to="/book" class="button button-dark">
+                    <NuxtLink to="/book#booking-form" class="button button-dark">
                         Request assistance ↗
                     </NuxtLink>
                 </div>

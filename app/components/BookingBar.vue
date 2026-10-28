@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { ArrowUpRight } from 'lucide-vue-next'
-import { airportsCatalog, journeyTypes, selectAirport } from '~/data/booking'
+import { airportsCatalog, journeyTypes, selectAirport, getJourneyLabel } from '~/data/booking'
 
 const airport = ref('heathrow')
 const service = ref('arrival')
@@ -33,6 +33,7 @@ function continueBooking() {
   const targetDate = date.value && date.value >= minDate.value ? date.value : (date.value ? minDate.value : '')
   return navigateTo({
     path: '/book',
+    hash: '#booking-form',
     query: {
       airport: airport.value,
       service: service.value,
@@ -79,7 +80,7 @@ function continueBooking() {
             :key="item.slug"
             :value="item.slug"
           >
-            {{ item.name }}
+            {{ getJourneyLabel(item.slug, airport, 'full') }}
           </option>
         </select>
       </label>

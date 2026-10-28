@@ -1,7 +1,7 @@
 <template>
+    <FlightLoader />
     <NuxtPage />
     <ClientOnly>
-        <FlightLoader />
         <ToastContainer />
     </ClientOnly>
 </template>

@@ -53,7 +53,7 @@ const { handleHomeClick } = useHomeNavigation()
 
         <div class="uaa-footer-column">
           <h3>Your Journey</h3>
-          <NuxtLink to="/book">Book Assistance</NuxtLink>
+          <NuxtLink to="/book#booking-form">Book Assistance</NuxtLink>
           <NuxtLink to="/airports">Meet &amp; Greet</NuxtLink>
           <NuxtLink to="/airports">Airport Services</NuxtLink>
           <NuxtLink to="/faq">FAQs</NuxtLink>

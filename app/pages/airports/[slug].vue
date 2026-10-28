@@ -12,7 +12,7 @@ import {
   ChevronUp
 } from 'lucide-vue-next'
 import { airports as primaryAirports } from '~/data/site'
-import { airportsCatalog, selectAirport, journeyTypes, type AirportOption } from '~/data/booking'
+import { airportsCatalog, selectAirport, journeyTypes, getJourneyLabel, type AirportOption } from '~/data/booking'
 import {
   getAirportTerminals,
   getServicePackages,
@@ -46,13 +46,13 @@ const offer = selectAirport(airport.slug)
 const { siteName, siteUrl } = useSiteMeta()
 const canonicalUrl = computed(() => `${siteUrl.value}/airports/${airport.slug}`)
 
-const pageTitle = computed(() => `${airport.name} (${airport.code}) VIP Airport Assistance & Pricing | ${siteName.value}`)
-const pageDescription = computed(() => `Explore confirmed VIP meet and greet, priority fast track and luggage assistance services at ${airport.name} (${airport.code}) with transparent pricing. Compare arrival, dispatch and transit packages.`)
+const pageTitle = computed(() => `${airport.name} (${airport.code}) ${airport.is_vip ? 'VIP Airport Assistance & Pricing' : 'Airport Meet & Greet Assistance & Pricing'} | ${siteName.value}`)
+const pageDescription = computed(() => `Explore confirmed ${airport.is_vip ? 'VIP meet and greet, private suite and priority fast track' : 'meet and greet, priority fast track and luggage assistance'} services at ${airport.name} (${airport.code}) with transparent pricing. Compare arrival, dispatch and transit packages.`)
 
 useSeoMeta({
   title: pageTitle,
   description: pageDescription,
-  keywords: computed(() => `${airport.name} airport assistance, ${airport.code} VIP meet and greet, ${airport.name} fast track cost, ${airport.name} arrival concierge pricing, ${airport.code} departure assistance, ${siteName.value}`),
+  keywords: computed(() => `${airport.name} airport assistance, ${airport.code} ${airport.is_vip ? 'VIP meet and greet' : 'meet and greet'}, ${airport.name} fast track cost, ${airport.name} arrival concierge pricing, ${airport.code} departure assistance, ${siteName.value}`),
   ogTitle: pageTitle,
   ogDescription: pageDescription,
   ogType: 'website',
@@ -110,7 +110,12 @@ const hasVipTerminal = computed(() => {
 
 const availableJourneys = computed(() => {
   const allowed = (offer.types || ['arrival', 'departure', 'transit']) as readonly string[]
-  return journeyTypes.filter(t => allowed.includes(t.slug))
+  return journeyTypes
+    .filter(t => allowed.includes(t.slug))
+    .map(t => ({
+      ...t,
+      name: getJourneyLabel(t.slug, airport.slug, 'full')
+    }))
 })
 
 const currentPackages = computed<ServiceDetails[]>(() => {
@@ -163,6 +168,9 @@ const airportFaqs = computed(() => [
             <span class="luxe-kicker">{{ airport.code }} / UK AIRPORT GATEWAY</span>
             <span v-if="airport.is_vip" class="airport-vip-badge">
               <Sparkles :size="13" /> DESIGNATED VIP HUB
+            </span>
+            <span v-else class="airport-premier-badge">
+              PREMIER MEET &amp; GREET
             </span>
           </div>
 
@@ -326,7 +334,7 @@ const airportFaqs = computed(() => [
               <div class="pkg-card-top">
                 <div class="pkg-badge-row">
                   <span class="pkg-type-badge">
-                    {{ journeyTypes.find(j => j.slug === activeJourney)?.name || 'VIP Service' }}
+                    {{ getJourneyLabel(activeJourney, airport.slug, 'full') }}
                   </span>
                   <span class="pkg-terminal-badge">
                     {{ activeTerminal === 'vip' ? 'VIP Private Suite' : 'Main Terminal' }}
@@ -375,6 +383,7 @@ const airportFaqs = computed(() => [
                 <NuxtLink
                   :to="{
                     path: '/book',
+                    hash: '#booking-form',
                     query: {
                       airport: airport.slug,
                       terminal: activeTerminal,
@@ -394,7 +403,7 @@ const airportFaqs = computed(() => [
           <div v-else class="no-packages-notice">
             <p>Services for this combination are arranged on bespoke enquiry.</p>
             <NuxtLink
-              :to="{ path: '/book', query: { airport: airport.slug, service: activeJourney } }"
+              :to="{ path: '/book', hash: '#booking-form', query: { airport: airport.slug, service: activeJourney } }"
               class="luxe-button luxe-button-cream"
             >
               Request Custom Quote →
@@ -457,7 +466,7 @@ const airportFaqs = computed(() => [
       <section class="container inline-cta">
         <h2>Reserve your {{ airport.name }} journey.</h2>
         <NuxtLink
-          :to="{ path: '/book', query: { airport: airport.slug } }"
+          :to="{ path: '/book', hash: '#booking-form', query: { airport: airport.slug } }"
           class="luxe-button luxe-button-cream"
         >
           Request Assistance Now →
@@ -490,6 +499,21 @@ const airportFaqs = computed(() => [
   color: #182a40;
   font-size: 10px;
   font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.airport-premier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(244, 234, 223, 0.12);
+  border: 1px solid rgba(220, 197, 165, 0.35);
+  color: #f4eadf;
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: 0.12em;
   padding: 4px 10px;
   border-radius: 4px;

@@ -76,7 +76,7 @@ async function togglePlay() {
             </p>
 
             <div class="hero-actions">
-                <NuxtLink to="/book" class="button button-light">
+                <NuxtLink to="/book#booking-form" class="button button-light">
                     Arrange your journey
                     <ArrowUpRight :size="17" aria-hidden="true" />
                 </NuxtLink>

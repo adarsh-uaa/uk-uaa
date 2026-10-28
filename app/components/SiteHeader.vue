@@ -63,7 +63,7 @@ onBeforeUnmount(() => {
         <NuxtLink to="/contact">Contact</NuxtLink>
       </nav>
 
-      <NuxtLink class="nav-cta" to="/book">
+      <NuxtLink class="nav-cta" to="/book#booking-form">
         Book now
         <ArrowUpRight :size="15" aria-hidden="true" />
       </NuxtLink>
@@ -93,7 +93,7 @@ onBeforeUnmount(() => {
       <NuxtLink to="/about">About</NuxtLink>
       <NuxtLink to="/faq">FAQ</NuxtLink>
       <NuxtLink to="/contact">Contact</NuxtLink>
-      <NuxtLink to="/book">Book now</NuxtLink>
+      <NuxtLink to="/book#booking-form">Book now</NuxtLink>
     </nav>
   </header>
 </template>

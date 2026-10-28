@@ -3,7 +3,8 @@ import { ChevronDown, Search, X } from "lucide-vue-next";
 import {
     journeyTypes,
     extrasCatalog,
-    selectAirport
+    selectAirport,
+    getJourneyLabel
 } from "~/data/booking";
 
 import {
@@ -315,7 +316,7 @@ onBeforeUnmount(() => {
                 <span class="field-label">Journey Type *</span>
                 <select :value="activeService" class="custom-select" required :disabled="!availableTypes.length" @change="changeService">
                     <option v-for="item in availableTypes" :key="item.slug" :value="item.slug">
-                        {{ item.name }}
+                        {{ getJourneyLabel(item.slug, airport, 'full') }}
                     </option>
                 </select>
             </label>

@@ -1,5 +1,5 @@
-﻿<script setup lang="ts">
-import { selectAirport, journeyTypes } from '~/data/booking'
+<script setup lang="ts">
+import { selectAirport, journeyTypes, getJourneyLabel } from '~/data/booking'
 
 import {
     getServicePackages,
@@ -78,6 +78,7 @@ function proceed() {
 
     return navigateTo({
         path: '/book',
+        hash: '#booking-form',
         query: {
             airport: airport.value,
             terminal: terminal.value,
@@ -102,7 +103,7 @@ function proceed() {
         <aside class="journey-panel-summary">
             <div class="journey-services-provided-heading">
                 <span class="luxe-kicker">SERVICES PROVIDED</span>
-                <h3>{{ activeJourneyType.name }}</h3>
+                <h3>{{ getJourneyLabel(service, airport, 'full') }}</h3>
                 <p class="journey-hub-sub">
                     {{ selected.name }} ({{ selected.code }}) · {{ selectedTerminal?.label }}
                 </p>

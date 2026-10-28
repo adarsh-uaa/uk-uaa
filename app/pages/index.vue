@@ -7,10 +7,6 @@ import {
     Minus,
     ChevronLeft,
     ChevronRight,
-    Play,
-    Pause,
-    Volume2,
-    VolumeX,
     Check
 } from 'lucide-vue-next'
 import { airports, services } from '~/data/site'
@@ -36,10 +32,6 @@ useSeoMeta({
 const chosenAirport = ref(0)
 const selectedService = ref(0)
 const openedFaq = ref(0)
-const vid = ref<HTMLVideoElement | null>(null)
-const videoFailed = ref(false)
-const playing = ref(true)
-const muted = ref(true)
 
 const currentAirport = computed(
     () => airports[chosenAirport.value >= 0 ? chosenAirport.value : 0]!
@@ -138,25 +130,6 @@ function changeAirport(n: number) {
     chosenAirport.value = (current + n + airports.length) % airports.length
 }
 
-async function toggleVideo() {
-    if (!vid.value) return
-    if (vid.value.paused) {
-        try {
-            await vid.value.play()
-            playing.value = true
-        } catch {
-            videoFailed.value = true
-        }
-    } else {
-        vid.value.pause()
-        playing.value = false
-    }
-}
-
-function toggleSound() {
-    muted.value = !muted.value
-    if (vid.value) vid.value.muted = muted.value
-}
 </script>
 
 <template>
@@ -165,50 +138,35 @@ function toggleSound() {
 
         <main id="main-content">
             <section class="luxe-hero" id="top">
-                <div class="luxe-hero-image"></div>
-                <video
-                    v-show="!videoFailed"
-                    ref="vid"
-                    class="luxe-video"
-                    autoplay
-                    muted
-                    playsinline
-                    loop
-                    preload="none"
-                    poster="/images/hero-poster.svg"
-                    @error="videoFailed = true"
-                    @pause="playing = false"
-                    @play="playing = true"
-                >
-                    <source :src="'/video/hero.mp4'" type="video/mp4">
-                </video>
+                <img class="luxe-hero-image" src="/images/hero.webp" alt="" aria-hidden="true"
+                    fetchpriority="high" decoding="async" />
                 <div class="luxe-hero-shade"></div>
 
                 <div class="container luxe-hero-content">
                     <div class="luxe-mini fade-up">
                         <span class="luxe-rule"></span>
-                        THE ART OF EFFORTLESS TRAVEL
-                        <span>EST. FOR THE EXCEPTIONAL</span>
+                        EXCLUSIVE UK AIRPORT ASSISTANCE
+                        <span>PERSONAL · DISCREET · EFFORTLESS</span>
                     </div>
 
                     <h1 class="luxe-hero-heading">
-                        <span class="line-reveal" style="color: #F4EADF;">The art of</span>
+                        <span class="line-reveal" style="color: #F4EADF;">VIP Airport Assistance.</span>
                         <span class="line-reveal" style="--line-delay: .05s;">
-                            <em style="color: #DCC5A5;">arriving.</em>
+                            <em style="color: #e3c191;">Without the wait.</em>
                         </span>
                     </h1>
 
                     <p class="luxe-hero-lead fade-up">
-                        Discreet, personal airport assistance for those who value every moment of their journey.
+                        Experience premium Meet & Greet, Fast Track and personal airport assistance at major UK airports. Every detail thoughtfully handled, from arrival to departure.
                     </p>
 
                     <div class="luxe-hero-actions fade-up">
-                        <NuxtLink to="/book" class="luxe-button luxe-button-cream">
-                            Arrange your journey
+                        <NuxtLink to="/book#booking-form" class="luxe-button luxe-button-cream">
+                            Book VIP Assistance
                             <ArrowUpRight :size="18" />
                         </NuxtLink>
                         <a href="#experience" class="luxe-hero-textlink">
-                            Discover our approach
+                            Explore Our Services
                             <ArrowRight :size="17" />
                         </a>
                     </div>
@@ -222,7 +180,8 @@ function toggleSound() {
                 </div>
             </section>
 
-            <section class="luxe-booking" id="reserve">
+            <div class="luxe-home-content">
+                <section class="luxe-booking" id="reserve">
                 <div class="container">
                     <div class="luxe-booking-title">
                         <span class="luxe-kicker">YOUR NEXT JOURNEY</span>
@@ -420,12 +379,13 @@ function toggleSound() {
                         <em style="color: #DCC5A5;">reimagined.</em>
                     </h2>
                     <p>Allow us to take care of the details so you can focus on what matters most.</p>
-                    <NuxtLink to="/book" class="luxe-button luxe-button-cream">
+                    <NuxtLink to="/book#booking-form" class="luxe-button luxe-button-cream">
                         Enquire about your journey
                         <ArrowUpRight :size="18" />
                     </NuxtLink>
                 </div>
             </section>
+            </div>
         </main>
 
         <SiteFooter />

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const route = useRoute()
 const { siteName, siteUrl } = useSiteMeta()
 const canonicalUrl = computed(() => `${siteUrl.value}/book`)
 
@@ -16,6 +17,46 @@ useSeoMeta({
 useHead(() => ({
   link: [{ rel: 'canonical', href: canonicalUrl.value }]
 }))
+
+function scrollToBookingForm(behavior: ScrollBehavior = 'smooth') {
+  if (!import.meta.client) return
+  const el = document.getElementById('booking-form') || document.querySelector('.booking-layout') || document.querySelector('.full-booking')
+  if (el) {
+    const isReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    el.scrollIntoView({
+      behavior: isReducedMotion ? 'auto' : behavior,
+      block: 'start'
+    })
+  }
+}
+
+function handleAutoScroll() {
+  const hasBookingIntent =
+    route.hash === '#booking-form' ||
+    Boolean(route.query.airport || route.query.service || route.query.packages || route.query.date)
+
+  if (hasBookingIntent) {
+    nextTick(() => {
+      setTimeout(() => {
+        scrollToBookingForm('smooth')
+      }, 100)
+      setTimeout(() => {
+        scrollToBookingForm('smooth')
+      }, 350)
+    })
+  }
+}
+
+onMounted(() => {
+  handleAutoScroll()
+})
+
+watch(
+  () => route.fullPath,
+  () => {
+    handleAutoScroll()
+  }
+)
 </script>
 
 <template>
@@ -25,22 +66,22 @@ useHead(() => ({
     <main>
       <section class="interior-hero">
         <div class="container">
-          <span class="luxe-kicker">THE ART OF EFFORTLESS TRAVEL</span>
+          <span class="luxe-kicker">EXCLUSIVE UK AIRPORT ASSISTANCE</span>
           <h1 style="color: #F4EADF;">Arrange your <em>journey.</em></h1>
           <p>Tell us a little about your travel plans. We’ll help coordinate the finer details.</p>
         </div>
       </section>
 
       <section class="luxe-pad">
-        <div class="container booking-layout">
+        <div id="booking-form" class="container booking-layout">
           <FullBookingForm />
 
           <aside class="booking-aside">
-            <span class="luxe-kicker">A MORE CONSIDERED JOURNEY</span>
-            <h2>Exclusively yours.</h2>
+            <span class="luxe-kicker">A SEAMLESS EXPERIENCE AWAITS</span>
+            <h2>The luxury of effortless travel.</h2>
             <p>
-              Premium meet and assist services across the United Kingdom, tailored to your airport and
-              journey preferences.
+              Enjoy a more comfortable journey with personalised Meet & Greet, Fast Track and 
+              VIP airport assistance, tailored to your every need.
             </p>
             <img
               src="/images/airport.webp"
@@ -58,3 +99,15 @@ useHead(() => ({
     <SiteFooter />
   </div>
 </template>
+
+<style scoped>
+#booking-form {
+  scroll-margin-top: 110px;
+}
+
+@media (max-width: 767px) {
+  #booking-form {
+    scroll-margin-top: 85px;
+  }
+}
+</style>

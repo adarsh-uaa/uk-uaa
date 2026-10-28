@@ -9,13 +9,13 @@ export interface AirportOption {
 }
 
 export const airportsCatalog: readonly AirportOption[] = [
-  // Primary UK hubs (VIP Hubs)
+  // Primary UK hubs (VIP Hubs exclusively LHR & LGW)
   { slug: "heathrow", name: "London Heathrow", code: "LHR", id: "740", types: ["arrival", "departure", "transit"], is_vip: true },
   { slug: "gatwick", name: "London Gatwick", code: "LGW", id: "739", types: ["arrival", "departure", "transit"], is_vip: true },
-  { slug: "manchester", name: "Manchester Airport", code: "MAN", id: "744", types: ["arrival", "departure", "transit"], is_vip: true },
-  { slug: "edinburgh", name: "Edinburgh Airport", code: "EDI", id: "732", types: ["arrival", "departure", "transit"], is_vip: true },
-  { slug: "birmingham", name: "Birmingham Airport", code: "BHX", id: "725", types: ["arrival", "departure", "transit"], is_vip: true },
-  { slug: "stansted", name: "London Stansted", code: "STN", id: "742", types: ["arrival", "departure", "transit"], is_vip: true },
+  { slug: "manchester", name: "Manchester Airport", code: "MAN", id: "744", types: ["arrival", "departure", "transit"], is_vip: false },
+  { slug: "edinburgh", name: "Edinburgh Airport", code: "EDI", id: "732", types: ["arrival", "departure", "transit"], is_vip: false },
+  { slug: "birmingham", name: "Birmingham Airport", code: "BHX", id: "725", types: ["arrival", "departure", "transit"], is_vip: false },
+  { slug: "stansted", name: "London Stansted", code: "STN", id: "742", types: ["arrival", "departure", "transit"], is_vip: false },
 
   // Complete UK Airports List
   { slug: "aberdeen-international-airport", name: "Aberdeen International Airport", code: "ABZ", id: "3600", types: ["arrival", "departure", "transit"] },
@@ -119,6 +119,44 @@ export const journeyTypes = [
 ] as const;
 
 export const vipAirportsCatalog = airportsCatalog.filter((a) => a.is_vip);
+export const featuredAirportsCatalog = airportsCatalog.slice(0, 6);
+
+export function isVipAirport(slugOrCode?: string): boolean {
+  if (!slugOrCode) return false;
+  const q = slugOrCode.trim().toLowerCase();
+  return q === "heathrow" || q === "lhr" || q === "gatwick" || q === "lgw";
+}
+
+export function getJourneyLabel(
+  journeySlug: string,
+  airportSlugOrCode?: string,
+  variant: "short" | "full" | "tab" = "full"
+): string {
+  const isVip = isVipAirport(airportSlugOrCode);
+
+  if (journeySlug === "arrival") {
+    if (isVip) {
+      return variant === "tab" ? "VIP Arrival" : (variant === "full" ? "VIP Arrival Service" : "VIP Arrival");
+    }
+    return variant === "tab" ? "Arrival" : (variant === "full" ? "Arrival Assistance" : "Arrival");
+  }
+
+  if (journeySlug === "departure") {
+    if (isVip) {
+      return variant === "tab" ? "VIP Departure" : (variant === "full" ? "VIP Departure Service" : "VIP Departure");
+    }
+    return variant === "tab" ? "Departure" : (variant === "full" ? "Departure Assistance" : "Departure");
+  }
+
+  if (journeySlug === "transit") {
+    if (isVip) {
+      return variant === "tab" ? "VIP Transit" : (variant === "full" ? "VIP Transit Service" : "VIP Transit");
+    }
+    return variant === "tab" ? "Transit" : (variant === "full" ? "Transit Assistance" : "Transit");
+  }
+
+  return journeySlug;
+}
 
 export const extrasCatalog = [
   { slug: "porter", name: "Porter & luggage assistance", id: "" },
