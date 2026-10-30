@@ -2,7 +2,7 @@ export const airports = [
   { slug: 'heathrow', name: 'London Heathrow', code: 'LHR', city: 'London', image: '/images/airports/heathrow.webp', note: 'The international gateway · VIP Suites Available', is_vip: true },
   { slug: 'gatwick', name: 'London Gatwick', code: 'LGW', city: 'London', image: '/images/airports/gatwick.webp', note: 'A refined welcome · VIP Terminal Available', is_vip: true },
   { slug: 'manchester', name: 'Manchester', code: 'MAN', city: 'Manchester', image: '/images/airports/manchester.webp', note: 'Northern connections · Premier Meet & Greet', is_vip: false },
-  { slug: 'edinburgh', name: 'Edinburgh', code: 'EDI', city: 'Edinburgh', image: '/images/airports/edinburgh.webp', note: 'Arrive in Scotland · Premier Meet & Greet', is_vip: false },
+  { slug: 'edinburgh', name: 'Edinburgh', code: 'EDI', city: 'Edinburgh', image: '/images/airports/edinburg.webp', note: 'Arrive in Scotland · Premier Meet & Greet', is_vip: false },
   { slug: 'birmingham', name: 'Birmingham', code: 'BHX', city: 'Birmingham', image: '/images/airports/birmingham.webp', note: 'Central UK gateway · Premier Meet & Greet', is_vip: false },
   { slug: 'stansted', name: 'London Stansted', code: 'STN', city: 'London', image: '/images/airports/stansted.webp', note: 'Travel, considered · Premier Meet & Greet', is_vip: false }
 ] as const
