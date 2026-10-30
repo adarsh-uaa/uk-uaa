@@ -5,7 +5,8 @@ import {
     getServicePackages,
     getSelectedServicePackages,
     getTerminalDetails,
-    type TerminalSlug
+    type TerminalSlug,
+    type ServiceDetails
 } from '~/data/terminalServices'
 
 const props = withDefaults(
@@ -66,6 +67,63 @@ const selectedPackages = computed(() =>
         packageSlugs.value
     )
 )
+
+// Featured UK airports permitted to show pricing
+const featuredAirportSlugs = new Set([
+    'heathrow',
+    'gatwick',
+    'manchester',
+    'edinburgh',
+    'birmingham',
+    'stansted'
+])
+
+// Only show price for VIP terminal or featured airports if valid price exists
+function canShowPackagePrice(item: ServiceDetails): boolean {
+    if (!item?.price || item.price.amount <= 0) {
+        return false
+    }
+
+    const isVipTerminal = terminal.value === 'vip'
+    const isFeaturedAirport = featuredAirportSlugs.has(airport.value)
+
+    return isVipTerminal || isFeaturedAirport
+}
+
+// Combined package prices by currency for visible priced packages
+const priceTotals = computed(() => {
+    const totals: Record<string, number> = {}
+
+    for (const item of selectedPackages.value) {
+        if (canShowPackagePrice(item) && item.price) {
+            const currency = item.price.currency
+            totals[currency] =
+                (totals[currency] || 0) + item.price.amount
+        }
+    }
+
+    return Object.entries(totals).map(
+        ([currency, amount]) => ({
+            currency,
+            amount
+        })
+    )
+})
+
+const hasUnpricedPackages = computed(() =>
+    selectedPackages.value.some(item => !canShowPackagePrice(item))
+)
+
+function formatPrice(
+    amount: number,
+    currency = 'USD'
+) {
+    return new Intl.NumberFormat('en-GB', {
+        style: 'currency',
+        currency,
+        maximumFractionDigits: 0
+    }).format(amount)
+}
 
 function cleanServiceName(title: string): string {
     if (!title) return ''
@@ -134,8 +192,42 @@ function proceed() {
                         {{ item.additionalService }}
                     </p>
 
-                    <div class="journey-quote-badge">
-                        Will be confirmed on quote
+                    <div v-if="canShowPackagePrice(item) && item.price" class="journey-selected-price">
+                        <span>
+                            {{
+                                item.price.upToPassengers
+                                    ? (item.price.upToPassengers === 1 ? 'Price for 1 passenger:' : `Price up to ${item.price.upToPassengers} passengers:`)
+                                    : (item.price.data || 'Package price:')
+                            }}
+                        </span>
+
+                        <strong>
+                            {{ formatPrice(
+                                item.price.amount,
+                                item.price.currency
+                            ) }}
+                        </strong>
+                    </div>
+                </div>
+
+                <!-- Total for selected packages -->
+                <div v-if="selectedPackages.length > 1 && priceTotals.length"
+                    class="journey-selected-price journey-total-price">
+                    <span>
+                        Listed package prices
+                        <small v-if="hasUnpricedPackages">
+                            (excludes packages to be confirmed on quote)
+                        </small>
+                    </span>
+
+                    <div>
+                        <strong v-for="total in priceTotals" :key="total.currency"
+                            style="display: block; text-align: right">
+                            {{ formatPrice(
+                                total.amount,
+                                total.currency
+                            ) }}
+                        </strong>
                     </div>
                 </div>
 
@@ -250,6 +342,59 @@ function proceed() {
   color: #6f6b64;
   font-size: 10.5px;
   line-height: 1.35;
+}
+
+.journey-selected-price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 0 0;
+  margin-top: 6px;
+  border-top: 1px solid #e2dbd1;
+  border-bottom: none;
+}
+
+.journey-selected-price span {
+  color: #77746d;
+  font-size: 10.5px;
+}
+
+.journey-selected-price strong {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #182a40;
+}
+
+/* Total price summary */
+.journey-total-price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  margin: 10px 0 8px;
+  background: #ffffff;
+  border: 1px solid #ded5c7;
+  border-radius: 5px;
+}
+
+.journey-total-price span {
+  font-size: 11px;
+  font-weight: 600;
+  color: #182a40;
+}
+
+.journey-total-price small {
+  display: block;
+  font-size: 10px;
+  color: #77746d;
+  font-weight: 400;
+}
+
+.journey-total-price strong {
+  font-size: 16px;
+  font-weight: 700;
+  color: #622a31;
 }
 
 /* Quote badge replacing price */

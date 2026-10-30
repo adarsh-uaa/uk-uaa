@@ -258,7 +258,10 @@ function changeAirport(n: number) {
                                     height="567"
                                 />
                             </Transition>
-                            <span class="luxe-airport-code">{{ currentAirport.code }}</span>
+                            <div class="luxe-airport-caption">
+                                <span class="luxe-airport-name">{{ currentAirport.name }}</span>
+                                <span class="luxe-airport-code">{{ currentAirport.code }}</span>
+                            </div>
                             <div class="luxe-airport-arrows">
                                 <button
                                     type="button"

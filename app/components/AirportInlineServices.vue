@@ -120,9 +120,9 @@ function continueBooking() {
             On request
           </span>
         </div>
-        <p v-if="pkg.inclusions && pkg.inclusions[0]" class="uaa-inline-pkg-desc">
+        <!-- <p v-if="pkg.inclusions && pkg.inclusions[0]" class="uaa-inline-pkg-desc">
           {{ pkg.inclusions[0] }}
-        </p>
+        </p> -->
       </div>
     </div>
 

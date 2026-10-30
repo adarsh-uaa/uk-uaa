@@ -1055,7 +1055,9 @@ async function submit() {
       <input v-model="consent" type="checkbox" required />
       <span>
         I agree to be contacted and have read the
-        <NuxtLink to="/privacy">privacy policy</NuxtLink>.
+        <!-- <NuxtLink to="/privacy"> -->
+          privacy policy
+        <!-- </NuxtLink>. -->
       </span>
     </label>
 
