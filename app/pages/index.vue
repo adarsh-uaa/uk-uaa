@@ -40,20 +40,24 @@ const currentService = computed(() => services[selectedService.value]!)
 
 const faqs = [
     {
-        q: 'Can I skip immigration and security queues?',
-        a: 'Priority access depends on the airport, terminal and officially permitted services. Your quote will specify precisely what is and is not included. Border and security authorities always retain control.'
+        q: 'What is UK Airport Assistance?',
+        a: 'We provide airport meet and greet services, including VIP assistance, for travellers at airports across the UK. A dedicated representative meets you and guides you through the airport so your journey is smoother and less stressful.'
     },
     {
         q: 'Which UK airports do you cover?',
-        a: 'Enquiries are available for London Heathrow, London Gatwick, Manchester, Edinburgh, Birmingham and London Stansted. We confirm the availability of each requested service individually.'
+        a: 'We operate at major UK airports, including London Heathrow, London Gatwick, London Stansted, London City, Manchester, Birmingham, Bristol, East Midlands, Edinburgh, Glasgow, Leeds Bradford and Newcastle. Please check the airport list on our website for the latest coverage and the services available at each airport.'
     },
     {
-        q: 'Is the enquiry a confirmed reservation?',
-        a: 'No. Submitting an enquiry starts the process. Your booking is confirmed only after availability, services and payment terms have been agreed and confirmed in writing.'
+        q: 'Do you provide immigration Fast Track services at London airports?',
+        a: 'Yes. We offer immigration Fast Track services at selected UK airports, including London Heathrow, London Gatwick, London Stansted, and Birmingham, along with several other airports. Please contact our team or check the available services on our website for airport-specific details and availability.'
     },
     {
-        q: 'Can you arrange assistance for families or groups?',
-        a: 'Yes. Tell us your party size, flight details and assistance preferences, and we will help identify appropriate arrangements subject to supplier availability.'
+        q: 'How do I book a service?',
+        a: 'Choose your airport and required service on our website, enter the passenger and flight details, and complete the booking process. Once submitted, you will receive a quotation via email along with a payment link to proceed with the payment.'
+    },
+    {
+        q: 'How far in advance should I book?',
+        a: 'We recommend making your booking at least 48 hours before your flight to allow sufficient time for us to arrange your representative. During peak travel periods, we strongly advise booking well in advance to ensure availability. Please note that an additional charge may apply to bookings made at short notice.'
     }
 ]
 
