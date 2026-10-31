@@ -11,9 +11,13 @@ const isStaging =
   process.env.NUXT_PUBLIC_ALLOW_INDEXING === "true"
     ? false
     : (hostname === "localhost" ||
-       hostname === "127.0.0.1" ||
-       hostname.endsWith(".onrender.com") ||
-       process.env.NUXT_PUBLIC_ALLOW_INDEXING === "false");
+      hostname === "127.0.0.1" ||
+      hostname.endsWith(".onrender.com") ||
+      process.env.NUXT_PUBLIC_ALLOW_INDEXING === "false");
+
+const whatsappNumber =
+  process.env.CONTACT_WHATSAPP_NUMBER ||
+  "1234568";
 
 export default defineNuxtConfig({
   compatibilityDate: "2026-10-01",
@@ -81,17 +85,17 @@ export default defineNuxtConfig({
         },
         ...(isStaging
           ? [
-              {
-                name: "robots",
-                content: "noindex, follow",
-              },
-            ]
+            {
+              name: "robots",
+              content: "noindex, follow",
+            },
+          ]
           : [
-              {
-                name: "robots",
-                content: "index, follow",
-              },
-            ]),
+            {
+              name: "robots",
+              content: "index, follow",
+            },
+          ]),
       ],
 
       link: [
@@ -173,6 +177,7 @@ export default defineNuxtConfig({
       siteUrl,
       siteName,
       isStaging,
+      whatsappNumber,
     },
   },
 });

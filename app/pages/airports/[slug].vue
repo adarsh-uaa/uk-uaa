@@ -176,7 +176,7 @@ const airportFaqs = computed(() => [
 
           <h1>
             <span style="color: #F4EADF;">{{ airport.name }} </span>
-            <em>assistance.</em>
+            <em> assistance.</em>
           </h1>
 
           <p>
@@ -352,14 +352,14 @@ const airportFaqs = computed(() => [
                   <span v-else class="pkg-price-amount">
                     Upon Request
                   </span>
-                  <span v-if="pkg.price?.data" class="pkg-price-pax">
+                  <!-- <span v-if="pkg.price?.data" class="pkg-price-pax">
                     {{ pkg.price.data }}
-                  </span>
-                  <span v-else-if="pkg.price?.upToPassengers" class="pkg-price-pax">
+                  </span> -->
+                  <span v-if="pkg.price?.upToPassengers" class="pkg-price-pax">
                     Up to {{ pkg.price.upToPassengers }} passengers
                   </span>
                 </div>
-                <span class="pkg-price-note">Transparent fixed pricing · No hidden airport surcharges</span>
+                <span class="pkg-price-note">Final pricing and service availability are subject to final confirmation.</span>
               </div>
 
               <!-- Inclusions Checklist -->

@@ -12,7 +12,7 @@ export function useHomeNavigation() {
     })
   }
 
-  function handleHomeClick(event?: MouseEvent, onNavigate?: () => void) {
+  function handleNavClick(targetPath: string, event?: MouseEvent, onNavigate?: () => void) {
     // Allow default browser behavior for modifier keys / middle click (open in new tab)
     if (event && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0)) {
       return
@@ -22,22 +22,30 @@ export function useHomeNavigation() {
       onNavigate()
     }
 
-    if (route.path === '/') {
-      if (event) {
+    const cleanTargetPath = targetPath.split('#')[0].split('?')[0].replace(/\/+$/, '') || '/'
+    const currentPath = route.path.replace(/\/+$/, '') || '/'
+
+    if (currentPath === cleanTargetPath) {
+      if (event && !targetPath.includes('#')) {
         event.preventDefault()
       }
       scrollToTop('smooth')
-      if (route.hash) {
-        router.replace({ path: '/', hash: '' })
+      if (route.hash && !targetPath.includes('#')) {
+        router.replace({ path: currentPath, hash: '' })
       }
     } else {
-      // If navigating from another page to home, ensure scroll reset
+      // If navigating from another page, ensure scroll reset
       scrollToTop('auto')
     }
   }
 
+  function handleHomeClick(event?: MouseEvent, onNavigate?: () => void) {
+    handleNavClick('/', event, onNavigate)
+  }
+
   return {
     handleHomeClick,
+    handleNavClick,
     scrollToTop,
   }
 }

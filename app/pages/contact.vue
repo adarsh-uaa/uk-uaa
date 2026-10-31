@@ -10,7 +10,7 @@ const errorMessage = ref('')
 const successMessage = ref('')
 
 const toast = useToast()
-const { siteName, siteUrl } = useSiteMeta()
+const { siteName, siteUrl, whatsappUrl } = useSiteMeta()
 const canonicalUrl = computed(() => `${siteUrl.value}/contact`)
 
 useSeoMeta({
@@ -96,9 +96,22 @@ async function handleSubmit() {
               For a complete flight itinerary and booking request, use our comprehensive booking page.
               For bespoke itineraries, corporate accounts, or general questions, submit an enquiry below.
             </p>
-            <NuxtLink to="/book#booking-form" class="luxe-link">
-              Go to the booking form →
-            </NuxtLink>
+            <div class="contact-direct-options">
+              <a
+                :href="whatsappUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="contact-whatsapp-btn"
+                aria-label="Chat on WhatsApp"
+              >
+                <WhatsAppIcon :size="22" color="#ffffff" />
+                <span>WhatsApp</span>
+              </a>
+
+              <NuxtLink to="/book#booking-form" class="luxe-link">
+                Go to the booking form →
+              </NuxtLink>
+            </div>
           </div>
 
           <form class="full-booking" @submit.prevent="handleSubmit">
@@ -147,3 +160,35 @@ async function handleSubmit() {
     <SiteFooter />
   </div>
 </template>
+
+<style scoped>
+.contact-direct-options {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.contact-whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  background: #25d366;
+  text-decoration: none;
+  line-height: 1;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.28);
+  transition: all 0.25s ease;
+}
+
+.contact-whatsapp-btn:hover {
+  background: #1ebd5a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(37, 211, 102, 0.38);
+}
+</style>

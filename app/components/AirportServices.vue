@@ -417,7 +417,7 @@ onBeforeUnmount(() => {
             </article>
 
             <p class="terminal-quote-note">
-                Final pricing and service availability are subject to supplier confirmation.
+                Final pricing and service availability are subject to final confirmation.
             </p>
         </div>
     </div>

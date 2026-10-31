@@ -8,8 +8,8 @@ import {
 } from 'lucide-vue-next'
 
 const year = new Date().getFullYear()
-const { siteName } = useSiteMeta()
-const { handleHomeClick } = useHomeNavigation()
+const { siteName, whatsappUrl } = useSiteMeta()
+const { handleHomeClick, handleNavClick } = useHomeNavigation()
 </script>
 
 <template>
@@ -45,22 +45,33 @@ const { handleHomeClick } = useHomeNavigation()
 
         <div class="uaa-footer-column">
           <h3>Explore</h3>
-          <NuxtLink to="/" @click="handleHomeClick">Home</NuxtLink>
-          <NuxtLink to="/airports">UK Airports</NuxtLink>
-          <NuxtLink to="/vip-experience">VIP Experience</NuxtLink>
-          <NuxtLink to="/about">About Us</NuxtLink>
+          <NuxtLink to="/" @click="handleNavClick('/', $event)">Home</NuxtLink>
+          <NuxtLink to="/airports" @click="handleNavClick('/airports', $event)">UK Airports</NuxtLink>
+          <NuxtLink to="/vip-experience" @click="handleNavClick('/vip-experience', $event)">VIP Experience</NuxtLink>
+          <NuxtLink to="/about" @click="handleNavClick('/about', $event)">About Us</NuxtLink>
         </div>
 
         <div class="uaa-footer-column">
           <h3>Your Journey</h3>
           <NuxtLink to="/book#booking-form">Book Assistance</NuxtLink>
-          <NuxtLink to="/airports">Meet &amp; Greet</NuxtLink>
-          <NuxtLink to="/airports">Airport Services</NuxtLink>
-          <NuxtLink to="/faq">FAQs</NuxtLink>
+          <NuxtLink to="/airports" @click="handleNavClick('/airports', $event)">Meet &amp; Greet</NuxtLink>
+          <NuxtLink to="/airports" @click="handleNavClick('/airports', $event)">Airport Services</NuxtLink>
+          <NuxtLink to="/faq" @click="handleNavClick('/faq', $event)">FAQs</NuxtLink>
         </div>
 
         <div class="uaa-footer-column">
           <h3>Get in Touch</h3>
+          <a
+            :href="whatsappUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="uaa-footer-contact uaa-footer-whatsapp-link"
+            aria-label="WhatsApp"
+          >
+            <WhatsAppIcon :size="20" />
+            <span>WhatsApp</span>
+          </a>
+
           <NuxtLink to="/contact" class="uaa-footer-contact">
             <Mail :size="17" />
             <span>Contact our team</span>
@@ -94,3 +105,20 @@ const { handleHomeClick } = useHomeNavigation()
     </div>
   </footer>
 </template>
+
+<style scoped>
+.uaa-footer-whatsapp-link {
+  color: #25d366;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.uaa-footer-whatsapp-link:hover {
+  color: #25d366;
+  transform: translateX(3px);
+}
+
+.uaa-footer-whatsapp-link svg {
+  color: #25d366;
+}
+</style>

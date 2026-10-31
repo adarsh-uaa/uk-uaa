@@ -4,11 +4,11 @@ import { Menu, X, ArrowUpRight } from 'lucide-vue-next'
 const menuOpen = ref(false)
 const scrolled = ref(false)
 const route = useRoute()
-const { siteName } = useSiteMeta()
-const { handleHomeClick } = useHomeNavigation()
+const { siteName, whatsappUrl } = useSiteMeta()
+const { handleHomeClick, handleNavClick } = useHomeNavigation()
 
-function onHeaderHomeClick(e: MouseEvent) {
-  handleHomeClick(e, () => {
+function onHeaderNavClick(path: string, e: MouseEvent) {
+  handleNavClick(path, e, () => {
     menuOpen.value = false
   })
 }
@@ -42,7 +42,7 @@ onBeforeUnmount(() => {
         to="/"
         class="wordmark brand-logo"
         :aria-label="`${siteName} home`"
-        @click="onHeaderHomeClick"
+        @click="onHeaderNavClick('/', $event)"
       >
         <img
           src="/images/uk-airport-assistance-logo.webp"
@@ -55,18 +55,31 @@ onBeforeUnmount(() => {
       </NuxtLink>
 
       <nav class="desktop-nav" aria-label="Primary navigation">
-        <NuxtLink to="/" @click="onHeaderHomeClick">Home</NuxtLink>
-        <NuxtLink to="/airports">Airports &amp; Services</NuxtLink>
-        <NuxtLink to="/vip-experience">VIP Experience</NuxtLink>
-        <NuxtLink to="/about">About</NuxtLink>
-        <NuxtLink to="/faq">FAQ</NuxtLink>
-        <NuxtLink to="/contact">Contact</NuxtLink>
+        <NuxtLink to="/" @click="onHeaderNavClick('/', $event)">Home</NuxtLink>
+        <NuxtLink to="/airports" @click="onHeaderNavClick('/airports', $event)">Airports &amp; Services</NuxtLink>
+        <NuxtLink to="/vip-experience" @click="onHeaderNavClick('/vip-experience', $event)">VIP Experience</NuxtLink>
+        <NuxtLink to="/about" @click="onHeaderNavClick('/about', $event)">About</NuxtLink>
+        <NuxtLink to="/faq" @click="onHeaderNavClick('/faq', $event)">FAQ</NuxtLink>
+        <NuxtLink to="/contact" @click="onHeaderNavClick('/contact', $event)">Contact</NuxtLink>
       </nav>
 
-      <NuxtLink class="nav-cta" to="/book#booking-form">
-        Book now
-        <ArrowUpRight :size="15" aria-hidden="true" />
-      </NuxtLink>
+      <div class="nav-actions">
+        <a
+          :href="whatsappUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="nav-whatsapp-link"
+          aria-label="WhatsApp"
+        >
+          <WhatsAppIcon :size="18" />
+          <span>WhatsApp</span>
+        </a>
+
+        <NuxtLink class="nav-cta" to="/book#booking-form">
+          Book now
+          <ArrowUpRight :size="15" aria-hidden="true" />
+        </NuxtLink>
+      </div>
 
       <button
         class="menu-toggle"
@@ -87,13 +100,80 @@ onBeforeUnmount(() => {
       class="mobile-nav"
       aria-label="Mobile navigation"
     >
-      <NuxtLink to="/" @click="onHeaderHomeClick">Home</NuxtLink>
-      <NuxtLink to="/airports">Airports &amp; Services</NuxtLink>
-      <NuxtLink to="/vip-experience">VIP Experience</NuxtLink>
-      <NuxtLink to="/about">About</NuxtLink>
-      <NuxtLink to="/faq">FAQ</NuxtLink>
-      <NuxtLink to="/contact">Contact</NuxtLink>
-      <NuxtLink to="/book#booking-form">Book now</NuxtLink>
+      <NuxtLink to="/" @click="onHeaderNavClick('/', $event)">Home</NuxtLink>
+      <NuxtLink to="/airports" @click="onHeaderNavClick('/airports', $event)">Airports &amp; Services</NuxtLink>
+      <NuxtLink to="/vip-experience" @click="onHeaderNavClick('/vip-experience', $event)">VIP Experience</NuxtLink>
+      <NuxtLink to="/about" @click="onHeaderNavClick('/about', $event)">About</NuxtLink>
+      <NuxtLink to="/faq" @click="onHeaderNavClick('/faq', $event)">FAQ</NuxtLink>
+      <NuxtLink to="/contact" @click="onHeaderNavClick('/contact', $event)">Contact</NuxtLink>
+      <a
+        :href="whatsappUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mobile-nav-whatsapp"
+        @click="menuOpen = false"
+      >
+        <WhatsAppIcon :size="22" />
+        <span>WhatsApp</span>
+      </a>
+      <NuxtLink to="/book#booking-form" @click="menuOpen = false">Book now</NuxtLink>
     </nav>
   </header>
 </template>
+
+<style scoped>
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #25d366;
+  background: rgba(37, 211, 102, 0.12);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  text-decoration: none;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.nav-whatsapp-link:hover {
+  background: #25d366;
+  color: #0b1e13;
+  border-color: #25d366;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.25);
+}
+
+.nav-whatsapp-link:hover :deep(path) {
+  fill: #0b1e13;
+}
+
+.mobile-nav-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #25d366;
+  background: rgba(37, 211, 102, 0.14);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  text-decoration: none;
+  width: fit-content;
+}
+
+@media (max-width: 800px) {
+  .nav-actions {
+    display: none;
+  }
+}
+</style>
