@@ -93,7 +93,7 @@ const { handleHomeClick, handleNavClick } = useHomeNavigation()
         <span>© 2018 – 2026 Universal Travel Assistance LLC. All Rights Reserved</span>
 
         <div class="uaa-footer-legal">
-          <!-- <NuxtLink to="/privacy">Privacy Policy</NuxtLink> -->
+          <NuxtLink to="/privacy">Privacy Policy</NuxtLink>
           <NuxtLink to="/faq">FAQs</NuxtLink>
           <NuxtLink to="/contact">Contact</NuxtLink>
         </div>
