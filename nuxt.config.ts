@@ -164,6 +164,10 @@ export default defineNuxtConfig({
     bookingApiToken: process.env.BOOKING_API_TOKEN || "",
 
     smtp: {
+      enabled:
+        process.env.SMTP_ENABLED !== undefined
+          ? process.env.SMTP_ENABLED === "true" || process.env.SMTP_ENABLED === "1"
+          : Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS),
       host: process.env.SMTP_HOST || "",
       port: Number(process.env.SMTP_PORT) || 587,
       user: process.env.SMTP_USER || "",

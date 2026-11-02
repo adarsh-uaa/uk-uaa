@@ -35,6 +35,7 @@ export default defineEventHandler(async (event) => {
   const name = typeof body.name === 'string' ? body.name.trim() : ''
   const email = typeof body.email === 'string' ? body.email.trim() : ''
   const phone = typeof body.phone === 'string' ? body.phone.trim() : ''
+  const subjectInput = typeof body.subject === 'string' ? body.subject.trim() : ''
   const message = typeof body.message === 'string' ? body.message.trim() : ''
 
   if (!name || name.length < 2) {
@@ -60,6 +61,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const smtpConfig = cfg.smtp as {
+    enabled?: boolean
     host?: string
     port?: number
     user?: string
@@ -67,6 +69,25 @@ export default defineEventHandler(async (event) => {
     secure?: boolean
     from?: string
     to?: string
+  }
+
+  // Check if SMTP is disabled
+  if (smtpConfig?.enabled === false) {
+    console.info('[Contact Form] SMTP is disabled via SMTP_ENABLED=false. Form submission logged locally:', {
+      name,
+      email,
+      phone,
+      subject: subjectInput,
+      message,
+      clientIp,
+      timestamp: new Date().toISOString()
+    })
+
+    return {
+      success: true,
+      message: 'Your enquiry has been received successfully. (SMTP sending is currently disabled)',
+      disabled: true
+    }
   }
 
   // Check if SMTP credentials are provided
@@ -78,7 +99,22 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const senderFrom = smtpConfig.from || `"UK Airport Assistance" <${smtpConfig.user}>`
+  const rawFrom = smtpConfig.from || smtpConfig.user || ''
+  let senderFrom: { name: string; address: string }
+
+  const fromMatch = rawFrom.match(/^(.*?)\s*<([^>]+)>$/)
+  if (fromMatch) {
+    senderFrom = {
+      name: fromMatch[1].replace(/^["']|["']$/g, '').trim() || 'UK AIRPORT ASSISTANCE',
+      address: fromMatch[2].trim()
+    }
+  } else {
+    senderFrom = {
+      name: 'UK AIRPORT ASSISTANCE',
+      address: rawFrom.trim()
+    }
+  }
+
   const recipientTo = smtpConfig.to || smtpConfig.user
 
   const transporter = nodemailer.createTransport({
@@ -104,9 +140,12 @@ export default defineEventHandler(async (event) => {
   const escapedName = escapeHtml(name)
   const escapedEmail = escapeHtml(email)
   const escapedPhone = phone ? escapeHtml(phone) : 'Not provided'
+  const escapedSubject = subjectInput ? escapeHtml(subjectInput) : ''
   const escapedMessage = escapeHtml(message).replace(/\n/g, '<br>')
 
-  const subject = `[Enquiry] New VIP Concierge Contact from ${name}`
+  const subject = subjectInput
+    ? `[Enquiry: ${subjectInput}] from ${name}`
+    : `[Enquiry] New VIP Concierge Contact from ${name}`
 
   const htmlContent = `
 <!DOCTYPE html>
@@ -140,6 +179,7 @@ export default defineEventHandler(async (event) => {
           <td class="label">Full Name</td>
           <td class="value"><strong>${escapedName}</strong></td>
         </tr>
+        ${escapedSubject ? `<tr><td class="label">Subject</td><td class="value"><strong>${escapedSubject}</strong></td></tr>` : ''}
         <tr>
           <td class="label">Email Address</td>
           <td class="value"><a href="mailto:${escapedEmail}" style="color: #622a31;">${escapedEmail}</a></td>
@@ -172,7 +212,7 @@ export default defineEventHandler(async (event) => {
 New Contact Form Submission - UK Airport Assistance
 --------------------------------------------------
 Name: ${name}
-Email: ${email}
+${subjectInput ? `Subject: ${subjectInput}\n` : ''}Email: ${email}
 Phone: ${phone || 'Not provided'}
 Time (UK): ${timestampFormatted}
 Client IP: ${clientIp}
@@ -194,7 +234,7 @@ ${message}
 
     return {
       success: true,
-      message: 'Your enquiry has been sent successfully. Our VIP team will contact you shortly.',
+      message: 'Your enquiry has been sent successfully. Our team will contact you shortly.',
       messageId: info.messageId
     }
   } catch (err: any) {

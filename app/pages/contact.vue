@@ -2,6 +2,7 @@
 const name = ref('')
 const email = ref('')
 const phone = ref('')
+const subject = ref('')
 const message = ref('')
 const honeypot = ref('')
 const sent = ref(false)
@@ -43,6 +44,7 @@ async function handleSubmit() {
         name: name.value,
         email: email.value,
         phone: phone.value,
+        subject: subject.value,
         message: message.value,
         website_check: honeypot.value
       }
@@ -60,6 +62,7 @@ async function handleSubmit() {
     name.value = ''
     email.value = ''
     phone.value = ''
+    subject.value = ''
     message.value = ''
   } catch (err: any) {
     const msg = err?.data?.statusMessage || err?.statusMessage || err?.message || 'Failed to submit enquiry. Please try again later.'
@@ -133,6 +136,11 @@ async function handleSubmit() {
             <label class="premium-field" for="contact-phone">
               <span>Phone number (optional)</span>
               <input id="contact-phone" v-model="phone" type="tel" autocomplete="tel" placeholder="e.g. +44 20 7946 0991" />
+            </label>
+
+            <label class="premium-field" for="contact-subject">
+              <span>Subject *</span>
+              <input id="contact-subject" v-model="subject" required placeholder="e.g. Heathrow Meet & Greet Enquiry" />
             </label>
 
             <label class="premium-field" for="contact-message">
