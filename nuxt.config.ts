@@ -1,5 +1,5 @@
 const siteUrl = (
-  process.env.NUXT_PUBLIC_SITE_URL || "https://uk-uaa-test.onrender.com"
+  process.env.NUXT_PUBLIC_SITE_URL || "https://ukairportvip.com"
 ).replace(/\/+$/, "");
 
 const siteName =
