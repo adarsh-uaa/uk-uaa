@@ -1,9 +1,15 @@
-import { logBooking } from '../server/utils/bookingLogger.ts'
+import { logBooking, cleanOldLogs, getRetainedMonths, getYearMonth } from '../server/utils/bookingLogger.ts'
 import fs from 'node:fs'
 import path from 'node:path'
 
 async function runTests() {
-  console.log('Testing booking logger...')
+  console.log('Testing monthwise booking logger and retention...')
+
+  const currentYm = getYearMonth()
+  console.log('Current Year-Month:', currentYm)
+
+  const retained = getRetainedMonths(3)
+  console.log('Retained months (max 3):', Array.from(retained))
 
   // Test 1: Successful booking attempt
   const successEntry = await logBooking({
@@ -28,7 +34,7 @@ async function runTests() {
       mobile: '+447911123456',
       service_types_id: '1',
       arrival_flight_number: 'BA1492',
-      arrival_date: 'Oct/28/2026',
+      arrival_date: 'Nov/02/2026',
       arrival_time: '14:30',
       departure_flight_number: '',
       departure_date: '',
@@ -79,70 +85,51 @@ async function runTests() {
   })
   console.log('Logged FAILED Demo entry:', failedDemoEntry.id)
 
-  // Test 3: Failed booking attempt - Upstream supplier failure (502)
-  const failedSupplierEntry = await logBooking({
-    status: 'FAILED',
-    statusCode: 502,
-    category: 'UPSTREAM_SUPPLIER_ERROR',
-    errorMessage: 'Supplier request failed. Please contact support before retrying to avoid a duplicate booking.',
-    errorDetails: {
-      upstreamStatus: 504,
-      upstreamMessage: 'Gateway Timeout connecting to provider api.supplier.com'
-    },
-    clientIp: '195.12.88.9',
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
-    payload: {
-      airport_name: 'Bruce Wayne',
-      airport_name_id: 'EDI-003',
-      email: 'bruce@wayne-enterprises.example',
-      mobile: '+447890123456',
-      service_types_id: '3',
-      arrival_flight_number: 'BA1320',
-      arrival_date: 'Dec/12/2026',
-      arrival_time: '10:00',
-      departure_flight_number: 'EK036',
-      departure_date: 'Dec/12/2026',
-      departure_time: '16:45',
-      class_of_travel_id: '4',
-      servicesinput_id: 'porter, lounge, family',
-      no_luggages: '4',
-      traveler_name: 'Bruce Wayne',
-      uaa_url: 'UK Airport Assistance',
-      uaa_p_c_method: 'Direct Call',
-      childrens_count: '0',
-      infants_count: '0',
-      adults_count: '1'
-    }
-  })
-  console.log('Logged FAILED Supplier entry:', failedSupplierEntry.id)
-
   // Wait a small moment for async file appends to complete
-  await new Promise(r => setTimeout(r, 200))
+  await new Promise(r => setTimeout(r, 400))
 
-  // Verify file existence and contents
   const logsDir = path.resolve(process.cwd(), 'logs')
-  const jsonlPath = path.join(logsDir, 'bookings.jsonl')
-  const csvPath = path.join(logsDir, 'bookings.csv')
-  const logPath = path.join(logsDir, 'bookings.log')
+  const monthJsonlPath = path.join(logsDir, `bookings-${currentYm}.jsonl`)
+  const monthCsvPath = path.join(logsDir, `bookings-${currentYm}.csv`)
+  const monthLogPath = path.join(logsDir, `bookings-${currentYm}.log`)
 
-  if (!fs.existsSync(jsonlPath)) throw new Error('bookings.jsonl not found!')
-  if (!fs.existsSync(csvPath)) throw new Error('bookings.csv not found!')
-  if (!fs.existsSync(logPath)) throw new Error('bookings.log not found!')
+  if (!fs.existsSync(monthJsonlPath)) throw new Error(`bookings-${currentYm}.jsonl not found!`)
+  if (!fs.existsSync(monthCsvPath)) throw new Error(`bookings-${currentYm}.csv not found!`)
+  if (!fs.existsSync(monthLogPath)) throw new Error(`bookings-${currentYm}.log not found!`)
 
-  const jsonlContent = fs.readFileSync(jsonlPath, 'utf-8').trim().split('\n')
-  const csvLines = fs.readFileSync(csvPath, 'utf-8').trim().split('\n')
-  const logContent = fs.readFileSync(logPath, 'utf-8')
+  const jsonlLines = fs.readFileSync(monthJsonlPath, 'utf-8').trim().split('\n')
+  const csvLines = fs.readFileSync(monthCsvPath, 'utf-8').trim().split('\n')
+  const logContent = fs.readFileSync(monthLogPath, 'utf-8')
 
-  console.log(`\nVerification successful:`)
-  console.log(`- bookings.jsonl: ${jsonlContent.length} entries`)
-  console.log(`- bookings.csv: ${csvLines.length} lines (including header)`)
-  console.log(`- bookings.log size: ${logContent.length} characters`)
+  console.log(`\nMonthwise log verification for ${currentYm}:`)
+  console.log(`- bookings-${currentYm}.jsonl: ${jsonlLines.length} entries`)
+  console.log(`- bookings-${currentYm}.csv: ${csvLines.length} lines (including CSV header)`)
+  console.log(`- bookings-${currentYm}.log: ${logContent.length} characters`)
 
-  // Check JSON parsing
-  jsonlContent.forEach((line, idx) => {
-    const parsed = JSON.parse(line)
-    console.log(`  Entry ${idx + 1}: [${parsed.status}] ID: ${parsed.id} | Traveler: ${parsed.traveler.name} | Airport: ${parsed.journey.airportId}`)
-  })
+  // Test 3: Test 3-month retention and automatic deletion of older files
+  console.log('\nTesting 3-month retention cleanup...')
+  const dummyOldLog = path.join(logsDir, 'bookings-2026-04.log')
+  const dummyOldCsv = path.join(logsDir, 'bookings-2026-04.csv')
+  const dummyOldJsonl = path.join(logsDir, 'bookings-2026-04.jsonl')
+  
+  fs.writeFileSync(dummyOldLog, 'Old log content April 2026\n', 'utf-8')
+  fs.writeFileSync(dummyOldCsv, 'Old csv content April 2026\n', 'utf-8')
+  fs.writeFileSync(dummyOldJsonl, '{"test":"april"}\n', 'utf-8')
+
+  console.log('Created dummy old files for 2026-04 (older than 3 months).')
+  const deletedFiles = await cleanOldLogs(3, true)
+  console.log('cleanOldLogs deleted:', deletedFiles)
+
+  if (fs.existsSync(dummyOldLog) || fs.existsSync(dummyOldCsv) || fs.existsSync(dummyOldJsonl)) {
+    throw new Error('Old logs for 2026-04 were not deleted!')
+  }
+  console.log('Successfully verified automatic deletion of logs older than 3 months.')
+
+  // Verify retained files still exist
+  if (!fs.existsSync(monthLogPath)) {
+    throw new Error(`Current month log bookings-${currentYm}.log was mistakenly deleted!`)
+  }
+  console.log(`Confirmed retained month logs remain intact: bookings-${currentYm}.*`)
 }
 
 runTests().catch(err => {

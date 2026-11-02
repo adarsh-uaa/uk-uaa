@@ -66,9 +66,93 @@ export interface BookingLogEntry {
 }
 
 const LOGS_DIR = path.resolve(process.cwd(), 'logs')
-const JSONL_PATH = path.join(LOGS_DIR, 'bookings.jsonl')
-const CSV_PATH = path.join(LOGS_DIR, 'bookings.csv')
-const TXT_LOG_PATH = path.join(LOGS_DIR, 'bookings.log')
+export const RETENTION_MONTHS = 3
+
+/**
+ * Returns year-month string like "2026-11"
+ */
+export function getYearMonth(date: Date = new Date()): string {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  return `${y}-${m}`
+}
+
+/**
+ * Returns the set of year-month keys that must be retained (default: last 3 months).
+ * e.g., in November 2026: {'2026-11', '2026-10', '2026-09'}
+ */
+export function getRetainedMonths(count: number = RETENTION_MONTHS, refDate: Date = new Date()): Set<string> {
+  const retained = new Set<string>()
+  for (let i = 0; i < count; i++) {
+    const d = new Date(refDate.getFullYear(), refDate.getMonth() - i, 1)
+    const ym = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+    retained.add(ym)
+  }
+  return retained
+}
+
+/**
+ * Resolves paths for monthwise log files.
+ */
+function getLogPathsForMonth(yearMonth: string) {
+  return {
+    jsonl: path.join(LOGS_DIR, `bookings-${yearMonth}.jsonl`),
+    csv: path.join(LOGS_DIR, `bookings-${yearMonth}.csv`),
+    log: path.join(LOGS_DIR, `bookings-${yearMonth}.log`)
+  }
+}
+
+/**
+ * Automatically cleans up log files older than the retention period (max last 3 months).
+ * Runs once per day in the background.
+ */
+let lastCleanupDay = ''
+
+export async function cleanOldLogs(retentionCount: number = RETENTION_MONTHS, force: boolean = false): Promise<string[]> {
+  const today = new Date().toISOString().slice(0, 10)
+  if (!force && lastCleanupDay === today) {
+    return []
+  }
+  lastCleanupDay = today
+
+  const deleted: string[] = []
+  try {
+    await fs.mkdir(LOGS_DIR, { recursive: true })
+    const entries = await fs.readdir(LOGS_DIR, { withFileTypes: true })
+    const retained = getRetainedMonths(retentionCount)
+
+    for (const entry of entries) {
+      // 1. Monthwise files: bookings-YYYY-MM.(jsonl|csv|log)
+      const fileMatch = entry.name.match(/^bookings-(\d{4}-\d{2})\.(jsonl|csv|log)$/i)
+      if (fileMatch) {
+        const ym = fileMatch[1]
+        if (!retained.has(ym)) {
+          const filePath = path.join(LOGS_DIR, entry.name)
+          await fs.unlink(filePath)
+          deleted.push(entry.name)
+          console.info(`[BookingLogger] Automatically removed expired log file (> ${retentionCount} months): ${entry.name}`)
+        }
+      }
+
+      // 2. Monthwise directories if any (e.g. logs/YYYY-MM/)
+      if (entry.isDirectory()) {
+        const dirMatch = entry.name.match(/^(\d{4}-\d{2})$/)
+        if (dirMatch) {
+          const ym = dirMatch[1]
+          if (!retained.has(ym)) {
+            const dirPath = path.join(LOGS_DIR, entry.name)
+            await fs.rm(dirPath, { recursive: true, force: true })
+            deleted.push(entry.name)
+            console.info(`[BookingLogger] Automatically removed expired log directory (> ${retentionCount} months): ${entry.name}`)
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.error('[BookingLogger] Error during old log cleanup:', err)
+  }
+  return deleted
+}
 
 const CSV_HEADERS = [
   'Booking ID',
@@ -121,53 +205,55 @@ function escapeCsvValue(val: any): string {
 
 // Mutex / sequential queue for atomic file appends
 let writeQueue: Promise<void> = Promise.resolve()
-let hasCsvHeader = false
+const initializedCsvFiles = new Set<string>()
 
-async function appendToJsonl(line: string): Promise<void> {
+async function appendToJsonl(yearMonth: string, line: string): Promise<void> {
   writeQueue = writeQueue.then(async () => {
     try {
       await fs.mkdir(LOGS_DIR, { recursive: true })
-      await fs.appendFile(JSONL_PATH, line, 'utf-8')
+      const paths = getLogPathsForMonth(yearMonth)
+      await fs.appendFile(paths.jsonl, line, 'utf-8')
     } catch (err) {
-      console.error(`[BookingLogger] Failed to write to JSONL:`, err)
+      console.error(`[BookingLogger] Failed to write to JSONL (${yearMonth}):`, err)
     }
   })
   return writeQueue
 }
 
-async function appendToCsv(row: string): Promise<void> {
+async function appendToCsv(yearMonth: string, row: string): Promise<void> {
   writeQueue = writeQueue.then(async () => {
     try {
       await fs.mkdir(LOGS_DIR, { recursive: true })
-      let writeHeader = false
-      if (!hasCsvHeader) {
+      const paths = getLogPathsForMonth(yearMonth)
+      let needsHeader = false
+
+      if (!initializedCsvFiles.has(paths.csv)) {
         try {
-          const stat = await fs.stat(CSV_PATH)
-          hasCsvHeader = stat.size > 0
+          const stat = await fs.stat(paths.csv)
+          needsHeader = stat.size === 0
         } catch {
-          hasCsvHeader = false
+          needsHeader = true
         }
-        if (!hasCsvHeader) {
-          writeHeader = true
-          hasCsvHeader = true
-        }
+        initializedCsvFiles.add(paths.csv)
       }
-      const headerLine = writeHeader ? CSV_HEADERS.map(escapeCsvValue).join(',') + '\n' : ''
-      await fs.appendFile(CSV_PATH, headerLine + row, 'utf-8')
+
+      const headerLine = needsHeader ? CSV_HEADERS.map(escapeCsvValue).join(',') + '\n' : ''
+      await fs.appendFile(paths.csv, headerLine + row, 'utf-8')
     } catch (err) {
-      console.error(`[BookingLogger] Failed to write to CSV:`, err)
+      console.error(`[BookingLogger] Failed to write to CSV (${yearMonth}):`, err)
     }
   })
   return writeQueue
 }
 
-async function appendToLog(block: string): Promise<void> {
+async function appendToLog(yearMonth: string, block: string): Promise<void> {
   writeQueue = writeQueue.then(async () => {
     try {
       await fs.mkdir(LOGS_DIR, { recursive: true })
-      await fs.appendFile(TXT_LOG_PATH, block, 'utf-8')
+      const paths = getLogPathsForMonth(yearMonth)
+      await fs.appendFile(paths.log, block, 'utf-8')
     } catch (err) {
-      console.error(`[BookingLogger] Failed to write to log:`, err)
+      console.error(`[BookingLogger] Failed to write to log (${yearMonth}):`, err)
     }
   })
   return writeQueue
@@ -176,6 +262,7 @@ async function appendToLog(block: string): Promise<void> {
 
 export async function logBooking(input: BookingLogInput): Promise<BookingLogEntry> {
   const now = new Date()
+  const yearMonth = getYearMonth(now)
   const bookingId = input.bookingId || generateBookingId()
   const enquiryRef =
     input.upstreamResponse?.result?.airport_enquiry ||
@@ -288,10 +375,15 @@ export async function logBooking(input: BookingLogInput): Promise<BookingLogEntr
     '================================================================================\n'
   ].join('\n')
 
+  // Trigger background cleanup for logs older than 3 months
+  cleanOldLogs().catch((err) => {
+    console.error('[BookingLogger] Background retention cleanup error:', err)
+  })
+
   // Append in background without blocking response
-  appendToJsonl(jsonLine)
-  appendToCsv(csvRow)
-  appendToLog(txtBlock)
+  appendToJsonl(yearMonth, jsonLine)
+  appendToCsv(yearMonth, csvRow)
+  appendToLog(yearMonth, txtBlock)
 
   // Console output for standard runtime monitoring
   const consolePrefix = `[BookingLog] [${entry.status} ${entry.statusCode}] ID: ${entry.id} - ${entry.traveler.name || 'Anonymous'}`
