@@ -29,8 +29,7 @@ useHead(() => ({
         <div class="container">
           <span class="luxe-kicker">OUR AIRPORTS</span>
           <h1>
-            <span style="color: #F4EADF;">Choose your </span>
-            <em>gateway.</em>
+            <span style="color: #F4EADF;">Choose your gateway.</span>
           </h1>
           <p>
             Each airport offers a distinct selection of services. Explore your destination and select the concierge assistance that suits you.

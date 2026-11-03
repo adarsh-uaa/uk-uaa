@@ -109,7 +109,7 @@ const { handleHomeClick, handleNavClick } = useHomeNavigation()
 <style scoped>
 .uaa-footer-whatsapp-link {
   color: #25d366;
-  font-weight: 500;
+  font-weight: 700;
   transition: all 0.2s ease;
 }
 

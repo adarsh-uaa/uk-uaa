@@ -121,5 +121,7 @@ async function togglePlay() {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: blur(2.5px);
+    transform: scale(1.02);
 }
 </style>

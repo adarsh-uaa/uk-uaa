@@ -135,7 +135,7 @@ onBeforeUnmount(() => {
   padding: 10px 14px;
   border-radius: 4px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   color: #25d366;
   background: rgba(37, 211, 102, 0.12);
   border: 1px solid rgba(37, 211, 102, 0.35);
@@ -150,6 +150,7 @@ onBeforeUnmount(() => {
   border-color: #25d366;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(37, 211, 102, 0.25);
+  text-shadow: none;
 }
 
 .nav-whatsapp-link:hover :deep(path) {
@@ -163,12 +164,13 @@ onBeforeUnmount(() => {
   padding: 10px 16px;
   border-radius: 4px;
   font-size: 13.5px;
-  font-weight: 600;
+  font-weight: 700;
   color: #25d366;
   background: rgba(37, 211, 102, 0.14);
   border: 1px solid rgba(37, 211, 102, 0.35);
   text-decoration: none;
   width: fit-content;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
 }
 
 @media (max-width: 800px) {

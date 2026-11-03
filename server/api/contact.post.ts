@@ -53,6 +53,13 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  if (!phone || phone.length < 6) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Please provide a valid phone number.'
+    })
+  }
+
   if (!message || message.length < 5) {
     throw createError({
       statusCode: 400,

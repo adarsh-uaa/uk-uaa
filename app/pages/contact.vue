@@ -35,6 +35,11 @@ async function handleSubmit() {
   successMessage.value = ''
   sent.value = false
 
+  if (!phone.value || phone.value.trim().length < 6) {
+    errorMessage.value = 'Please provide a valid phone number.'
+    return
+  }
+
   loading.value = true
 
   try {
@@ -134,8 +139,8 @@ async function handleSubmit() {
             </label>
 
             <label class="premium-field" for="contact-phone">
-              <span>Phone number (optional)</span>
-              <input id="contact-phone" v-model="phone" type="tel" autocomplete="tel" placeholder="e.g. +44 20 7946 0991" />
+              <span>Phone number *</span>
+              <input id="contact-phone" v-model="phone" type="tel" autocomplete="tel" required placeholder="e.g. +44 20 7946 0991" />
             </label>
 
             <label class="premium-field" for="contact-subject">
@@ -185,7 +190,7 @@ async function handleSubmit() {
   padding: 11px 18px;
   border-radius: 4px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: #ffffff;
   background: #25d366;
   text-decoration: none;
