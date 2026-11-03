@@ -73,7 +73,7 @@ useHead(() => ({
             </p>
             <p>
               Priority access, airside escorting and private facilities are only available where explicitly
-              authorized. Each itinerary receives a tailored service confirmation.
+              authorised. Each itinerary receives a tailored service confirmation.
             </p>
             <NuxtLink to="/airports" class="luxe-link">
               See airport-specific services →

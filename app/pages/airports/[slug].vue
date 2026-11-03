@@ -139,7 +139,7 @@ function scrollToSection(id: string) {
 const airportFaqs = computed(() => [
   {
     q: `Where will my greeter meet me at ${airport.name}?`,
-    a: `For arrivals, your dedicated greeter meets you at the aerobridge or aircraft arrival gate holding a personalized nameboard. For departures, meeting takes place curbside at the terminal drop-off or designated greeting desk.`
+    a: `For arrivals, your dedicated greeter meets you at the aerobridge or aircraft arrival gate holding a personalised nameboard. For departures, meeting takes place kerbside at the terminal drop-off or designated greeting desk.`
   },
   {
     q: `What happens if my flight into ${airport.name} is delayed?`,
@@ -209,15 +209,15 @@ const airportFaqs = computed(() => [
             <div class="highlight-item">
               <div class="highlight-icon"><Plane :size="20" /></div>
               <div>
-                <strong>Gate & Curbside Meet</strong>
-                <p>Personal greeter waiting with customized nameboard</p>
+                <strong>Gate & Kerbside Meet</strong>
+                <p>Personal greeter waiting with personalised nameboard</p>
               </div>
             </div>
             <div class="highlight-item">
               <div class="highlight-icon"><ShieldCheck :size="20" /></div>
               <div>
                 <strong>Fast-Track Guidance</strong>
-                <p>Expedited immigration & security where authorized</p>
+                <p>Expedited immigration & security where authorised</p>
               </div>
             </div>
             <div class="highlight-item">

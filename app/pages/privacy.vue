@@ -73,7 +73,7 @@ useHead(() => ({
             <li>Coordinate service delivery with our airport team</li>
             <li>Communicate booking confirmations, updates, and support via email and WhatsApp</li>
             <li>Process payments and issue confirmation vouchers</li>
-            <li>Respond to inquiries, complaints, or feedback</li>
+            <li>Respond to enquiries, complaints, or feedback</li>
             <li>Improve our website and services</li>
             <li>Comply with legal and regulatory obligations</li>
           </ul>
@@ -102,7 +102,7 @@ useHead(() => ({
         <section class="privacy-section">
           <h2>5. DATA RETENTION</h2>
           <p>
-            We retain personal information for as long as necessary to fulfill the purposes described in this Policy, including to meet legal, accounting, or
+            We retain personal information for as long as necessary to fulfil the purposes described in this Policy, including to meet legal, accounting, or
             reporting obligations. Booking and communication records may be retained for a reasonable period after service completion to handle any
             follow-up queries or disputes.
           </p>
@@ -120,7 +120,7 @@ useHead(() => ({
         <section class="privacy-section">
           <h2>7. DATA SECURITY</h2>
           <p>
-            We take reasonable technical and organizational measures to protect your personal information against unauthorized access, loss, misuse, or
+            We take reasonable technical and organisational measures to protect your personal information against unauthorised access, loss, misuse, or
             alteration. However, no method of transmission over the internet is completely secure, and we cannot guarantee absolute security.
           </p>
         </section>

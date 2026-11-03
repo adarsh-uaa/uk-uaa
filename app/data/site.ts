@@ -8,7 +8,7 @@ export const airports = [
 ] as const
 export const services = [
   { slug: 'meet-and-greet', eyebrow: '01 / ARRIVE', name: 'Meet & Greet', detail: 'A warm welcome and a dedicated assistant to guide your journey.', icon: 'handshake', image: '/images/meet-and-greet.webp?auto=format&fit=crop&w=850&q=80' },
-  { slug: 'fast-track', eyebrow: '02 / FLOW', name: 'Fast Track', detail: 'Priority services where available and authorized by the airport.', icon: 'clock', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=850&q=80' },
+  { slug: 'fast-track', eyebrow: '02 / FLOW', name: 'Fast Track', detail: 'Priority services where available and authorised by the airport.', icon: 'clock', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=850&q=80' },
   { slug: 'lounge', eyebrow: '03 / UNWIND', name: 'VIP Lounges', detail: 'An elevated pause before your flight, subject to access.', icon: 'armchair', image: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=850&q=80' },
   { slug: 'family-assistance', eyebrow: '04 / CARE', name: 'Family Assistance', detail: 'A thoughtful experience for those travelling together.', icon: 'users', image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=850&q=80' }
 ] as const

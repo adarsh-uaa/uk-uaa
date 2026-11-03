@@ -2,7 +2,7 @@
 import { ArrowUpRight } from 'lucide-vue-next'
 const options=[
  {name:'Arrivals',kicker:'01 / A WARM WELCOME',heading:'A beautiful beginning.',description:'Meet your personal assistant at the agreed meeting point. From wayfinding to luggage coordination, experience an arrival designed around you.',image:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1400&q=85'},
- {name:'Departures',kicker:'02 / A CALMER DEPARTURE',heading:'Leave the details to us.',description:'Arrive with confidence. We coordinate your requested departure assistance, including premium facilities and priority options wherever authorized.',image:'https://images.unsplash.com/photo-1474302770737-173ee21bab63?auto=format&fit=crop&w=1400&q=85'},
+ {name:'Departures',kicker:'02 / A CALMER DEPARTURE',heading:'Leave the details to us.',description:'Arrive with confidence. We coordinate your requested departure assistance, including premium facilities and priority options wherever authorised.',image:'https://images.unsplash.com/photo-1474302770737-173ee21bab63?auto=format&fit=crop&w=1400&q=85'},
  {name:'Connections',kicker:'03 / IN PERFECT TRANSIT',heading:'The journey flows on.',description:'From one flight to the next, your assistant helps make the connection feel seamless, subject to terminal access and airline procedures.',image:'https://images.unsplash.com/photo-1488085061387-422e29b40080?auto=format&fit=crop&w=1400&q=85'}
 ]
 const active=ref(0)

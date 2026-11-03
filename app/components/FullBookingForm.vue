@@ -1018,28 +1018,28 @@ async function submit() {
       </label>
 
       <label class="premium-field">
-        <span>No of Adults (Above 12 years) *</span>
+        <span>Adults (Aged 12+) *</span>
         <input v-model.number="input.adults" type="number" min="1" max="100" required />
       </label>
 
       <label class="premium-field">
-        <span>No of Children (2–12 years)</span>
+        <span>Children (2–11 years)</span>
         <input v-model.number="input.children" type="number" min="0" max="100" />
       </label>
 
       <label class="premium-field">
-        <span>No of Infants (0–2 years)</span>
+        <span>Infants (Under 2 years)</span>
         <input v-model.number="input.infants" type="number" min="0" max="100" />
       </label>
 
       <label class="premium-field">
-        <span>No of Luggages *</span>
+        <span>Number of Bags (Luggage) *</span>
         <input v-model.number="input.luggages" type="number" min="0" max="100" required />
       </label>
     </div>
 
     <div class="reference-communication">
-      <p>Please select mode of communication methods *</p>
+      <p>Preferred contact method(s) *</p>
 
       <div class="reference-communication-options">
         <label v-for="method in communicationMethods" :key="method" class="checkbox-choice">

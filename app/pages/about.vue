@@ -65,12 +65,12 @@ useHead(() => ({
               <li>Arrival, departure and transit meet and greet</li>
               <li>VIP terminal access</li>
               <li>Assistance for families and groups</li>
-              <li>Support for business travelers and frequent flyers</li>
+              <li>Support for business travellers and frequent flyers</li>
             </ul>
           </article>
 
           <article class="about-card">
-            <h2>Why travelers choose us</h2>
+            <h2>Why travellers choose us</h2>
             <ul class="about-features-list">
               <li>
                 <strong>Local knowledge:</strong> our teams know how each UK airport works, including terminals,

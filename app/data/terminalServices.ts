@@ -70,7 +70,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             inclusions: [
               "Meet your personal greeter at the end of the aerobridge or at the arrival gate with a name board.",
               "Fast-track immigration assistance.",
-              "Baggage Assistance (maximum 4 luggage).",
+              "Baggage Assistance (up to 4 bags).",
               "Escort through customs formalities.",
               "Escort to the airport exit and coordinate with your driver for pickup.",
               "Maximum 3 hours of service."
@@ -92,7 +92,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             title: "LHR Departure Meet and Greet Service",
             inclusions: [
               "Meet your personal greeter at the curb side.",
-              "Baggage Assistance (maximum 4 luggage).",
+              "Baggage Assistance (up to 4 bags).",
               "Assistance with Check In formalities.",
               "Fast-track immigration assistance.",
               "Escort through security.",
@@ -226,7 +226,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             inclusions: [
               "Meet your personal greeter at the end of the aerobridge or at the arrival gate with a name board.",
               "Fast-track immigration assistance.",
-              "Baggage Assistance (Maximum 4 luggage).",
+              "Baggage Assistance (up to 4 bags).",
               "Escort through customs formalities.",
               "Coordinate with the driver for a meeting point.",
               "Escort to the airport exit and coordinate with your driver for pickup.",
@@ -247,7 +247,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             title: "LGW Gold Departure Meet and Greet Service",
             inclusions: [
               "Meet your personal greeter at the curb side.",
-              "Baggage Assistance (maximum 4 luggage).",
+              "Baggage Assistance (up to 4 bags).",
               "Assistance with Check In formalities.",
               "Fast-track immigration assistance.",
               "Escort through security.",
@@ -271,7 +271,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             inclusions: [
               "Meet your personal greeter at the end of the aerobridge or at the arrival gate with a name board.",
               "Fast-track immigration assistance.",
-              "Baggage Assistance (maximum 4 luggage), if required.",
+              "Baggage Assistance (up to 4 bags), if required.",
               "Escort through customs formalities.",
               "Assistance with Check-in formalities, if required.",
               "Fast-track immigration assistance.",
@@ -321,7 +321,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             slug: "lgw-vip-departure-meet-greet",
             title: "LGW VIP Departure Meet and Greet Service",
             inclusions: [
-              "Upon your arrival at the VIP Terminal, our staff will warmly welcome you and assist with the airline check In formalities.",
+              "Upon your arrival at the VIP Terminal, our staff will warmly welcome you and assist with the airline check-in formalities.",
               "You will then be escorted to a lounge where you can relax while waiting for your departure.",
               "Beverages and pre-packaged refreshments will be available in our lounges.",
               "When it’s time to board your flight, you will be guided through dedicated security screening and transported in a luxury vehicle directly to the aircraft.",
@@ -344,7 +344,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             inclusions: [
               "A VIP terminal staff member will greet you at the aircraft with a name board.",
               "Escort you in a chauffeur-driven vehicle directly to our lounges, where dedicated immigration personnel will assist with your entry into the United Kingdom.",
-              "Your checked-in luggage will be collected directly from the aircraft and delivered to the check In counter, if required.",
+              "Your checked-in luggage will be collected directly from the aircraft and delivered to the check-in desk, if required.",
               "When it’s time to board your flight, you will be guided through dedicated security screening and transported in a luxury vehicle directly to the aircraft.",
               "Service up to 3 hours."
             ],
@@ -375,7 +375,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             inclusions: [
               "Meet your personal greeter at the end of the aerobridge or at the arrival gate with a name board.",
               "Fast-track immigration assistance.",
-              "Baggage Assistance (maximum 4 luggage).",
+              "Baggage Assistance (up to 4 bags).",
               "Escort through customs formalities.",
               "Escort to the airport exit and coordinate with your driver for pickup.",
               "Maximum service duration: 2 hours."
@@ -395,7 +395,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             title: "BHX Departure Meet and Greet Service",
             inclusions: [
               "Meet your personal greeter at the curb side.",
-              "Baggage Assistance (maximum 4 luggage).",
+              "Baggage Assistance (up to 4 bags).",
               "Assistance with Check In formalities.",
               "Escort through immigration assistance.",
               "Fast-track through security.",
@@ -449,7 +449,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             inclusions: [
               "Meet your travel concierge at your arrival gate after leaving the plane with a name board.",
               "Fast-track immigration assistance.",
-              "Baggage Assistance (maximum 8 luggage).",
+              "Baggage Assistance (up to 8 bags).",
               "Escort through customs formalities.",
               "Escort to the airport exit and coordinate with your driver for pickup.",
               "Maximum 2 hours service."
@@ -469,7 +469,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             title: "STN Departure Meet and Greet Service",
             inclusions: [
               "Meet your personal greeter at the curb side.",
-              "Baggage Assistance (maximum 8 luggage).",
+              "Baggage Assistance (up to 8 bags).",
               "Assistance with Check In formalities.",
               "Fast-track immigration assistance.",
               "Escort through security.",
@@ -526,7 +526,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             inclusions: [
               "Meet your personal greeter at the end of the aerobridge or at the arrival gate with a name board.",
               "Escort through immigration.",
-              "Baggage Assistance (maximum 3 luggage).",
+              "Baggage Assistance (up to 3 bags).",
               "Escort through customs formalities.",
               "Escort to the airport exit and coordinate with your driver for pickup.",
               "Maximum service duration: 3 hours."
@@ -546,7 +546,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             title: "EDI Departure Meet and Greet Service",
             inclusions: [
               "Meet your personal greeter at the curb side.",
-              "Baggage Assistance (maximum 3 luggage).",
+              "Baggage Assistance (up to 3 bags).",
               "Assistance with Check In formalities.",
               "Fast-track immigration assistance.",
               "Escort through security.",
@@ -570,7 +570,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             inclusions: [
               "Meet your personal greeter at the end of the aerobridge or at the arrival gate with a name board.",
               "Escort through immigration.",
-              "Baggage Assistance (maximum 3 luggage), if required.",
+              "Baggage Assistance (up to 3 bags), if required.",
               "Escort you through customs formalities.",
               "Transfer between terminals, if required.",
               "Assistance with Check-in formalities, if required.",
@@ -607,7 +607,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             inclusions: [
               "Meet your personal greeter at the end of the aerobridge or at the arrival gate with a name board.",
               "Fast-track immigration assistance.",
-              "Baggage Assistance (maximum 4 luggage).",
+              "Baggage Assistance (up to 4 bags).",
               "Escort through customs formalities.",
               "Escort to the airport exit and coordinate with your driver for pickup."
             ],
@@ -626,7 +626,7 @@ export const terminalServices: Record<string, AirportTerminalConfig> = {
             title: "MAN Departure Meet and Greet Service",
             inclusions: [
               "Meet your personal greeter at the curb side.",
-              "Baggage Assistance (maximum 4 luggage).",
+              "Baggage Assistance (up to 4 bags).",
               "Assistance with Check In formalities.",
               "Fast-track immigration assistance.",
               "Escort through security.",
