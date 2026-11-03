@@ -256,7 +256,7 @@ function proceed() {
                     Continue to booking →
                 </button>
                 <p v-if="!selectedPackages.length" class="mandatory-package-notice">
-                    * Minimum 1 service package is mandatory to proceed
+                    * Please select at least one service package to proceed
                 </p>
             </div>
         </aside>
