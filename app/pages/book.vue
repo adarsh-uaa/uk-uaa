@@ -67,7 +67,7 @@ watch(
       <section class="interior-hero">
         <div class="container">
           <span class="luxe-kicker">EXCLUSIVE UK AIRPORT ASSISTANCE</span>
-          <h1 style="color: #F4EADF;">Arrange your <em>journey.</em></h1>
+          <h1 style="color: #F4EADF;">Arrange your journey. </h1>
           <p>Tell us a little about your travel plans. We’ll help coordinate the finer details.</p>
         </div>
       </section>
