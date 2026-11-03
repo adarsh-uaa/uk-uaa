@@ -3641,36 +3641,56 @@ body {
 
 .country-trigger {
   width: 100%;
-
   height: 52px;
-
-  padding: 0 10px;
-
+  padding: 0 12px;
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   background: #fffefa;
-
   color: #182a40;
-
   border: 1px solid #dcd5ca;
-
   border-right: 0;
-
   border-radius: 5px 0 0 5px;
-
   font-size: 13px;
-
+  line-height: 1;
   cursor: pointer;
+  box-sizing: border-box;
+}
+
+.country-code-text {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  color: #182a40;
+  font-weight: 500;
 }
 
 .country-chevron {
-  font-size: 16px;
-
+  width: 10px;
+  height: 6px;
   color: #77746d;
+  flex-shrink: 0;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+span.country-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  font-size: 14px;
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+.country-trigger[aria-expanded="true"] .country-chevron {
+  transform: rotate(180deg);
+}
+
+.country-trigger[aria-expanded="true"] span.country-chevron {
+  transform: translateY(-2px) rotate(180deg);
 }
 
 .premium-field .phone-input-group input[type="tel"] {

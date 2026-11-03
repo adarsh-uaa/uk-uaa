@@ -841,8 +841,10 @@ async function submit() {
               :aria-expanded="countryOpen"
               @click="countryOpen = !countryOpen"
             >
-              <span>{{ selectedDialCode }}</span>
-              <span class="country-chevron">⌄</span>
+              <span class="country-code-text">{{ selectedDialCode }}</span>
+              <svg class="country-chevron" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </button>
 
             <div v-if="countryOpen" class="country-dropdown-menu">
