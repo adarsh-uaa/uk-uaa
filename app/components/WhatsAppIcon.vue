@@ -23,7 +23,7 @@ withDefaults(
   }>(),
   {
     size: 22,
-    color: '#25d366'
+    color: 'currentColor'
   }
 )
 </script>
