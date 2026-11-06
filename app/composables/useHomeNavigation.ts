@@ -22,7 +22,7 @@ export function useHomeNavigation() {
       onNavigate()
     }
 
-    const cleanTargetPath = targetPath.split('#')[0].split('?')[0].replace(/\/+$/, '') || '/'
+    const cleanTargetPath = (targetPath.split('#')[0] || '').split('?')[0]?.replace(/\/+$/, '') || '/'
     const currentPath = route.path.replace(/\/+$/, '') || '/'
 
     if (currentPath === cleanTargetPath) {

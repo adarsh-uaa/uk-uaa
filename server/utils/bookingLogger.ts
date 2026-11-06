@@ -126,7 +126,7 @@ export async function cleanOldLogs(retentionCount: number = RETENTION_MONTHS, fo
       const fileMatch = entry.name.match(/^bookings-(\d{4}-\d{2})\.(jsonl|csv|log)$/i)
       if (fileMatch) {
         const ym = fileMatch[1]
-        if (!retained.has(ym)) {
+        if (ym && !retained.has(ym)) {
           const filePath = path.join(LOGS_DIR, entry.name)
           await fs.unlink(filePath)
           deleted.push(entry.name)
@@ -139,7 +139,7 @@ export async function cleanOldLogs(retentionCount: number = RETENTION_MONTHS, fo
         const dirMatch = entry.name.match(/^(\d{4}-\d{2})$/)
         if (dirMatch) {
           const ym = dirMatch[1]
-          if (!retained.has(ym)) {
+          if (ym && !retained.has(ym)) {
             const dirPath = path.join(LOGS_DIR, entry.name)
             await fs.rm(dirPath, { recursive: true, force: true })
             deleted.push(entry.name)

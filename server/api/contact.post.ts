@@ -110,7 +110,7 @@ export default defineEventHandler(async (event) => {
   let senderFrom: { name: string; address: string }
 
   const fromMatch = rawFrom.match(/^(.*?)\s*<([^>]+)>$/)
-  if (fromMatch) {
+  if (fromMatch && fromMatch[1] && fromMatch[2]) {
     senderFrom = {
       name: fromMatch[1].replace(/^["']|["']$/g, '').trim() || 'UK AIRPORT ASSISTANCE',
       address: fromMatch[2].trim()
