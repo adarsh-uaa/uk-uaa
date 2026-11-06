@@ -182,6 +182,10 @@ export default defineNuxtConfig({
       siteName,
       isStaging,
       whatsappNumber,
+      clarityId:
+        process.env.NUXT_PUBLIC_CLARITY_ID ||
+        process.env.CLARITY_PROJECT_ID ||
+        "",
     },
   },
 });

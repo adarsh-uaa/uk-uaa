@@ -142,7 +142,7 @@ const steps = [
             <div class="reference-badge">
               <span class="ref-label">Enquiry Reference:</span>
               <span class="ref-value">{{ referenceId }}</span>
-              <button
+              <!-- <button
                 type="button"
                 class="copy-ref-btn"
                 :title="copied ? 'Copied to clipboard' : 'Copy reference'"
@@ -152,7 +152,7 @@ const steps = [
                 <Check v-if="copied" :size="15" class="copied-check" />
                 <Copy v-else :size="15" />
                 <span>{{ copied ? 'Copied' : 'Copy' }}</span>
-              </button>
+              </button> -->
             </div>
           </div>
         </div>
