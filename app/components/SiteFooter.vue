@@ -8,8 +8,32 @@ import {
 } from 'lucide-vue-next'
 
 const year = new Date().getFullYear()
+const route = useRoute()
+const router = useRouter()
 const { siteName, whatsappUrl } = useSiteMeta()
 const { handleHomeClick, handleNavClick } = useHomeNavigation()
+
+function handleEnquiryClick(event: MouseEvent) {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+    return
+  }
+
+  const currentPath = route.path.replace(/\/+$/, '') || '/'
+  if (currentPath === '/contact') {
+    event.preventDefault()
+    const el = document.getElementById('contact-form') || document.getElementById('enquiry-form') || document.querySelector('.contact-grid') || document.querySelector('.full-booking')
+    if (el) {
+      const isReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+      el.scrollIntoView({
+        behavior: isReducedMotion ? 'auto' : 'smooth',
+        block: 'start'
+      })
+      if (route.hash !== '#contact-form') {
+        router.replace({ path: '/contact', hash: '#contact-form' })
+      }
+    }
+  }
+}
 </script>
 
 <template>
@@ -72,7 +96,11 @@ const { handleHomeClick, handleNavClick } = useHomeNavigation()
             <span>WhatsApp</span>
           </a>
 
-          <NuxtLink to="/contact" class="uaa-footer-contact">
+          <NuxtLink
+            to="/contact#contact-form"
+            class="uaa-footer-contact"
+            @click="handleEnquiryClick"
+          >
             <Mail :size="17" />
             <span>Contact our team</span>
           </NuxtLink>
@@ -82,7 +110,11 @@ const { handleHomeClick, handleNavClick } = useHomeNavigation()
             <span>United Kingdom</span>
           </div>
 
-          <NuxtLink to="/contact" class="uaa-footer-enquire">
+          <NuxtLink
+            to="/contact#contact-form"
+            class="uaa-footer-enquire"
+            @click="handleEnquiryClick"
+          >
             Make an enquiry
             <ArrowUpRight :size="16" />
           </NuxtLink>

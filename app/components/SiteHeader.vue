@@ -76,7 +76,7 @@ onBeforeUnmount(() => {
         </a>
 
         <NuxtLink class="nav-cta" to="/book#booking-form">
-          Book now
+          Book Now
           <ArrowUpRight :size="15" aria-hidden="true" />
         </NuxtLink>
       </div>
@@ -116,7 +116,7 @@ onBeforeUnmount(() => {
         <WhatsAppIcon :size="22" />
         <span>WhatsApp</span>
       </a>
-      <NuxtLink to="/book#booking-form" @click="menuOpen = false">Book now</NuxtLink>
+      <NuxtLink to="/book#booking-form" @click="menuOpen = false">Book Now</NuxtLink>
     </nav>
   </header>
 </template>

@@ -1105,7 +1105,7 @@ async function resetForm() {
       <input v-model="consent" type="checkbox" required />
       <span>
         I agree to be contacted and have read the
-        <NuxtLink to="/privacy">
+        <NuxtLink to="/privacy" target="_blank" rel="noopener noreferrer">
           privacy policy
         </NuxtLink>.
       </span>

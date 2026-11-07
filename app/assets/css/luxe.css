@@ -2051,12 +2051,10 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    95deg,
+  background: linear-gradient(95deg,
       rgba(16, 29, 45, 0.52) 0%,
       rgba(24, 42, 64, 0.40) 50%,
-    rgba(24, 42, 64, 0.28) 100%
-  );
+      rgba(24, 42, 64, 0.28) 100%);
   z-index: 1;
   pointer-events: none;
 }

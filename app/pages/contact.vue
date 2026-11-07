@@ -11,8 +11,51 @@ const errorMessage = ref('')
 const successMessage = ref('')
 
 const toast = useToast()
+const route = useRoute()
 const { siteName, siteUrl, whatsappUrl } = useSiteMeta()
 const canonicalUrl = computed(() => `${siteUrl.value}/contact`)
+
+function scrollToContactForm(behavior: ScrollBehavior = 'smooth') {
+  if (!import.meta.client) return
+  const el = document.getElementById('contact-form') || document.getElementById('enquiry-form') || document.querySelector('.contact-grid') || document.querySelector('.full-booking')
+  if (el) {
+    const isReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    el.scrollIntoView({
+      behavior: isReducedMotion ? 'auto' : behavior,
+      block: 'start'
+    })
+  }
+}
+
+function handleAutoScroll() {
+  const hasContactIntent =
+    route.hash === '#contact-form' ||
+    route.hash === '#enquiry-form' ||
+    route.hash === '#enquiry' ||
+    route.hash === '#form'
+
+  if (hasContactIntent) {
+    nextTick(() => {
+      setTimeout(() => {
+        scrollToContactForm('smooth')
+      }, 100)
+      setTimeout(() => {
+        scrollToContactForm('smooth')
+      }, 350)
+    })
+  }
+}
+
+onMounted(() => {
+  handleAutoScroll()
+})
+
+watch(
+  () => route.fullPath,
+  () => {
+    handleAutoScroll()
+  }
+)
 
 useSeoMeta({
   title: computed(() => `Contact Us | ${siteName.value} VIP Concierge`),
@@ -96,7 +139,7 @@ async function handleSubmit() {
       />
 
       <section class="luxe-pad">
-        <div class="container contact-grid">
+        <div id="contact-form" class="container contact-grid">
           <div>
             <span class="luxe-kicker">TELL US ABOUT YOUR JOURNEY</span>
             <h2>We're here to <em>help.</em></h2>
@@ -122,7 +165,7 @@ async function handleSubmit() {
             </div>
           </div>
 
-          <form class="full-booking" @submit.prevent="handleSubmit">
+          <form id="enquiry-form" class="full-booking" @submit.prevent="handleSubmit">
             <!-- Honeypot field for bot spam deterrence -->
             <div style="display: none;" aria-hidden="true">
               <input v-model="honeypot" tabindex="-1" autocomplete="off" name="website_check" />
@@ -175,6 +218,20 @@ async function handleSubmit() {
 </template>
 
 <style scoped>
+#contact-form,
+#enquiry-form,
+.contact-grid {
+  scroll-margin-top: 110px;
+}
+
+@media (max-width: 767px) {
+  #contact-form,
+  #enquiry-form,
+  .contact-grid {
+    scroll-margin-top: 85px;
+  }
+}
+
 .contact-direct-options {
   display: flex;
   align-items: center;
