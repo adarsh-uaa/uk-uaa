@@ -437,7 +437,7 @@ const airportFaqs = computed(() => [
       </section>
 
       <!-- Airport FAQs Section -->
-      <section class="luxe-pad airport-faq-section">
+      <!-- <section class="luxe-pad airport-faq-section">
         <div class="container">
           <div class="section-title-wrap">
             <span class="luxe-kicker">FREQUENTLY ASKED QUESTIONS</span>
@@ -469,7 +469,7 @@ const airportFaqs = computed(() => [
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
 
       <!-- Bottom Inline CTA -->
       <section class="container inline-cta">
