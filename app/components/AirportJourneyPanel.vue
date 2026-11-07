@@ -248,10 +248,10 @@ function proceed() {
                     </div>
                 </div>
 
-                <p class="subtle-note journey-supplier-note">
+                <!-- <p class="subtle-note journey-supplier-note">
                     Final pricing and service availability are subject
                     to supplier confirmation.
-                </p>
+                </p> -->
 
             </template>
 
