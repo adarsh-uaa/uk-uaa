@@ -423,9 +423,9 @@ onBeforeUnmount(() => {
                 </p>
             </article>
 
-            <p class="terminal-quote-note">
+            <!-- <p class="terminal-quote-note">
                 Final pricing and service availability are subject to final confirmation.
-            </p>
+            </p> -->
         </div>
     </div>
 </template>

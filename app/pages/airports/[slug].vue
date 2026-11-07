@@ -368,7 +368,7 @@ const airportFaqs = computed(() => [
                     Up to {{ pkg.price.upToPassengers }} passengers
                   </span>
                 </div>
-                <span class="pkg-price-note">Final pricing and service availability are subject to final confirmation.</span>
+           <!-- <span class="pkg-price-note">Final pricing and service availability are subject to final confirmation.</> -->
               </div>
 
               <!-- Inclusions Checklist -->
