@@ -92,7 +92,7 @@ const steps = [
     number: '04',
     title: 'Confirmation Email',
     description:
-      'Once your payment is received, you’ll get a confirmation email along with your service voucher - everything you need, in one place.',
+      'Once your payment is received, our team will check the service availability. Once confirmed, you will receive a confirmation email along with your service voucher, containing all the details you need in one place.',
     icon: FileCheck
   },
   {
@@ -131,7 +131,7 @@ const steps = [
 
           <span class="luxe-kicker">ENQUIRY CONFIRMATION</span>
           <h1>
-            Booking Request <em>Received.</em>
+            Booking Request Received.
           </h1>
           <p class="confirmation-lead">
             Your booking request has been received by our concierge service. Our VIP concierge desk will review your details and send confirmation promptly.

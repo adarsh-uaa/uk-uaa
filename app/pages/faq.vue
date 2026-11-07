@@ -129,9 +129,9 @@ useHead(() => ({
 
           <p style="margin-top: 36px;">
             Still have questions about your upcoming trip?
-            <NuxtLink to="/contact#contact-form">Contact our concierge team</NuxtLink>
+            <NuxtLink to="/contact#contact-form"><b style=" color: #9b1c31;">Contact our concierge team</b></NuxtLink>
             or
-            <NuxtLink to="/book#booking-form">request airport assistance online</NuxtLink>.
+            <NuxtLink to="/book#booking-form"><b style="color: #9b1c31;">request airport assistance online</b></NuxtLink>.
           </p>
         </div>
       </section>

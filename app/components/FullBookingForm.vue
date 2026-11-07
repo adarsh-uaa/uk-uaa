@@ -144,7 +144,12 @@ function resolveInitialServices(
     return Array.from(matchedSlugs)
   }
 
-  // 6. Do not select anything by default; let the user select
+  // 6. If only one service is available, autoselect it
+  if (availableSlugs.size === 1) {
+    return Array.from(availableSlugs)
+  }
+
+  // 7. Do not select anything by default; let the user select
   return []
 }
 
@@ -290,6 +295,9 @@ watch(
         input.services = ['meet-greet', ...input.services.filter(s => s !== 'vip-terminal')]
       }
     }
+    if (input.services.length === 0 && availableServices.value.length === 1) {
+      input.services = [availableServices.value[0].slug]
+    }
   }
 )
 
@@ -314,6 +322,9 @@ watch(
     input.services = input.services.filter(slug =>
       availableServices.value.some(item => item.slug === slug)
     )
+    if (input.services.length === 0 && availableServices.value.length === 1) {
+      input.services = [availableServices.value[0].slug]
+    }
   }
 )
 
@@ -324,6 +335,9 @@ watch(
     input.services = input.services.filter(slug =>
       availableServices.value.some(item => item.slug === slug)
     )
+    if (input.services.length === 0 && availableServices.value.length === 1) {
+      input.services = [availableServices.value[0].slug]
+    }
   }
 )
 
@@ -1010,11 +1024,13 @@ async function resetForm() {
           >
             <span>
               {{
-                selectedServices.length
-                  ? `${selectedServices.length} services selected`
-                  : availableServices.length
-                    ? 'Select services *'
-                    : 'No services configured'
+                selectedServices.length === 1
+                  ? selectedServices[0].name
+                  : selectedServices.length
+                    ? `${selectedServices.length} services selected`
+                    : availableServices.length
+                      ? 'Select services *'
+                      : 'No services configured'
               }}
             </span>
             <span aria-hidden="true">⌄</span>

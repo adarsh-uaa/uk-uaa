@@ -3,6 +3,7 @@ import {
   Check,
   ArrowRight,
   ArrowUpRight,
+  ArrowDown,
   ShieldCheck,
   Clock,
   Plane,
@@ -186,24 +187,26 @@ const airportFaqs = computed(() => [
           <div class="hero-quick-actions">
             <button
               type="button"
-              class="luxe-button luxe-button-cream"
+              class="hero-primary-btn"
               @click="scrollToSection('services-catalogue')"
             >
-              View Services & Pricing ↓
+              <span>View Services &amp; Pricing</span>
+              <ArrowDown :size="15" class="hero-btn-icon" />
             </button>
             <button
               type="button"
               class="hero-ghost-btn"
               @click="scrollToSection('journey-planner')"
             >
-              Configure Journey →
+              <span>Configure Journey</span>
+              <ArrowRight :size="15" class="hero-btn-icon" />
             </button>
           </div>
         </div>
       </section>
 
       <!-- 4-Feature Highlights Bar -->
-      <section class="airport-highlights-strip">
+      <!-- <section class="airport-highlights-strip">
         <div class="container">
           <div class="highlights-grid">
             <div class="highlight-item">
@@ -236,7 +239,7 @@ const airportFaqs = computed(() => [
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
 
       <!-- Editorial Overview Section -->
       <section class="luxe-pad airport-editorial-section">
@@ -345,6 +348,12 @@ const airportFaqs = computed(() => [
 
               <!-- Price Box -->
               <div class="pkg-price-box">
+                <span
+                  v-if="pkg.price && pkg.price.amount > 0 && pkg.price.upToPassengers === 1"
+                  class="pkg-price-starting-label"
+                >
+                  Starting from
+                </span>
                 <div class="pkg-price-main">
                   <span v-if="pkg.price && pkg.price.amount > 0" class="pkg-price-amount">
                     {{ formatServicePrice(pkg.price) }}
@@ -355,7 +364,7 @@ const airportFaqs = computed(() => [
                   <!-- <span v-if="pkg.price?.data" class="pkg-price-pax">
                     {{ pkg.price.data }}
                   </span> -->
-                  <span v-if="pkg.price?.upToPassengers" class="pkg-price-pax">
+                  <span v-if="pkg.price?.upToPassengers && pkg.price.upToPassengers > 1" class="pkg-price-pax">
                     Up to {{ pkg.price.upToPassengers }} passengers
                   </span>
                 </div>
@@ -523,27 +532,81 @@ const airportFaqs = computed(() => [
 .hero-quick-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   margin-top: 28px;
   flex-wrap: wrap;
 }
 
+.hero-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #f4eadf;
+  color: #182a40;
+  border: 1px solid #f4eadf;
+  padding: 13px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.hero-primary-btn:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #101d2d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+}
+
+.hero-primary-btn:hover .hero-btn-icon {
+  transform: translateY(2px);
+}
+
+.hero-primary-btn:active {
+  transform: translateY(0);
+}
+
 .hero-ghost-btn {
-  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(244, 234, 223, 0.06);
   color: #f4eadf;
   border: 1px solid rgba(244, 234, 223, 0.4);
   padding: 13px 24px;
   font-size: 13px;
   font-weight: 600;
+  letter-spacing: 0.02em;
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(4px);
 }
 
 .hero-ghost-btn:hover {
-  background: rgba(244, 234, 223, 0.1);
+  background: rgba(244, 234, 223, 0.12);
   border-color: #c9a86a;
   color: #c9a86a;
+  transform: translateY(-2px);
+}
+
+.hero-ghost-btn:hover .hero-btn-icon {
+  transform: translateX(2px);
+}
+
+.hero-ghost-btn:active {
+  transform: translateY(0);
+}
+
+.hero-btn-icon {
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
 }
 
 /* Highlights Bar */
@@ -823,6 +886,15 @@ const airportFaqs = computed(() => [
   padding: 16px 22px;
   background: #fbf9f5;
   border-bottom: 1px solid #f0e9df;
+}
+
+.pkg-price-starting-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #797268;
+  margin-bottom: 2px;
+  line-height: 1.2;
 }
 
 .pkg-price-main {

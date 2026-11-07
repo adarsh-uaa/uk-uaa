@@ -22,7 +22,17 @@ const props = withDefaults(
 const airport = ref(props.initialAirport)
 const terminal = ref<TerminalSlug>('normal')
 const service = ref('arrival')
-const packageSlugs = ref<string[]>([])
+
+function getInitialPackageSlugs(): string[] {
+    const available = getServicePackages(
+        airport.value,
+        terminal.value,
+        service.value
+    )
+    return available.length === 1 ? [available[0].slug] : []
+}
+
+const packageSlugs = ref<string[]>(getInitialPackageSlugs())
 const extras = ref<string[]>([])
 
 // Selected airport
@@ -52,9 +62,16 @@ watch(
             terminal.value,
             service.value
         )
-        packageSlugs.value = packageSlugs.value.filter(slug =>
+        const valid = packageSlugs.value.filter(slug =>
             available.some(p => p.slug === slug)
         )
+        if (valid.length > 0) {
+            packageSlugs.value = valid
+        } else if (available.length === 1) {
+            packageSlugs.value = [available[0].slug]
+        } else {
+            packageSlugs.value = []
+        }
     }
 )
 
@@ -196,7 +213,7 @@ function proceed() {
                         <span>
                             {{
                                 item.price.upToPassengers
-                                    ? (item.price.upToPassengers === 1 ? 'Price for 1 passenger:' : `Price up to ${item.price.upToPassengers} passengers:`)
+                                    ? (item.price.upToPassengers === 1 ? 'Starting from:' : `Price up to ${item.price.upToPassengers} passengers:`)
                                     : (item.price.data || 'Package price:')
                             }}
                         </span>

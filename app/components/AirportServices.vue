@@ -182,13 +182,17 @@ watch(
             packages.value.map(item => item.slug)
         );
 
-        const validPackages = [
+        let validPackages = [
             ...new Set(
                 props.packageSlugs.filter(
                     slug => allowedPackages.has(slug)
                 )
             )
         ];
+
+        if (validPackages.length === 0 && packages.value.length === 1) {
+            validPackages = [packages.value[0].slug];
+        }
 
         if (
             JSON.stringify(validPackages) !==
@@ -221,7 +225,8 @@ function changeAirport(eventOrValue: Event | string) {
     emit("update:terminal", "normal");
     const pkgs = getServicePackages(value, "normal", activeService.value);
     const valid = props.packageSlugs.filter(slug => pkgs.some(p => p.slug === slug));
-    emit("update:packageSlugs", valid);
+    const next = valid.length > 0 ? valid : (pkgs.length === 1 ? [pkgs[0].slug] : []);
+    emit("update:packageSlugs", next);
     emit("update:extras", []);
 }
 
@@ -230,7 +235,8 @@ function changeTerminal(event: Event) {
     emit("update:terminal", newTerm);
     const pkgs = getServicePackages(props.airport, newTerm, activeService.value);
     const valid = props.packageSlugs.filter(slug => pkgs.some(p => p.slug === slug));
-    emit("update:packageSlugs", valid);
+    const next = valid.length > 0 ? valid : (pkgs.length === 1 ? [pkgs[0].slug] : []);
+    emit("update:packageSlugs", next);
     emit("update:extras", []);
 }
 
@@ -239,7 +245,8 @@ function changeService(event: Event) {
     emit("update:service", newServ);
     const pkgs = getServicePackages(props.airport, activeTerminal.value, newServ);
     const valid = props.packageSlugs.filter(slug => pkgs.some(p => p.slug === slug));
-    emit("update:packageSlugs", valid);
+    const next = valid.length > 0 ? valid : (pkgs.length === 1 ? [pkgs[0].slug] : []);
+    emit("update:packageSlugs", next);
     emit("update:extras", []);
 }
 
