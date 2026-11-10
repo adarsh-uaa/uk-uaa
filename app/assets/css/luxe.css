@@ -1730,6 +1730,23 @@ body {
     box-shadow 0.2s;
 }
 
+.premium-field select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%23182a40' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 15px 15px;
+  padding-right: 38px !important;
+  cursor: pointer;
+}
+
+.premium-field select::-ms-expand {
+  display: none;
+}
+
 .premium-field :is(input, select, textarea):focus {
   border-color: #9b8164;
 
@@ -4211,7 +4228,9 @@ span.country-chevron {
   width: 100%;
   min-width: 0;
   min-height: 48px;
+  height: 48px;
   border-radius: 5px;
+  box-sizing: border-box;
 }
 
 .reference-booking .reference-flight-grid {
@@ -4227,7 +4246,8 @@ span.country-chevron {
 .reference-services-trigger {
   width: 100%;
   min-height: 48px;
-  padding: 11px 14px;
+  height: 48px;
+  padding: 0 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -4239,6 +4259,25 @@ span.country-chevron {
   color: #182a40;
   font-size: 13px;
   cursor: pointer;
+  box-sizing: border-box;
+}
+
+.reference-services-trigger .reference-services-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #182a40;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.reference-services-trigger .services-chevron {
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.reference-services-trigger .services-chevron.rotate-180 {
+  transform: rotate(180deg);
 }
 
 .reference-services-trigger:disabled {

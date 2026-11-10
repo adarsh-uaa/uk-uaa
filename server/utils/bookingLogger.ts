@@ -395,3 +395,65 @@ export async function logBooking(input: BookingLogInput): Promise<BookingLogEntr
 
   return entry
 }
+
+/**
+ * Looks up a confirmed booking entry in the monthly .jsonl log files by
+ * enquiryReference (e.g. "BU24700") or internal booking ID (e.g. "bkg_...").
+ * Waits for any queued writes before reading.
+ */
+export async function findBookingInLogs(referenceId: string): Promise<BookingLogEntry | null> {
+  const needle = String(referenceId || '').trim().toLowerCase()
+  if (!needle || needle === 'enq-pending') {
+    return null
+  }
+
+  // Wait for any active background write operations to flush to disk
+  await writeQueue
+
+  try {
+    await fs.mkdir(LOGS_DIR, { recursive: true })
+    const dirEntries = await fs.readdir(LOGS_DIR, { withFileTypes: true })
+
+    // Sort monthwise JSONL files newest-first
+    const jsonlFiles = dirEntries
+      .filter(e => e.isFile() && /^bookings-\d{4}-\d{2}\.jsonl$/i.test(e.name))
+      .map(e => e.name)
+      .sort((a, b) => b.localeCompare(a))
+
+    for (const filename of jsonlFiles) {
+      const filePath = path.join(LOGS_DIR, filename)
+      const content = await fs.readFile(filePath, 'utf-8')
+      const lines = content.split(/\r?\n/).filter(Boolean)
+
+      // Search newest log lines first
+      for (let i = lines.length - 1; i >= 0; i--) {
+        const line = lines[i]
+        if (!line) continue
+
+        try {
+          const parsed = JSON.parse(line) as BookingLogEntry
+          if (parsed.status !== 'SUCCESS') continue
+
+          const refMatch =
+            parsed.enquiryReference &&
+            String(parsed.enquiryReference).trim().toLowerCase() === needle
+
+          const idMatch =
+            parsed.id &&
+            String(parsed.id).trim().toLowerCase() === needle
+
+          if (refMatch || idMatch) {
+            return parsed
+          }
+        } catch {
+          // Ignore malformed log lines
+        }
+      }
+    }
+
+    return null
+  } catch (err) {
+    console.error('[BookingLogger] Failed to search booking logs:', err)
+    return null
+  }
+}

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ChevronDown } from 'lucide-vue-next'
 import {
   airportsCatalog,
   journeyTypes,
@@ -260,6 +261,18 @@ const journeyDisplayOptions = computed(() => {
     }
   })
 })
+
+const terminalSelectOptions = computed(() =>
+  terminalOptions.value.map(t => ({ value: t.slug, label: t.label }))
+)
+
+const journeySelectOptions = computed(() =>
+  journeyDisplayOptions.value.map(t => ({ value: t.slug, label: t.name }))
+)
+
+const classSelectOptions = computed(() =>
+  [...classes].reverse().map(c => ({ value: c.id, label: c.name }))
+)
 
 const availableServices = computed<BookingService[]>(() => {
   const configured = servicesConfig[input.airport]?.[
@@ -944,24 +957,27 @@ async function resetForm() {
         </div>
       </div>
 
-      <label class="premium-field">
+      <div class="premium-field">
         <span>Terminal Type *</span>
-        <select v-model="input.terminal" required>
-          <option v-for="t in terminalOptions" :key="t.slug" :value="t.slug">
-            {{ t.label }}
-          </option>
-        </select>
-      </label>
+        <CustomDropdownSelect
+          v-model="input.terminal"
+          :options="terminalSelectOptions"
+          aria-label="Terminal Type"
+          required
+        />
+      </div>
 
-      <label class="premium-field">
+      <div class="premium-field">
         <span>Service Type *</span>
-        <select v-model="input.journey" :disabled="!availableJourneys.length" required>
-          <option value="" disabled>- Select -</option>
-          <option v-for="type in journeyDisplayOptions" :key="type.slug" :value="type.slug">
-            {{ type.name }}
-          </option>
-        </select>
-      </label>
+        <CustomDropdownSelect
+          v-model="input.journey"
+          :options="journeySelectOptions"
+          :disabled="!availableJourneys.length"
+          placeholder="- Select -"
+          aria-label="Service Type"
+          required
+        />
+      </div>
     </div>
 
     <div class="form-section-title">
@@ -1033,7 +1049,9 @@ async function resetForm() {
                       : 'No services configured'
               }}
             </span>
-            <span aria-hidden="true">⌄</span>
+            <span class="reference-services-arrow" aria-hidden="true">
+              <ChevronDown :size="15" class="services-chevron" :class="{ 'rotate-180': servicesOpen }" />
+            </span>
           </button>
 
           <div v-if="servicesOpen" class="reference-services-menu">
@@ -1071,15 +1089,16 @@ async function resetForm() {
         </div>
       </div>
 
-      <label class="premium-field">
+      <div class="premium-field">
         <span>Class of Travel *</span>
-        <select v-model="input.travelClass" required>
-          <option value="" disabled>- Select -</option>
-          <option v-for="travelClass in [...classes].reverse()" :key="travelClass.id" :value="travelClass.id">
-            {{ travelClass.name }}
-          </option>
-        </select>
-      </label>
+        <CustomDropdownSelect
+          v-model="input.travelClass"
+          :options="classSelectOptions"
+          placeholder="- Select -"
+          aria-label="Class of Travel"
+          required
+        />
+      </div>
 
       <label class="premium-field">
         <span>Adults (Aged 12+) *</span>

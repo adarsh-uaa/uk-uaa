@@ -23,6 +23,13 @@ const availableServices = computed(() => {
   )
 })
 
+const serviceOptions = computed(() =>
+  availableServices.value.map(item => ({
+    value: item.slug,
+    label: getJourneyLabel(item.slug, airport.value, 'full')
+  }))
+)
+
 watch(airport, () => {
   if (!availableServices.value.some(x => x.slug === service.value)) {
     service.value = availableServices.value[0]?.slug ?? 'arrival'
@@ -72,18 +79,15 @@ function continueBooking() {
         />
       </div>
 
-      <label class="premium-field">
+      <div class="premium-field">
         <span>Service Type *</span>
-        <select v-model="service" required>
-          <option
-            v-for="item in availableServices"
-            :key="item.slug"
-            :value="item.slug"
-          >
-            {{ getJourneyLabel(item.slug, airport, 'full') }}
-          </option>
-        </select>
-      </label>
+        <CustomDropdownSelect
+          v-model="service"
+          :options="serviceOptions"
+          aria-label="Service Type"
+          required
+        />
+      </div>
 
       <label class="premium-field">
         <span>Travel Date *</span>
