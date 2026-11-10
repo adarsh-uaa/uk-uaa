@@ -42,12 +42,24 @@ export default defineNuxtConfig({
     },
   },
 
-  css: ["~/assets/css/main.css", "~/assets/css/luxe.css"],
+  css: ["~/assets/css/main.css", "~/assets/css/luxe.css", "~/assets/css/site.css"],
+
+  nitro: {
+    compressPublicAssets: true,
+  },
+
+  vite: {
+    build: {
+      cssCodeSplit: true,
+      chunkSizeWarningLimit: 1000,
+    },
+  },
 
   app: {
     head: {
       htmlAttrs: {
         lang: "en-GB",
+        dir: "ltr",
       },
 
       title: `${siteName} | VIP Meet & Greet`,
@@ -80,8 +92,45 @@ export default defineNuxtConfig({
           content: "en_GB",
         },
         {
+          property: "og:type",
+          content: "website",
+        },
+        {
+          property: "og:image",
+          content: `${siteUrl}/images/hero-light-lounge.webp`,
+        },
+        {
+          property: "og:image:width",
+          content: "1200",
+        },
+        {
+          property: "og:image:height",
+          content: "630",
+        },
+        {
+          property: "og:image:alt",
+          content: `${siteName} — VIP Airport Concierge & Meet & Greet`,
+        },
+        {
           name: "twitter:card",
           content: "summary_large_image",
+        },
+        {
+          name: "twitter:title",
+          content: `${siteName} | VIP Meet & Greet`,
+        },
+        {
+          name: "twitter:description",
+          content:
+            `Premium ${siteName} VIP meet and greet assistance for arrivals, departures and connections.`,
+        },
+        {
+          name: "twitter:image",
+          content: `${siteUrl}/images/hero-light-lounge.webp`,
+        },
+        {
+          name: "twitter:image:alt",
+          content: `${siteName} — VIP Airport Concierge & Meet & Greet`,
         },
         ...(isStaging
           ? [
@@ -99,6 +148,12 @@ export default defineNuxtConfig({
       ],
 
       link: [
+        // Canonical Fallback
+        {
+          rel: "canonical",
+          href: siteUrl,
+        },
+
         // Favicon
         {
           rel: "icon",
@@ -117,7 +172,15 @@ export default defineNuxtConfig({
           href: "/apple-touch-icon.png",
         },
 
-        // Google Fonts
+        // Google Fonts preconnect & dns-prefetch
+        {
+          rel: "dns-prefetch",
+          href: "https://fonts.googleapis.com",
+        },
+        {
+          rel: "dns-prefetch",
+          href: "https://fonts.gstatic.com",
+        },
         {
           rel: "preconnect",
           href: "https://fonts.googleapis.com",
@@ -142,15 +205,35 @@ export default defineNuxtConfig({
       },
     },
 
+    // Immutable caching for hashed JS/CSS chunks
+    "/_nuxt/**": {
+      headers: {
+        "Cache-Control": "public, max-age=31536000, immutable",
+      },
+    },
+
+    // Cache static assets with stale-while-revalidate
     "/images/**": {
       headers: {
-        "Cache-Control": "public, max-age=604800",
+        "Cache-Control": "public, max-age=2592000, stale-while-revalidate=86400",
       },
     },
 
     "/video/**": {
       headers: {
-        "Cache-Control": "public, max-age=604800",
+        "Cache-Control": "public, max-age=2592000, stale-while-revalidate=86400",
+      },
+    },
+
+    "/animations/**": {
+      headers: {
+        "Cache-Control": "public, max-age=2592000, stale-while-revalidate=86400",
+      },
+    },
+
+    "/favicon*": {
+      headers: {
+        "Cache-Control": "public, max-age=2592000, stale-while-revalidate=86400",
       },
     },
   },

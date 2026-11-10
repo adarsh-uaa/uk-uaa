@@ -176,7 +176,7 @@ const airportFaqs = computed(() => [
           </div>
 
           <h1>
-            <span style="color: #F4EADF;">{{ airport.name }} </span>
+            <span class="hero-title-light">{{ airport.name }} </span>
             <em> assistance.</em>
           </h1>
 

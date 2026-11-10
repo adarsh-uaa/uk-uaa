@@ -143,7 +143,7 @@ function changeAirport(n: number) {
         <main id="main-content">
             <section class="luxe-hero" id="top">
                 <img class="luxe-hero-image" src="/images/hero.webp" alt="" aria-hidden="true"
-                    fetchpriority="high" decoding="async" />
+                    width="1920" height="1080" fetchpriority="high" decoding="async" />
                 <div class="luxe-hero-shade"></div>
 
                 <div class="container luxe-hero-content">
@@ -154,9 +154,9 @@ function changeAirport(n: number) {
                     </div>
 
                     <h1 class="luxe-hero-heading">
-                        <span class="line-reveal" style="color: #F4EADF;">VIP Airport Assistance.</span>
-                        <span class="line-reveal" style="--line-delay: .05s;">
-                            <em style="color: #e3c191;">Without the wait.</em>
+                        <span class="line-reveal hero-title-light">VIP Airport Assistance.</span>
+                        <span class="line-reveal line-reveal-delay-1">
+                            <em class="hero-title-gold">Without the wait.</em>
                         </span>
                     </h1>
 
@@ -378,12 +378,12 @@ function changeAirport(n: number) {
             <section class="luxe-final">
                 <div class="luxe-final-photo"></div>
                 <div class="container luxe-final-content" v-reveal>
-                    <span class="luxe-kicker" style="color: #DCC5A5;">
+                    <span class="luxe-kicker text-gold-light">
                         A MORE BEAUTIFUL WAY TO TRAVEL
                     </span>
                     <h2>
-                        <span style="color: #F4EADF;">Your journey,</span><br>
-                        <em style="color: #DCC5A5;">reimagined.</em>
+                        <span class="hero-title-light">Your journey,</span><br>
+                        <em class="text-gold-light">reimagined.</em>
                     </h2>
                     <p>Allow us to take care of the details so you can focus on what matters most.</p>
                     <NuxtLink to="/book#booking-form" class="luxe-button luxe-button-cream">

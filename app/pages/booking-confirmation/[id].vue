@@ -7,7 +7,8 @@ import {
   Plane,
   Copy,
   Check,
-  ArrowUpRight
+  ArrowUpRight,
+  ChevronDown
 } from 'lucide-vue-next'
 
 const route = useRoute()
@@ -66,6 +67,13 @@ async function copyReference() {
   }
 }
 
+function scrollToDetails() {
+  const el = document.getElementById('confirmation-details')
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
 const steps = [
   {
     number: '01',
@@ -118,8 +126,8 @@ const steps = [
             <ClientOnly>
               <LottieAnimation
                 animation-link="https://lottie.host/a1a9dde2-d1f6-488a-9950-c609c6d8b8ef/pCwjgN0cho.json"
-                :width="140"
-                :height="140"
+                :width="120"
+                :height="120"
                 :loop="false"
                 :auto-play="true"
               />
@@ -155,11 +163,38 @@ const steps = [
               </button>
             </div>
           </div>
+
+          <!-- Minimalist Scroll Down Cue with Contextual Text -->
+          <a
+            href="#confirmation-details"
+            class="scroll-down-minimal"
+            aria-label="Scroll down to explore what happens next and booking details"
+            @click.prevent="scrollToDetails"
+          >
+            <span class="scroll-text">Explore What Happens Next</span>
+            <div class="minimal-chevrons-grid" aria-hidden="true">
+              <div class="chevron-row row-1">
+                <ChevronDown :size="16" class="grid-chevron" />
+                <ChevronDown :size="16" class="grid-chevron" />
+                <ChevronDown :size="16" class="grid-chevron" />
+              </div>
+              <div class="chevron-row row-2">
+                <ChevronDown :size="16" class="grid-chevron" />
+                <ChevronDown :size="16" class="grid-chevron" />
+                <ChevronDown :size="16" class="grid-chevron" />
+              </div>
+              <div class="chevron-row row-3">
+                <ChevronDown :size="16" class="grid-chevron" />
+                <ChevronDown :size="16" class="grid-chevron" />
+                <ChevronDown :size="16" class="grid-chevron" />
+              </div>
+            </div>
+          </a>
         </div>
       </section>
 
       <!-- Next Steps & Thank You Section -->
-      <section class="luxe-pad confirmation-pad">
+      <section id="confirmation-details" class="luxe-pad confirmation-pad">
         <div class="container confirmation-wrap">
           <!-- Thank You Card -->
           <article class="confirmation-thankyou-card">
@@ -229,7 +264,14 @@ const steps = [
 <style scoped>
 .confirmation-hero {
   text-align: center;
-  padding: 160px 0 80px;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 105px 0 28px;
+  box-sizing: border-box;
 }
 
 .confirmation-hero-content {
@@ -238,10 +280,12 @@ const steps = [
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
+  width: 100%;
 }
 
 .confirmation-lottie-box {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -345,6 +389,119 @@ const steps = [
   color: #48bb78;
 }
 
+/* ------------------------------------------------------------- */
+/* Minimalist Scroll Down Chevrons Grid (3x3 Horizontal/Vertical) */
+/* ------------------------------------------------------------- */
+
+.scroll-down-minimal {
+  margin-top: auto;
+  margin-bottom: 12px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 8px 14px;
+  background: transparent;
+  border: none;
+  user-select: none;
+  transition: transform 0.25s ease;
+}
+
+.scroll-down-minimal:hover {
+  transform: translateY(3px);
+}
+
+.scroll-down-minimal:focus-visible {
+  outline: 2px solid #c9a86a;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.scroll-text {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #dcc5a5;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+  transition: color 0.25s ease;
+}
+
+.scroll-down-minimal:hover .scroll-text {
+  color: #ffffff;
+}
+
+.minimal-chevrons-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #c9a86a;
+  transition: color 0.25s ease;
+}
+
+.scroll-down-minimal:hover .minimal-chevrons-grid {
+  color: #ffffff;
+}
+
+.chevron-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.row-1 {
+  animation: rowCascade 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 0s;
+}
+
+.row-2 {
+  margin-top: -6px;
+  animation: rowCascade 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 0.18s;
+}
+
+.row-3 {
+  margin-top: -6px;
+  animation: rowCascade 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 0.36s;
+}
+
+.grid-chevron {
+  stroke-width: 2.25;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.75));
+  transition: filter 0.25s ease;
+}
+
+.scroll-down-minimal:hover .grid-chevron {
+  filter: drop-shadow(0 0 8px rgba(201, 168, 106, 0.95));
+}
+
+@keyframes rowCascade {
+  0%, 100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(3.5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row-1,
+  .row-2,
+  .row-3 {
+    animation: none;
+    opacity: 0.85;
+    transform: none;
+  }
+}
+
 /* ------------------------------------------ */
 /* Confirmation Content Body                  */
 /* ------------------------------------------ */
@@ -352,6 +509,7 @@ const steps = [
 .confirmation-pad {
   padding-top: 48px;
   padding-bottom: 96px;
+  scroll-margin-top: 90px;
 }
 
 .confirmation-wrap {
@@ -549,12 +707,21 @@ const steps = [
 
 @media (max-width: 767px) {
   .confirmation-hero {
-    padding: 135px 0 60px;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 92px 0 20px;
+  }
+
+  .scroll-down-minimal {
+    margin-top: auto;
+    margin-bottom: 8px;
+    padding: 6px 10px;
   }
 
   .confirmation-pad {
     padding-top: 32px;
     padding-bottom: 64px;
+    scroll-margin-top: 80px;
   }
 
   .confirmation-thankyou-card {

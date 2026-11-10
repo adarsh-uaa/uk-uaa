@@ -239,7 +239,7 @@ function proceed() {
 
                     <div>
                         <strong v-for="total in priceTotals" :key="total.currency"
-                            style="display: block; text-align: right">
+                            class="text-right-block">
                             {{ formatPrice(
                                 total.amount,
                                 total.currency

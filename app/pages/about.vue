@@ -41,7 +41,7 @@ useHead(() => ({
               meetandgreet and VIP airport services provide a professional face from the moment you
               step into the terminal.
             </p>
-            <p style="margin-top: 16px;">
+            <p class="mt-16">
               Whether you are flying in from another country leaving from the UK or switching flights, our
               dedicated concierge staff meets you at the designated meeting point, shows you the way in
               the airport and assist you with the necessary procedures, ensuring a smooth and hassle-free

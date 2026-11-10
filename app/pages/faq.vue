@@ -99,7 +99,7 @@ useHead(() => ({
       <section class="interior-hero">
         <div class="container">
           <span class="luxe-kicker">BEFORE YOU TRAVEL</span>
-          <h1 style="color: #F4EADF;">
+          <h1 class="hero-title-light">
             Questions, answered.  
           </h1>
           <p>Answers to the most common questions about meet and greet, VIP terminal and accessibility services at UK airports.</p>
@@ -127,11 +127,11 @@ useHead(() => ({
             </p>
           </div>
 
-          <p style="margin-top: 36px;">
+          <p class="mt-36">
             Still have questions about your upcoming trip?
-            <NuxtLink to="/contact#contact-form"><b style=" color: #9b1c31;">Contact our concierge team</b></NuxtLink>
+            <NuxtLink to="/contact#contact-form"><b class="faq-accent-link">Contact our concierge team</b></NuxtLink>
             or
-            <NuxtLink to="/book#booking-form"><b style="color: #9b1c31;">request airport assistance online</b></NuxtLink>.
+            <NuxtLink to="/book#booking-form"><b class="faq-accent-link">request airport assistance online</b></NuxtLink>.
           </p>
         </div>
       </section>

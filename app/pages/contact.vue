@@ -167,7 +167,7 @@ async function handleSubmit() {
 
           <form id="enquiry-form" class="full-booking" @submit.prevent="handleSubmit">
             <!-- Honeypot field for bot spam deterrence -->
-            <div style="display: none;" aria-hidden="true">
+            <div class="is-hidden" aria-hidden="true">
               <input v-model="honeypot" tabindex="-1" autocomplete="off" name="website_check" />
             </div>
 
@@ -201,11 +201,11 @@ async function handleSubmit() {
               <span v-else>Send enquiry →</span>
             </button>
 
-            <p v-if="errorMessage" role="alert" class="subtle-note" style="color: #c93b2b; font-weight: 600; margin-top: 15px;">
+            <p v-if="errorMessage" role="alert" class="subtle-note contact-status-error">
               {{ errorMessage }}
             </p>
 
-            <p v-if="sent" role="status" class="subtle-note" style="color: #2e6930; font-weight: 600; margin-top: 15px;">
+            <p v-if="sent" role="status" class="subtle-note contact-status-success">
               {{ successMessage }}
             </p>
           </form>

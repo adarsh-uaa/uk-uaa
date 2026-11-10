@@ -30,7 +30,7 @@ useHead(() => ({
       <section class="interior-hero">
         <div class="container">
           <span class="luxe-kicker">SITE INFORMATION</span>
-          <h1 style="color: #F4EADF;">
+          <h1 class="hero-title-light">
             Privacy <em>Policy.</em>
           </h1>
           <p>

@@ -7,6 +7,26 @@ const route = useRoute()
 const { siteName, whatsappUrl } = useSiteMeta()
 const { handleHomeClick, handleNavClick } = useHomeNavigation()
 
+const navLinks = [
+  { label: 'Home', path: '/' },
+  { label: 'Airports & Services', path: '/airports' },
+  { label: 'VIP Experience', path: '/vip-experience' },
+  { label: 'About', path: '/about' },
+  { label: 'FAQ', path: '/faq' },
+  { label: 'Contact', path: '/contact' }
+]
+
+function isLinkActive(path: string): boolean {
+  const currentPath = route.path.replace(/\/+$/, '') || '/'
+  const targetPath = path.replace(/\/+$/, '') || '/'
+
+  if (targetPath === '/') {
+    return currentPath === '/'
+  }
+
+  return currentPath === targetPath || currentPath.startsWith(`${targetPath}/`)
+}
+
 function onHeaderNavClick(path: string, e: MouseEvent) {
   handleNavClick(path, e, () => {
     menuOpen.value = false
@@ -55,12 +75,17 @@ onBeforeUnmount(() => {
       </NuxtLink>
 
       <nav class="desktop-nav" aria-label="Primary navigation">
-        <NuxtLink to="/" @click="onHeaderNavClick('/', $event)">Home</NuxtLink>
-        <NuxtLink to="/airports" @click="onHeaderNavClick('/airports', $event)">Airports &amp; Services</NuxtLink>
-        <NuxtLink to="/vip-experience" @click="onHeaderNavClick('/vip-experience', $event)">VIP Experience</NuxtLink>
-        <NuxtLink to="/about" @click="onHeaderNavClick('/about', $event)">About</NuxtLink>
-        <NuxtLink to="/faq" @click="onHeaderNavClick('/faq', $event)">FAQ</NuxtLink>
-        <NuxtLink to="/contact" @click="onHeaderNavClick('/contact', $event)">Contact</NuxtLink>
+        <NuxtLink
+          v-for="link in navLinks"
+          :key="link.path"
+          :to="link.path"
+          class="desktop-nav-link"
+          :class="{ 'is-active': isLinkActive(link.path) }"
+          :aria-current="isLinkActive(link.path) ? 'page' : undefined"
+          @click="onHeaderNavClick(link.path, $event)"
+        >
+          <span>{{ link.label }}</span>
+        </NuxtLink>
       </nav>
 
       <div class="nav-actions">
@@ -100,12 +125,17 @@ onBeforeUnmount(() => {
       class="mobile-nav"
       aria-label="Mobile navigation"
     >
-      <NuxtLink to="/" @click="onHeaderNavClick('/', $event)">Home</NuxtLink>
-      <NuxtLink to="/airports" @click="onHeaderNavClick('/airports', $event)">Airports &amp; Services</NuxtLink>
-      <NuxtLink to="/vip-experience" @click="onHeaderNavClick('/vip-experience', $event)">VIP Experience</NuxtLink>
-      <NuxtLink to="/about" @click="onHeaderNavClick('/about', $event)">About</NuxtLink>
-      <NuxtLink to="/faq" @click="onHeaderNavClick('/faq', $event)">FAQ</NuxtLink>
-      <NuxtLink to="/contact" @click="onHeaderNavClick('/contact', $event)">Contact</NuxtLink>
+      <NuxtLink
+        v-for="link in navLinks"
+        :key="link.path"
+        :to="link.path"
+        class="mobile-nav-link"
+        :class="{ 'is-active': isLinkActive(link.path) }"
+        :aria-current="isLinkActive(link.path) ? 'page' : undefined"
+        @click="onHeaderNavClick(link.path, $event)"
+      >
+        <span>{{ link.label }}</span>
+      </NuxtLink>
       <a
         :href="whatsappUrl"
         target="_blank"
@@ -122,6 +152,38 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+/* Desktop Nav Link */
+.desktop-nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+/* Active Link - Transparent / Hero Header */
+:deep(.desktop-nav .desktop-nav-link.is-active) {
+  color: #c9a86a !important;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+}
+
+/* Active Link - Scrolled Light Header */
+:deep(.header-scrolled .desktop-nav .desktop-nav-link.is-active) {
+  color: var(--brand-red, #9b1c31) !important;
+}
+
+/* Mobile Nav Active Link */
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 4px;
+  transition: color 0.2s ease;
+}
+
+.mobile-nav-link.is-active {
+  color: #c9a86a !important;
+}
+
 .nav-actions {
   display: flex;
   align-items: center;

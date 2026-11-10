@@ -77,7 +77,7 @@ useHead(() => ({
                 {{ eyebrow || siteName.toUpperCase() }}
             </span>
 
-            <h1 style="color: #F4EADF;">
+            <h1 class="hero-title-light">
                 {{ heading }}
             </h1>
 

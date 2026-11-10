@@ -52,6 +52,7 @@ function handleEnquiryClick(event: MouseEvent) {
               width="2020"
               height="779"
               loading="lazy"
+              decoding="async"
             />
           </NuxtLink>
 

@@ -2394,7 +2394,6 @@ body {
   border: 1px solid #0f7a4d !important;
 }
 
-.site-header .nav-whatsapp-link :deep(path),
 .site-header .nav-whatsapp-link path {
   fill: currentColor !important;
 }
@@ -3516,6 +3515,15 @@ body {
 
 .site-header .desktop-nav a:hover,
 .site-header.header-scrolled .desktop-nav a:hover {
+  color: var(--brand-red) !important;
+}
+
+/* Active Navigation Marks (Color Highlight Only) */
+.site-header .desktop-nav a.is-active {
+  color: #c9a86a !important;
+}
+
+.site-header.header-scrolled .desktop-nav a.is-active {
   color: var(--brand-red) !important;
 }
 

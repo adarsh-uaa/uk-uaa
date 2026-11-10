@@ -1,0 +1,104 @@
+/* ==========================================================================
+   Global Site & Page Utilities — Extracted from inline styles for SEO & speed
+   ========================================================================== */
+
+/* Color & Typography Utilities */
+.hero-title-light,
+.text-cream {
+  color: #f4eadf !important;
+}
+
+.hero-title-gold {
+  color: #e3c191 !important;
+}
+
+.text-gold-light {
+  color: #dcc5a5 !important;
+}
+
+.faq-accent-link {
+  color: #9b1c31 !important;
+  font-weight: 700;
+}
+
+/* Spacing Utilities */
+.mt-16 {
+  margin-top: 16px !important;
+}
+
+.mt-36 {
+  margin-top: 36px !important;
+}
+
+/* Visibility & Alignment */
+.is-hidden {
+  display: none !important;
+}
+
+.text-right-block {
+  display: block !important;
+  text-align: right !important;
+}
+
+.line-reveal-delay-1 {
+  --line-delay: 0.05s;
+}
+
+/* Contact Status Messages */
+.contact-status-error {
+  color: #c93b2b !important;
+  font-weight: 600;
+  margin-top: 15px;
+}
+
+.contact-status-success {
+  color: #2e6930 !important;
+  font-weight: 600;
+  margin-top: 15px;
+}
+
+/* ==========================================================================
+   Airports Directory Page Cards (Exact match to original inline styles)
+   ========================================================================== */
+.airport-card-img-wrap {
+  position: relative;
+}
+
+.airport-card-vip-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #c9a86a;
+  color: #182a40;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 4px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.airport-card-content {
+  padding: 20px;
+}
+
+.airport-card-code {
+  font-size: 11px;
+  font-weight: 700;
+  color: #c9a86a;
+  letter-spacing: 0.1em;
+}
+
+.airport-card-title {
+  margin: 6px 0 10px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #182a40;
+}
+
+.airport-card-cta {
+  font-size: 12px;
+  font-weight: 600;
+  color: #182a40;
+}
