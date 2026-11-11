@@ -3635,7 +3635,18 @@ body {
 
 @media (max-width: 767px) {
   .site-header .brand-logo img {
-    width: 185px;
+    width: 175px;
+  }
+}
+
+@media (max-width: 580px) {
+  .site-header .brand-logo,
+  .luxe-page .site-header .brand-logo {
+    margin-left: -4px !important;
+  }
+
+  .site-header .brand-logo img {
+    width: clamp(114px, 31vw, 158px);
   }
 }
 

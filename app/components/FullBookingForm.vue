@@ -155,7 +155,8 @@ function resolveInitialServices(
 }
 
 const initialAirport = selectAirport(String(route.query.airport || 'heathrow')).slug
-const initialTerminal = (String(route.query.terminal || 'normal').toLowerCase() === 'vip' ? 'vip' : 'normal') as TerminalSlug
+const rawTerminal = String(route.query.terminal || '').trim().toLowerCase()
+const initialTerminal = (rawTerminal === 'vip' || rawTerminal === 'normal' ? rawTerminal : '') as TerminalSlug | ''
 const rawJourney = String(route.query.service || route.query.journey || 'arrival').toLowerCase()
 const initialJourney = journeyTypes.some(j => j.slug === rawJourney) ? rawJourney : 'arrival'
 
@@ -190,12 +191,9 @@ const input = reactive({
 })
 
 const formRef = ref<HTMLFormElement | null>(null)
-const successCardRef = ref<HTMLElement | null>(null)
 const consent = ref(false)
 const sending = ref(false)
-const submitted = ref(false)
 const error = ref('')
-const enquiryReference = ref<string | null>(null)
 const payloadPreview = ref(false)
 const toast = useToast()
 const { siteName } = useSiteMeta()
@@ -244,15 +242,19 @@ const availableJourneys = computed(() => {
 
 const journeyDisplayOptions = computed(() => {
   return availableJourneys.value.map(type => {
-    let name = type.name
+    let name: string = type.name
     if (input.terminal === 'normal') {
       if (type.slug === 'arrival') name = 'Normal Arrival'
       else if (type.slug === 'departure') name = 'Normal Departure'
       else if (type.slug === 'transit') name = 'Normal Transit'
-    } else {
+    } else if (input.terminal === 'vip') {
       if (type.slug === 'arrival') name = 'VIP Arrival'
       else if (type.slug === 'departure') name = 'VIP Departure'
       else if (type.slug === 'transit') name = 'VIP Transit'
+    } else {
+      if (type.slug === 'arrival') name = 'Arrival'
+      else if (type.slug === 'departure') name = 'Departure'
+      else if (type.slug === 'transit') name = 'Transit'
     }
     return {
       slug: type.slug,
@@ -608,7 +610,7 @@ const payload = computed(() => ({
 
 async function submit() {
   error.value = ''
-  if (sending.value || submitted.value) return
+  if (sending.value) return
 
   if (
     !input.firstName.trim() ||
@@ -622,6 +624,12 @@ async function submit() {
 
   if (!selectAirport(input.airport).id) {
     error.value = 'The selected airport needs a configured supplier ID.'
+    toast.error(error.value)
+    return
+  }
+
+  if (!input.terminal) {
+    error.value = 'Please select a terminal type.'
     toast.error(error.value)
     return
   }
@@ -771,6 +779,7 @@ async function submit() {
   }
 
   sending.value = true
+  let redirected = false
 
   try {
     const result = await $fetch<{
@@ -791,18 +800,10 @@ async function submit() {
         result.bookingId ||
         'ENQ-' + Math.floor(100000 + Math.random() * 900000)
 
-      enquiryReference.value = refId
-      submitted.value = true
-
-      toast.success({
-        title: 'Booking Request Received',
-        message: result.message || 'Your booking enquiry has been received by our concierge service.',
-        enquiryRef: refId,
-        duration: 7000
-      })
-
-      // Navigate to the dedicated booking confirmation page
+      redirected = true
+      // Navigate directly to the dedicated booking confirmation page
       await navigateTo(`/booking-confirmation/${encodeURIComponent(refId)}`)
+      return
     } else {
       const errMsg =
         result.message ||
@@ -827,47 +828,9 @@ async function submit() {
       duration: 8000
     })
   } finally {
-    sending.value = false
-  }
-}
-
-async function resetForm() {
-  submitted.value = false
-  enquiryReference.value = null
-  error.value = ''
-  consent.value = false
-
-  // Reset and clear all passenger and journey fields
-  input.firstName = ''
-  input.lastName = ''
-  input.email = ''
-  input.mobile = ''
-  input.airport = 'heathrow'
-  input.terminal = 'normal'
-  input.journey = 'arrival'
-  input.services = []
-  input.arrivalFlight = ''
-  input.arrivalDate = ''
-  input.arrivalTime = ''
-  input.departureFlight = ''
-  input.departureDate = ''
-  input.departureTime = ''
-  input.travelClass = ''
-  input.adults = 1
-  input.children = 0
-  input.infants = 0
-  input.luggages = 0
-  input.communication = ['Email (Default)']
-
-  selectedCountry.value = 'GB'
-  countrySearch.value = ''
-  serviceSearch.value = ''
-
-  // Scroll smoothly to the top of the form
-  await nextTick()
-  const target = document.getElementById('booking-form') || formRef.value
-  if (target) {
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (!redirected) {
+      sending.value = false
+    }
   }
 }
 </script>
@@ -962,6 +925,7 @@ async function resetForm() {
         <CustomDropdownSelect
           v-model="input.terminal"
           :options="terminalSelectOptions"
+          placeholder="- Select -"
           aria-label="Terminal Type"
           required
         />
@@ -1150,41 +1114,8 @@ async function resetForm() {
       {{ error }}
     </p>
 
-    <!-- SUCCESS FEEDBACK CARD WITH LOTTIE ANIMATION -->
-    <div v-if="submitted" id="booking-success" ref="successCardRef" class="booking-success-card" role="status">
-      <ClientOnly>
-        <LottieAnimation
-          animation-link="https://lottie.host/a1a9dde2-d1f6-488a-9950-c609c6d8b8ef/pCwjgN0cho.json"
-          :width="120"
-          :height="120"
-          :loop="false"
-          :auto-play="true"
-        />
-        <template #fallback>
-          <div class="lottie-fallback-tick" aria-hidden="true">✓</div>
-        </template>
-      </ClientOnly>
-
-      <h3>Booking Request Received</h3>
-      <p class="success-message">
-        Your booking request has been received by our concierge service. Our VIP concierge desk will review your details and send confirmation promptly.
-      </p>
-
-      <div v-if="enquiryReference" class="success-reference-box">
-        <span class="ref-label">Enquiry Reference</span>
-        <span class="ref-code">{{ enquiryReference }}</span>
-      </div>
-
-      <div class="success-actions">
-        <button type="button" class="btn-book-another" @click="resetForm">
-          Arrange Another Journey
-        </button>
-      </div>
-    </div>
-
     <!-- BOOK NOW BUTTON WITH ANIMATED LOADING STATE -->
     <button
-      v-if="!submitted"
       type="submit"
       class="premium-submit reference-book-button"
       :disabled="sending"
@@ -1210,10 +1141,6 @@ async function resetForm() {
   .reference-booking {
     scroll-margin-top: 85px;
   }
-
-  .booking-success-card {
-    scroll-margin-top: 85px;
-  }
 }
 
 .submit-loading-state {
@@ -1237,113 +1164,6 @@ async function resetForm() {
 @keyframes lottie-submit-spin {
   to {
     transform: rotate(360deg);
-  }
-}
-
-.booking-success-card {
-  scroll-margin-top: 110px;
-  margin-top: 28px;
-  padding: 36px 28px;
-  background: #ffffff;
-  border: 1px solid rgba(201, 168, 106, 0.45);
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 12px 36px rgba(24, 42, 64, 0.08);
-  animation: cardFadeIn 0.4s ease-out;
-}
-
-.booking-success-card h3 {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 24px;
-  color: #182a40;
-  margin: 8px 0 10px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-.booking-success-card .success-message {
-  font-size: 14px;
-  color: #5c554c;
-  line-height: 1.65;
-  max-width: 520px;
-  margin: 0 auto 20px;
-}
-
-.success-reference-box {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 12px 24px;
-  background: #faf8f5;
-  border: 1px dashed #c9a86a;
-  border-radius: 6px;
-  margin: 0 auto 22px;
-}
-
-.success-reference-box .ref-label {
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #8c857b;
-  font-weight: 600;
-}
-
-.success-reference-box .ref-code {
-  font-family: monospace;
-  font-size: 17px;
-  font-weight: 700;
-  color: #182a40;
-  letter-spacing: 0.05em;
-}
-
-.success-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 6px;
-}
-
-.btn-book-another {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 11px 24px;
-  background: transparent;
-  color: #182a40;
-  border: 1px solid #182a40;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-book-another:hover {
-  background: #182a40;
-  color: #ffffff;
-}
-
-.lottie-fallback-tick {
-  width: 72px;
-  height: 72px;
-  line-height: 72px;
-  text-align: center;
-  font-size: 38px;
-  font-weight: bold;
-  color: #0f7a4d;
-  background: rgba(15, 122, 77, 0.1);
-  border-radius: 50%;
-  margin: 0 auto 12px;
-}
-
-@keyframes cardFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 </style>

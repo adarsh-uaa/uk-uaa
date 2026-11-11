@@ -88,35 +88,42 @@ onBeforeUnmount(() => {
         </NuxtLink>
       </nav>
 
-      <div class="nav-actions">
-        <a
-          :href="whatsappUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="nav-whatsapp-link"
-          aria-label="WhatsApp"
+      <div class="header-controls">
+        <div class="nav-actions">
+          <a
+            :href="whatsappUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="nav-whatsapp-link"
+            aria-label="WhatsApp"
+            title="WhatsApp"
+          >
+            <WhatsAppIcon :size="18" class="whatsapp-icon" />
+            <span class="nav-whatsapp-label">WhatsApp</span>
+          </a>
+
+          <NuxtLink
+            class="nav-cta"
+            to="/book#booking-form"
+            @click="menuOpen = false"
+          >
+            <span>Book Now</span>
+            <ArrowUpRight :size="15" class="nav-cta-arrow" aria-hidden="true" />
+          </NuxtLink>
+        </div>
+
+        <button
+          class="menu-toggle"
+          type="button"
+          :aria-expanded="menuOpen"
+          aria-controls="mobile-site-navigation"
+          :aria-label="menuOpen ? 'Close navigation' : 'Open navigation'"
+          @click="menuOpen = !menuOpen"
         >
-          <WhatsAppIcon :size="18" />
-          <span>WhatsApp</span>
-        </a>
-
-        <NuxtLink class="nav-cta" to="/book#booking-form">
-          Book Now
-          <ArrowUpRight :size="15" aria-hidden="true" />
-        </NuxtLink>
+          <X v-if="menuOpen" aria-hidden="true" />
+          <Menu v-else aria-hidden="true" />
+        </button>
       </div>
-
-      <button
-        class="menu-toggle"
-        type="button"
-        :aria-expanded="menuOpen"
-        aria-controls="mobile-site-navigation"
-        :aria-label="menuOpen ? 'Close navigation' : 'Open navigation'"
-        @click="menuOpen = !menuOpen"
-      >
-        <X v-if="menuOpen" aria-hidden="true" />
-        <Menu v-else aria-hidden="true" />
-      </button>
     </div>
 
     <nav
@@ -136,17 +143,6 @@ onBeforeUnmount(() => {
       >
         <span>{{ link.label }}</span>
       </NuxtLink>
-      <a
-        :href="whatsappUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="mobile-nav-whatsapp"
-        @click="menuOpen = false"
-      >
-        <WhatsAppIcon :size="22" />
-        <span>WhatsApp</span>
-      </a>
-      <NuxtLink to="/book#booking-form" @click="menuOpen = false">Book Now</NuxtLink>
     </nav>
   </header>
 </template>
@@ -184,6 +180,13 @@ onBeforeUnmount(() => {
   color: #c9a86a !important;
 }
 
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
 .nav-actions {
   display: flex;
   align-items: center;
@@ -204,6 +207,7 @@ onBeforeUnmount(() => {
   text-decoration: none;
   line-height: 1;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .nav-whatsapp-link :deep(path) {
@@ -219,28 +223,79 @@ onBeforeUnmount(() => {
   text-shadow: none;
 }
 
-.mobile-nav-whatsapp {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  border-radius: 4px;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #0f7a4d;
-  background: transparent;
-  border: 1px solid #0f7a4d;
-  text-decoration: none;
-  width: fit-content;
-}
-
-.mobile-nav-whatsapp :deep(path) {
-  fill: currentColor;
-}
-
 @media (max-width: 800px) {
+  .nav-wrap {
+    gap: 10px;
+  }
+
+  .header-controls {
+    gap: 8px;
+  }
+
   .nav-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .nav-actions .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    gap: 6px;
+  }
+
+  .nav-whatsapp-link {
+    padding: 8px 11px;
+    font-size: 12px;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 580px) {
+  .header-controls {
+    gap: 6px;
+  }
+
+  .nav-actions {
+    gap: 6px;
+  }
+
+  .nav-whatsapp-label {
     display: none;
+  }
+
+  .nav-whatsapp-link {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .nav-actions .nav-cta {
+    height: 34px;
+    padding: 0 10px;
+    font-size: 11.5px;
+    gap: 4px;
+  }
+
+  .nav-cta-arrow {
+    width: 13px;
+    height: 13px;
+  }
+
+  .menu-toggle {
+    width: 32px;
+    height: 34px;
+    padding: 0;
   }
 }
 </style>
