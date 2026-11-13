@@ -1,5 +1,6 @@
-import { createError, readBody, getRequestIP, getRequestHeader } from 'h3'
+import { createError, getRequestIP, getRequestHeader } from 'h3'
 import { logBooking } from '../utils/bookingLogger'
+import { assertSafeJsonBody } from '../utils/security'
 
 // POST remains disabled until you explicitly enable it. Never expose upstream API keys to the browser.
 export default defineEventHandler(async (event) => {
@@ -10,8 +11,11 @@ export default defineEventHandler(async (event) => {
   let payload: any = null
 
   try {
-    payload = await readBody(event)
+    payload = await assertSafeJsonBody(event)
   } catch (err: any) {
+    if (err?.statusCode === 400 && err?.statusMessage === 'Request contains disallowed characters.') {
+      throw err
+    }
     await logBooking({
       status: 'FAILED',
       statusCode: 400,

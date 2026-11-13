@@ -22,7 +22,7 @@ useSeoMeta({
     title: pageTitle,
     description: pageDescription,
     keywords: computed(() => `${siteName.value}, UK airport assistance, meet and greet UK, VIP airport concierge, London Heathrow assistance, Gatwick meet and greet, fast track UK airport, airport lounge access UK, VIP terminal assistance`),
-    ogTitle: computed(() => `${siteName.value} — Travel, Considered.`),
+    ogTitle: computed(() => `${siteName.value} - Travel, Considered.`),
     ogDescription: pageDescription,
     ogType: 'website',
     ogUrl: siteUrl,

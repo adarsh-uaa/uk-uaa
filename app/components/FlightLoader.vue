@@ -124,7 +124,7 @@ onBeforeUnmount(() => {
       <div class="loader-progress" aria-hidden="true"><span></span></div>
       <span class="loader-bottom">
         A considered way to travel
-        <span>01 — 03</span>
+        <span>01 - 03</span>
       </span>
     </div>
   </div>

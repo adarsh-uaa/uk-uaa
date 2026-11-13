@@ -1,24 +1,17 @@
-import { createError, readBody, getRequestIP, getRequestHeader } from 'h3'
+import { createError, getRequestIP, getRequestHeader } from 'h3'
 import { logReview } from '../utils/reviewLogger'
+import { assertSafeJsonBody, logSecurityEvent, sanitizeText } from '../utils/security'
 
 export default defineEventHandler(async (event) => {
   const clientIp = getRequestIP(event, { xForwardedFor: true }) || 'unknown'
   const userAgent = getRequestHeader(event, 'user-agent') || 'unknown'
   const referer = getRequestHeader(event, 'referer') || ''
 
-  let body: Record<string, any> = {}
-
-  try {
-    body = await readBody(event)
-  } catch (err: any) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Invalid request body'
-    })
-  }
+  const body = await assertSafeJsonBody<Record<string, any>>(event)
 
   // Honeypot check for bots
   if (body.website_check || body.honeypot) {
+    await logSecurityEvent(event, 'BOT_HONEYPOT_REVIEW', 'Spam bot trapped in review honeypot', true)
     return { success: true, message: 'Review received.' }
   }
 
@@ -31,8 +24,8 @@ export default defineEventHandler(async (event) => {
   }
 
   const rating = Math.round(rawRating)
-  const bookingReference = typeof body.bookingReference === 'string' ? body.bookingReference.trim() : 'ENQ-PENDING'
-  const comment = typeof body.comment === 'string' ? body.comment.trim().slice(0, 1000) : ''
+  const bookingReference = sanitizeText(body.bookingReference, 64) || 'ENQ-PENDING'
+  const comment = sanitizeText(body.comment, 1000)
 
   const entry = await logReview({
     bookingReference,

@@ -109,7 +109,7 @@ export default defineNuxtConfig({
         },
         {
           property: "og:image:alt",
-          content: `${siteName} — VIP Airport Concierge & Meet & Greet`,
+          content: `${siteName} - VIP Airport Concierge & Meet & Greet`,
         },
         {
           name: "twitter:card",
@@ -130,7 +130,7 @@ export default defineNuxtConfig({
         },
         {
           name: "twitter:image:alt",
-          content: `${siteName} — VIP Airport Concierge & Meet & Greet`,
+          content: `${siteName} - VIP Airport Concierge & Meet & Greet`,
         },
         ...(isStaging
           ? [
@@ -192,7 +192,7 @@ export default defineNuxtConfig({
         },
         {
           rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;1,400&display=swap",
+          href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap",
         },
       ],
     },
@@ -202,6 +202,20 @@ export default defineNuxtConfig({
     "/api/**": {
       headers: {
         "X-Robots-Tag": "noindex, nofollow",
+      },
+    },
+
+    "/uaaukadmin": {
+      headers: {
+        "X-Robots-Tag": "noindex, nofollow",
+        "Cache-Control": "no-store, no-cache, must-revalidate, private",
+      },
+    },
+
+    "/uaaukadmin/**": {
+      headers: {
+        "X-Robots-Tag": "noindex, nofollow",
+        "Cache-Control": "no-store, no-cache, must-revalidate, private",
       },
     },
 
@@ -245,6 +259,13 @@ export default defineNuxtConfig({
     bookingApiEnabled: process.env.BOOKING_API_ENABLED === "true",
 
     bookingApiToken: process.env.BOOKING_API_TOKEN || "",
+
+    admin: {
+      username: process.env.ADMIN_USERNAME || "",
+      passwordHash: process.env.ADMIN_PASSWORD_HASH || "",
+      password: process.env.ADMIN_PASSWORD || "",
+      sessionSecret: process.env.ADMIN_SESSION_SECRET || "",
+    },
 
     smtp: {
       enabled:

@@ -35,7 +35,7 @@ const activePackages = computed(() =>
 
 function cleanServiceName(title: string): string {
   if (!title) return ''
-  return title.replace(/^[A-Z]{2,4}\s*[-–—:]?\s*/i, '').trim()
+  return title.replace(/^[A-Z]{2,4}\s*[-–-:]?\s*/i, '').trim()
 }
 
 const availableExtras = computed(() =>
@@ -182,7 +182,7 @@ function continueBooking() {
 }
 
 .uaa-service-heading-title {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: 16px;
   font-weight: 600;
   margin: 3px 0 2px;

@@ -113,7 +113,7 @@ async function copyRef(refCode: string, toastId: string) {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   color: #f7f3ed;
-  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -182,7 +182,7 @@ async function copyRef(refCode: string, toastId: string) {
 
 .toast-title {
   margin: 0;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Playfair Display', serif;
   font-size: 19px;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -222,7 +222,8 @@ async function copyRef(refCode: string, toastId: string) {
   color: #ffffff;
   font-weight: 800;
   letter-spacing: 0.08em;
-  font-family: monospace;
+  font-family: 'Montserrat', sans-serif;
+  font-variant-numeric: tabular-nums;
   font-size: 13px;
   background: rgba(210, 180, 138, 0.18);
   padding: 2px 7px;

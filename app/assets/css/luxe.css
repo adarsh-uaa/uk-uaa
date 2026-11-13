@@ -1,4 +1,4 @@
-/* Optimized UK Airport Assistance CSS — all original rules and breakpoints retained. */
+/* Optimized UK Airport Assistance CSS - all original rules and breakpoints retained. */
 :root {
   --ink: #182a40;
 
@@ -38,7 +38,7 @@ body {
 
   color: #272722;
 
-  font-family: "DM Sans", sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .luxe-page {
@@ -50,7 +50,7 @@ body {
 .luxe-page h1,
 .luxe-page h2,
 .luxe-page h3 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
 
   font-weight: 400;
 
@@ -856,7 +856,7 @@ body {
 .luxe-airport-caption .luxe-airport-name {
   color: #f4eadf;
 
-  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Montserrat", sans-serif;
 
   font-size: clamp(14px, 1.4vw, 19px);
 
@@ -874,7 +874,7 @@ body {
 .luxe-airport-caption .luxe-airport-code {
   color: white;
 
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
 
   font-size: clamp(55px, 7.5vw, 115px);
 
@@ -960,7 +960,7 @@ body {
 }
 
 .luxe-airport-row strong {
-  font-family: "Playfair Display";
+  font-family: "Playfair Display", serif;
 
   font-weight: 400;
 
@@ -1877,7 +1877,7 @@ body {
 }
 
 .form-section-title h2 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
 
   font-size: clamp(27px, 3vw, 38px);
 
@@ -2082,7 +2082,7 @@ body {
 }
 
 .interior-hero h1 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
 
   font-size: clamp(48px, 7vw, 96px);
 
@@ -2300,7 +2300,7 @@ body {
 
   flex-direction: column;
 
-  font-family: Georgia, serif;
+  font-family: "Playfair Display", serif;
 
   font-size: 36px;
 
@@ -2311,7 +2311,7 @@ body {
 
 .footer-wordmark small {
   font:
-    9px "DM Sans",
+    9px "Montserrat",
     sans-serif;
 
   letter-spacing: 0.22em;
@@ -2358,7 +2358,7 @@ body {
 }
 
 .wordmark>span {
-  font-family: Georgia, serif;
+  font-family: "Playfair Display", serif;
 
   letter-spacing: 0.08em;
 
@@ -2566,7 +2566,7 @@ body {
 }
 
 .uaa-footer-logo>span {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
 
   font-size: 49px;
 
@@ -2624,7 +2624,7 @@ body {
 }
 
 .uaa-footer-column h3 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
 
   font-size: 24px;
 
@@ -2756,7 +2756,7 @@ body {
 }
 
 .uaa-quick-header h3 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
 
   font-size: clamp(28px, 3vw, 40px);
 
@@ -3314,7 +3314,7 @@ body {
 
 /* ==========================================================
 
-   UK AIRPORT ASSISTANCE — TRANSPARENT LOGO + BRAND ACCENTS
+   UK AIRPORT ASSISTANCE - TRANSPARENT LOGO + BRAND ACCENTS
 
    Designed for the transparent PNG in public/images/.
 
@@ -3425,7 +3425,7 @@ body {
 
 /* ================================================================
 
-   PREMIUM NAVY + MUTED RED — CONTROLLED BRAND REFINEMENT
+   PREMIUM NAVY + MUTED RED - CONTROLLED BRAND REFINEMENT
 
    Original luxury cream/gold backgrounds and page layouts retained.
 
@@ -3447,7 +3447,7 @@ body {
   color: var(--brand-navy);
 }
 
-/* Muted burgundy accents — original warm gold is intentionally kept
+/* Muted burgundy accents - original warm gold is intentionally kept
 
    on other ornamental elements to preserve the premium feel. */
 
@@ -3568,7 +3568,7 @@ body {
 
 /* =========================================
 
-   LOGO — CLEAN TRANSPARENT (NO BACKGROUND)
+   LOGO - CLEAN TRANSPARENT (NO BACKGROUND)
 
    ========================================= */
 
@@ -3871,7 +3871,7 @@ span.country-chevron {
 }
 
 .terminal-service-details h3 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: clamp(25px, 3vw, 36px);
   line-height: 1.2;
   font-weight: 400;
@@ -3958,7 +3958,7 @@ span.country-chevron {
 }
 
 .terminal-packages-heading h3 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: clamp(27px, 3vw, 36px);
   font-weight: 400;
   color: #182a40;
@@ -4014,7 +4014,7 @@ span.country-chevron {
 }
 
 .terminal-package-card strong {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: 23px;
   font-weight: 400;
   line-height: 1.25;
@@ -4063,7 +4063,7 @@ span.country-chevron {
 }
 
 /* ==========================================
-   AIRPORT JOURNEY — COMPACT SPLIT LAYOUT
+   AIRPORT JOURNEY - COMPACT SPLIT LAYOUT
    ========================================== */
 
 .airport-journey-compact {
@@ -4088,7 +4088,7 @@ span.country-chevron {
 
 .airport-journey-compact .journey-panel-summary>h3 {
   margin: 12px 0 20px;
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: clamp(27px, 3vw, 36px);
   font-weight: 400;
   color: #182a40;
@@ -4102,7 +4102,7 @@ span.country-chevron {
 
 .journey-selected-service h4 {
   margin: 12px 0 18px;
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: clamp(22px, 2.4vw, 29px);
   font-weight: 400;
   line-height: 1.25;
@@ -4206,7 +4206,7 @@ span.country-chevron {
 }
 
 /* ===========================================
-   BOOKING FORM — REFERENCE LAYOUT
+   BOOKING FORM - REFERENCE LAYOUT
    =========================================== */
 
 .reference-booking {
@@ -4451,7 +4451,7 @@ span.country-chevron {
 }
 
 .about-card h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Playfair Display', serif;
   font-size: 24px;
   font-weight: 500;
   color: #111e2f;
@@ -4487,7 +4487,7 @@ span.country-chevron {
 
 .about-list li::before,
 .about-features-list li::before {
-  content: '—';
+  content: '-';
   position: absolute;
   left: 0;
   top: 0;
@@ -4553,7 +4553,7 @@ span.country-chevron {
 }
 
 .privacy-company {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Playfair Display', serif;
   font-size: 20px;
   font-weight: 600;
   color: #182a40;
@@ -4566,7 +4566,7 @@ span.country-chevron {
 }
 
 .privacy-section h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Playfair Display', serif;
   font-size: 20px;
   font-weight: 600;
   color: #182a40;

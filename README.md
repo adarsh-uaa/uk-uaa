@@ -1,4 +1,4 @@
-# UK Airport Assistance — Nuxt 4 Luxury Website
+# UK Airport Assistance - Nuxt 4 Luxury Website
 
 Based on your uploaded luxury Nuxt project. Includes a cinematic video hero, first-visit flight loader, scroll reveals, responsive editorial pages, dynamic airport-dependent service selections, a homepage short form that passes airport/service/date/adults to the full booking page, and an API proxy with the exact request keys supplied.
 
@@ -12,7 +12,7 @@ npm run dev
 
 Add your licensed video at `public/video/hero.mp4`. A poster image is shown if unavailable. Existing decorative images are illustrative and must be licensed/verified before launch.
 
-## Booking integration — REQUIRED BEFORE LAUNCH
+## Booking integration - REQUIRED BEFORE LAUNCH
 
 1. Open `app/data/booking.ts`. Replace **blank** airport `id` and optional add-on `id` values with VERIFIED upstream IDs. Map journey type IDs and class IDs to the real API. Do not guess IDs from the sample payload.
 2. Set `BOOKING_API_URL=https://abc.api.com/abc-test` (replace when real), `BOOKING_API_ENABLED=true`, and server-side `BOOKING_API_TOKEN` if required.

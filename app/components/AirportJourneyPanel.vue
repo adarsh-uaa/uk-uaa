@@ -144,7 +144,7 @@ function formatPrice(
 
 function cleanServiceName(title: string): string {
     if (!title) return ''
-    return title.replace(/^[A-Z]{2,4}\s*[-–—:]?\s*/i, '').trim()
+    return title.replace(/^[A-Z]{2,4}\s*[-–-:]?\s*/i, '').trim()
 }
 
 // Carry selections to booking form
@@ -294,7 +294,7 @@ function proceed() {
 
 .journey-services-provided-heading > h3 {
   margin: 4px 0 4px;
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: clamp(22px, 2.4vw, 26px);
   font-weight: 500;
   color: #182a40;

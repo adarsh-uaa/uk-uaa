@@ -329,7 +329,7 @@ const popularGateways = [
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Playfair Display', serif;
   font-size: clamp(4.5rem, 9.5vw, 7.2rem);
   font-weight: 400;
   line-height: 0.9;
@@ -401,7 +401,7 @@ const popularGateways = [
 
 /* Heading & Lead */
 .main-heading {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Playfair Display', serif;
   font-size: clamp(1.8rem, 3.2vw, 2.5rem);
   font-weight: 400;
   line-height: 1.15;

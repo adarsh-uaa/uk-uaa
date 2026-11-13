@@ -516,7 +516,7 @@
   }
 
   .confirmation-hero h1 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Playfair Display', serif;
     font-size: clamp(36px, 5.5vw, 64px);
     color: #f4eadf;
     margin: 16px 0 18px;
@@ -565,7 +565,8 @@
   }
 
   .ref-value {
-    font-family: monospace;
+    font-family: 'Montserrat', sans-serif;
+    font-variant-numeric: tabular-nums;
     font-size: 17px;
     font-weight: 700;
     color: #ffffff;
@@ -751,7 +752,7 @@
   }
 
   .confirmation-thankyou-card h2 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Playfair Display', serif;
     font-size: clamp(24px, 3.2vw, 32px);
     color: #182a40;
     margin: 0 0 10px;
@@ -933,7 +934,7 @@
   }
 
   .next-steps-header h2 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Playfair Display', serif;
     font-size: clamp(24px, 3.5vw, 34px);
     color: #182a40;
     margin: 8px 0 10px;

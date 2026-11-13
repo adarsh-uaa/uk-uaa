@@ -203,7 +203,7 @@ useHead(() => ({
 
 .vip-airports-header h2 {
   margin: 8px 0 12px;
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: clamp(28px, 3.5vw, 42px);
   font-weight: 400;
   color: #182a40;
@@ -311,7 +311,7 @@ useHead(() => ({
 }
 
 .vip-card-title-row h3 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: 19px;
   font-weight: 600;
   color: #182a40;

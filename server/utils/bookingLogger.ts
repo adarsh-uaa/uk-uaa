@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import fsSync from 'node:fs'
 import path from 'node:path'
+import { sanitizeCsvCell } from './security'
 
 export interface BookingLogInput {
   status: 'SUCCESS' | 'FAILED'
@@ -66,7 +67,7 @@ export interface BookingLogEntry {
 }
 
 const LOGS_DIR = path.resolve(process.cwd(), 'logs')
-export const RETENTION_MONTHS = 3
+export const RETENTION_MONTHS = 5
 
 /**
  * Returns year-month string like "2026-11"
@@ -78,8 +79,8 @@ export function getYearMonth(date: Date = new Date()): string {
 }
 
 /**
- * Returns the set of year-month keys that must be retained (default: last 3 months).
- * e.g., in November 2026: {'2026-11', '2026-10', '2026-09'}
+ * Returns the set of year-month keys that must be retained (default: last 5 months).
+ * e.g., in November 2026: {'2026-11', '2026-10', '2026-09', '2026-08', '2026-07'}
  */
 export function getRetainedMonths(count: number = RETENTION_MONTHS, refDate: Date = new Date()): Set<string> {
   const retained = new Set<string>()
@@ -103,7 +104,7 @@ function getLogPathsForMonth(yearMonth: string) {
 }
 
 /**
- * Automatically cleans up log files older than the retention period (max last 3 months).
+ * Automatically cleans up log files older than the retention period (max last 5 months).
  * Runs once per day in the background.
  */
 let lastCleanupDay = ''
@@ -195,12 +196,8 @@ function generateBookingId(): string {
 }
 
 function escapeCsvValue(val: any): string {
-  if (val === undefined || val === null) return ''
-  const str = typeof val === 'object' ? JSON.stringify(val) : String(val)
-  if (/[",\r\n]/.test(str)) {
-    return `"${str.replace(/"/g, '""')}"`
-  }
-  return str
+  const raw = val && typeof val === 'object' ? JSON.stringify(val) : val
+  return sanitizeCsvCell(raw)
 }
 
 // Mutex / sequential queue for atomic file appends
@@ -375,7 +372,7 @@ export async function logBooking(input: BookingLogInput): Promise<BookingLogEntr
     '================================================================================\n'
   ].join('\n')
 
-  // Trigger background cleanup for logs older than 3 months
+  // Trigger background cleanup for logs older than 5 months
   cleanOldLogs().catch((err) => {
     console.error('[BookingLogger] Background retention cleanup error:', err)
   })

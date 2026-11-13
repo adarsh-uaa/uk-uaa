@@ -125,7 +125,7 @@ const currentPackages = computed<ServiceDetails[]>(() => {
 
 function cleanServiceName(title: string): string {
   if (!title) return ''
-  return title.replace(/^[A-Z]{3,4}\s*[-–—:]?\s*/i, '').trim()
+  return title.replace(/^[A-Z]{3,4}\s*[-–-:]?\s*/i, '').trim()
 }
 
 function scrollToSection(id: string) {
@@ -730,7 +730,7 @@ const airportFaqs = computed(() => [
 }
 
 .section-title-wrap h2 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: clamp(26px, 3.2vw, 38px);
   font-weight: 400;
   color: #182a40;
@@ -874,7 +874,7 @@ const airportFaqs = computed(() => [
 }
 
 .pkg-card-title {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: 19px;
   font-weight: 600;
   color: #182a40;

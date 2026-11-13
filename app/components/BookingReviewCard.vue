@@ -281,7 +281,7 @@ async function submitReview() {
 }
 
 .review-card-title {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Playfair Display', serif;
   font-size: clamp(22px, 2.8vw, 28px);
   color: #182a40;
   margin: 0 0 8px;
@@ -393,7 +393,8 @@ async function submitReview() {
 .char-count {
   font-size: 11px;
   color: #8c9aa8;
-  font-family: monospace;
+  font-family: 'Montserrat', sans-serif;
+  font-variant-numeric: tabular-nums;
 }
 
 .comment-textarea {
@@ -526,7 +527,7 @@ async function submitReview() {
 }
 
 .submitted-title {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Playfair Display', serif;
   font-size: 22px;
   font-weight: 500;
   color: #182a40;

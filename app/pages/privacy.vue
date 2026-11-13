@@ -43,7 +43,7 @@ useHead(() => ({
         <div class="container privacy-content-wrap">
           <div class="editorial-body privacy-body">
         <p class="privacy-company">
-          UK Airports — Universal Travel Assistance LLC
+          UK Airports - Universal Travel Assistance LLC
         </p>
 
         <p class="body-copy">
@@ -56,12 +56,12 @@ useHead(() => ({
           <h2>1. INFORMATION WE COLLECT</h2>
           <p>We may collect the following categories of information when you use our website or book a service:</p>
           <ul class="privacy-list">
-            <li>Contact details — name, email address, phone number, and WhatsApp number</li>
-            <li>Travel details — flight number, arrival/departure date and time, airport, and terminal</li>
-            <li>Passenger details — names of all passengers included in the booking, and any special assistance requirements (e.g., wheelchair)</li>
-            <li>Payment information — processed securely through our third-party payment providers (see Section 4); we do not store full card details on our servers</li>
-            <li>Communication records — emails, WhatsApp messages, and call records related to your booking</li>
-            <li>Website usage data — IP address, browser type, and pages visited, collected via cookies (see Section 6)</li>
+            <li>Contact details - name, email address, phone number, and WhatsApp number</li>
+            <li>Travel details - flight number, arrival/departure date and time, airport, and terminal</li>
+            <li>Passenger details - names of all passengers included in the booking, and any special assistance requirements (e.g., wheelchair)</li>
+            <li>Payment information - processed securely through our third-party payment providers (see Section 4); we do not store full card details on our servers</li>
+            <li>Communication records - emails, WhatsApp messages, and call records related to your booking</li>
+            <li>Website usage data - IP address, browser type, and pages visited, collected via cookies (see Section 6)</li>
           </ul>
         </section>
 
@@ -83,9 +83,9 @@ useHead(() => ({
           <h2>3. SHARING YOUR INFORMATION</h2>
           <p>We share your information only where necessary to deliver the service you have booked, including with:</p>
           <ul class="privacy-list">
-            <li>Service partners: — to book and coordinate the service, including passenger name, flight details, and contact number</li>
-            <li>Payment Processors — to process your payment securely</li>
-            <li>Regulatory or government authorities — where required by law</li>
+            <li>Service partners: - to book and coordinate the service, including passenger name, flight details, and contact number</li>
+            <li>Payment Processors - to process your payment securely</li>
+            <li>Regulatory or government authorities - where required by law</li>
           </ul>
           <p>We do not sell your personal information to third parties for marketing purposes.</p>
         </section>

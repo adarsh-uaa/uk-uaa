@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { sanitizeCsvCell } from './security'
 
 export interface ReviewLogInput {
   bookingReference: string
@@ -60,12 +61,7 @@ function generateReviewId(): string {
 }
 
 function escapeCsvValue(val: unknown): string {
-  if (val === null || val === undefined) return '""'
-  const str = String(val).replace(/\r\n/g, ' ').replace(/[\r\n]/g, ' ')
-  if (/[",\n]/.test(str)) {
-    return `"${str.replace(/"/g, '""')}"`
-  }
-  return `"${str}"`
+  return sanitizeCsvCell(val)
 }
 
 function getReviewPathsForMonth(yearMonth: string) {

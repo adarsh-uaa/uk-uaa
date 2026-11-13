@@ -9,7 +9,8 @@
     "preview": "nuxt preview",
     "typecheck": "tsc --noEmit",
     "start": "node .output/server/index.mjs",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "admin:password": "node scripts/admin-hash.mjs"
   },
   "dependencies": {
     "lucide-vue-next": "^0.468.0",

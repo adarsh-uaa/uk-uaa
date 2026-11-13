@@ -1,5 +1,6 @@
-import { createError, readBody, getRequestIP, getRequestHeader } from 'h3'
+import { createError, getRequestIP, getRequestHeader } from 'h3'
 import nodemailer from 'nodemailer'
+import { assertSafeJsonBody, logSecurityEvent } from '../utils/security'
 
 function escapeHtml(text: string): string {
   return text
@@ -15,20 +16,11 @@ export default defineEventHandler(async (event) => {
   const clientIp = getRequestIP(event, { xForwardedFor: true }) || 'unknown'
   const userAgent = getRequestHeader(event, 'user-agent') || 'unknown'
 
-  let body: Record<string, any> = {}
-
-  try {
-    body = await readBody(event)
-  } catch (err: any) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Invalid request body'
-    })
-  }
+  const body = await assertSafeJsonBody<Record<string, any>>(event)
 
   // Honeypot check for spam bots
   if (body.website_check || body.honeypot) {
-    // Silently succeed so bots think it was sent
+    await logSecurityEvent(event, 'BOT_HONEYPOT_CONTACT', 'Spam bot trapped in honeypot', true)
     return { success: true, message: 'Enquiry received.' }
   }
 
@@ -160,10 +152,10 @@ export default defineEventHandler(async (event) => {
 <head>
   <meta charset="utf-8">
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7f3ed; color: #20251f; margin: 0; padding: 24px; }
+    body { font-family: 'Montserrat', sans-serif; background-color: #f7f3ed; color: #20251f; margin: 0; padding: 24px; }
     .card { max-width: 620px; margin: 0 auto; background: #ffffff; border-radius: 6px; border: 1px solid #dcd5ca; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.06); }
     .header { background: #182a40; color: #f7f3ed; padding: 26px 30px; }
-    .header h1 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: 0.05em; color: #e8d7be; }
+    .header h1 { margin: 0; font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; letter-spacing: 0.05em; color: #e8d7be; }
     .header p { margin: 6px 0 0; font-size: 13px; opacity: 0.85; }
     .content { padding: 30px; }
     .info-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 14px; }

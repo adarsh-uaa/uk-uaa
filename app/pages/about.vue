@@ -6,7 +6,7 @@ useSeoMeta({
   title: computed(() => `About Us | ${siteName.value} VIP Concierge Services`),
   description: computed(() => `Learn about ${siteName.value}: dedicated to delivering effortless, discreet VIP airport concierge, meet & greet and private travel services across UK airports.`),
   keywords: computed(() => `about ${siteName.value}, VIP travel concierge UK, luxury airport assistance team, Heathrow meet and greet company, bespoke travel concierge`),
-  ogTitle: computed(() => `About Us | ${siteName.value} — Considered Travel`),
+  ogTitle: computed(() => `About Us | ${siteName.value} - Considered Travel`),
   ogDescription: computed(() => `Thoughtful, discreet airport concierge services across major UK gateways with ${siteName.value}.`),
   ogType: 'website',
   ogUrl: canonicalUrl,

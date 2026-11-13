@@ -368,7 +368,7 @@ async function submitReview() {
 
 .modal-title {
   margin: 0 0 8px;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Playfair Display', serif;
   font-size: 23px;
   font-weight: 600;
   color: #182a40;
@@ -398,7 +398,8 @@ async function submitReview() {
 
 .ref-pill strong {
   color: #182a40;
-  font-family: monospace;
+  font-family: 'Montserrat', sans-serif;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ------------------------------------------ */
@@ -499,7 +500,8 @@ async function submitReview() {
 .char-counter {
   font-size: 11px;
   color: #8c9aa8;
-  font-family: monospace;
+  font-family: 'Montserrat', sans-serif;
+  font-variant-numeric: tabular-nums;
 }
 
 .comment-textarea {
@@ -643,7 +645,7 @@ async function submitReview() {
 
 .success-title {
   margin: 0 0 10px;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Playfair Display', serif;
   font-size: 22px;
   font-weight: 600;
   color: #182a40;
