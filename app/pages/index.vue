@@ -13,16 +13,16 @@ import { airports, services } from '~/data/site'
 
 const { siteName, siteUrl } = useSiteMeta()
 
-const pageTitle = computed(() => `${siteName.value} | VIP Meet & Greet Across the UK`)
+const pageTitle = computed(() => `Heathrow Meet and Greet, Fast Track & VIP UK Airport Assistance | ${siteName.value}`)
 const pageDescription = computed(() =>
-    `Personalised VIP meet and greet, arrival, departure and transit airport assistance across UK airports with ${siteName.value}. An effortless airport experience, thoughtfully arranged.`
+    `Premier London Heathrow meet and greet, priority fast track immigration & security, baggage assistance and VIP airport concierge across Heathrow (LHR), Gatwick, Manchester, Stansted and all UK airports.`
 )
 
 useSeoMeta({
     title: pageTitle,
     description: pageDescription,
-    keywords: computed(() => `${siteName.value}, UK airport assistance, meet and greet UK, VIP airport concierge, London Heathrow assistance, Gatwick meet and greet, fast track UK airport, airport lounge access UK, VIP terminal assistance`),
-    ogTitle: computed(() => `${siteName.value} - Travel, Considered.`),
+    keywords: computed(() => `Heathrow meet and greet, London Heathrow meet and greet, fast track Heathrow, fastrack, fast track UK airport, fastrack Heathrow, Heathrow airport assistance, Gatwick meet and greet, Manchester airport VIP assistance, Stansted fast track, Birmingham airport meet and greet, Edinburgh airport assistance, VIP airport concierge, airport meet and greet UK, Heathrow VIP terminal, priority fast track UK, VIP luggage assistance, tarmac transfer Heathrow, ${siteName.value}`),
+    ogTitle: computed(() => `Heathrow Meet and Greet & VIP Airport Assistance | ${siteName.value}`),
     ogDescription: pageDescription,
     ogType: 'website',
     ogUrl: siteUrl,
@@ -112,6 +112,42 @@ useHead(() => ({
                         areaServed: 'GB'
                     },
                     {
+                        '@type': ['TravelAgency', 'ProfessionalService'],
+                        '@id': `${siteUrl.value}/#service`,
+                        name: `${siteName.value} - Heathrow Meet and Greet & VIP Airport Assistance`,
+                        alternateName: [
+                            'Heathrow Meet and Greet',
+                            'London Heathrow Meet and Greet',
+                            'Fast Track Heathrow',
+                            'Fastrack UK Airport Assistance',
+                            'Gatwick Meet and Greet',
+                            'Manchester Airport VIP Concierge'
+                        ],
+                        url: siteUrl.value,
+                        priceRange: '££££',
+                        areaServed: [
+                            'London Heathrow Airport (LHR)',
+                            'London Gatwick Airport (LGW)',
+                            'Manchester Airport (MAN)',
+                            'London Stansted Airport (STN)',
+                            'Birmingham Airport (BHX)',
+                            'Edinburgh Airport (EDI)',
+                            'Glasgow Airport (GLA)',
+                            'Bristol Airport (BRS)',
+                            'London City Airport (LCY)',
+                            'London Luton Airport (LTN)'
+                        ],
+                        serviceType: [
+                            'Heathrow Meet and Greet',
+                            'Fast Track Security Clearance',
+                            'Fastrack Immigration Clearance',
+                            'VIP Airport Concierge',
+                            'Luggage Porterage & Dispatch',
+                            'Tarmac Transfer & Chauffeur Services',
+                            'VIP Terminal Access'
+                        ]
+                    },
+                    {
                         '@type': 'FAQPage',
                         '@id': `${siteUrl.value}/#faq`,
                         mainEntity: faqs.map(item => ({
@@ -154,6 +190,7 @@ function changeAirport(n: number) {
                     </div>
 
                     <h1 class="luxe-hero-heading">
+                        <span class="sr-only">Heathrow Meet and Greet, Fast Track &amp; UK Airport VIP Assistance — </span>
                         <span class="line-reveal hero-title-light">VIP Airport Assistance.</span>
                         <span class="line-reveal line-reveal-delay-1">
                             <em class="hero-title-gold">Without the wait.</em>

@@ -92,7 +92,7 @@
     description: computed(() =>
       isUnknown.value
         ? `Booking reference #${referenceId.value} could not be located. Please contact ${siteName.value} concierge support.`
-        : `Booking request received. Enquiry reference #${referenceId.value}. Our VIP concierge desk will review your details and send confirmation promptly.`
+        : `Booking request received. Enquiry reference #${referenceId.value}. Our VIP concierge desk will review your details and send an email shortly.`
     ),
     robots: 'noindex, nofollow',
     ogTitle: computed(() => `Booking Confirmation #${referenceId.value} | ${siteName.value}`),
@@ -216,7 +216,7 @@
                 We could not locate a confirmed booking matching reference #{{ referenceId }} in our logs. Please verify your reference or contact our concierge desk for details.
               </template>
               <template v-else>
-                Your booking request has been received by our concierge service. Our VIP concierge desk will review your details and send confirmation promptly.
+                Your booking request has been received by our concierge service. Our VIP concierge desk will review your details and send an email shortly.
               </template>
             </p>
 

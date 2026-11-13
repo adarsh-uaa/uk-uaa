@@ -6,6 +6,7 @@ const props = defineProps<{
     keywords?: string
     eyebrow?: string
     heading: string
+    srHeading?: string
     intro: string
     image?: string
 }>()
@@ -78,6 +79,7 @@ useHead(() => ({
             </span>
 
             <h1 class="hero-title-light">
+                <span v-if="srHeading" class="sr-only">{{ srHeading }} — </span>
                 {{ heading }}
             </h1>
 

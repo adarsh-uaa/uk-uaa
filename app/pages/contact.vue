@@ -131,10 +131,12 @@ async function handleSubmit() {
 
     <main>
       <SeoPage
-        :title="`Contact Us | ${siteName} VIP Concierge`"
-        :description="`Contact ${siteName} for questions about VIP meet and greet, airport service availability and booking enquiries.`"
+        :title="`Contact Heathrow Meet and Greet & VIP Concierge | ${siteName}`"
+        :description="`Contact ${siteName} for enquiries about London Heathrow meet and greet, priority fast track security, luggage porterage and UK airport VIP assistance.`"
         path="/contact"
+        keywords="contact Heathrow meet and greet, Heathrow concierge enquiry, fast track contact, fastrack, airport assistance UK contact, Gatwick meet and greet phone, Manchester airport assistance support"
         heading="Let's connect."
+        sr-heading="Contact Heathrow Meet and Greet & 24/7 UK Airport Concierge"
         intro="Every extraordinary journey begins with a conversation."
       />
 

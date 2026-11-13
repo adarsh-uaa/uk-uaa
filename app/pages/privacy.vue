@@ -31,6 +31,7 @@ useHead(() => ({
         <div class="container">
           <span class="luxe-kicker">SITE INFORMATION</span>
           <h1 class="hero-title-light">
+            <span class="sr-only">UK Airport Assistance &amp; Heathrow Meet and Greet Services — </span>
             Privacy <em>Policy.</em>
           </h1>
           <p>

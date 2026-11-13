@@ -28,17 +28,23 @@ export default defineEventHandler((event) => {
     { path: "/privacy", changefreq: "yearly", priority: "0.3" },
   ];
 
-  const airportEntries = airports.map((a) => ({
-    path: `/airports/${a.slug}`,
-    changefreq: "weekly",
-    priority: "0.8",
-  }));
+  const airportEntries = airports.map((a) => {
+    const isHeathrow = a.slug === "heathrow";
+    return {
+      path: `/airports/${a.slug}`,
+      changefreq: isHeathrow ? "daily" : "weekly",
+      priority: isHeathrow ? "1.0" : "0.85",
+    };
+  });
 
-  const serviceEntries = services.map((s) => ({
-    path: `/services/${s.slug}`,
-    changefreq: "weekly",
-    priority: "0.8",
-  }));
+  const serviceEntries = services.map((s) => {
+    const isPriorityService = s.slug === "meet-and-greet" || s.slug === "fast-track";
+    return {
+      path: `/services/${s.slug}`,
+      changefreq: isPriorityService ? "daily" : "weekly",
+      priority: isPriorityService ? "0.95" : "0.80",
+    };
+  });
 
   const allEntries = [...staticEntries, ...airportEntries, ...serviceEntries];
 

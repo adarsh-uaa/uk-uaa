@@ -3,11 +3,11 @@ const { siteName, siteUrl } = useSiteMeta()
 const canonicalUrl = computed(() => `${siteUrl.value}/about`)
 
 useSeoMeta({
-  title: computed(() => `About Us | ${siteName.value} VIP Concierge Services`),
-  description: computed(() => `Learn about ${siteName.value}: dedicated to delivering effortless, discreet VIP airport concierge, meet & greet and private travel services across UK airports.`),
-  keywords: computed(() => `about ${siteName.value}, VIP travel concierge UK, luxury airport assistance team, Heathrow meet and greet company, bespoke travel concierge`),
-  ogTitle: computed(() => `About Us | ${siteName.value} - Considered Travel`),
-  ogDescription: computed(() => `Thoughtful, discreet airport concierge services across major UK gateways with ${siteName.value}.`),
+  title: computed(() => `About Us — Heathrow Meet and Greet & VIP Concierge | ${siteName.value}`),
+  description: computed(() => `Learn about ${siteName.value}: delivering premier Heathrow meet and greet, priority fast track security and bespoke VIP airport concierge across London Heathrow and all UK airports.`),
+  keywords: computed(() => `about ${siteName.value}, Heathrow meet and greet, fast track, fastrack, luxury airport assistance team, Heathrow meet and greet company, bespoke travel concierge, Gatwick airport assistance, Manchester meet and greet`),
+  ogTitle: computed(() => `About Us | Heathrow Meet and Greet & VIP Travel | ${siteName.value}`),
+  ogDescription: computed(() => `Thoughtful, discreet Heathrow meet and greet and airport concierge services across major UK gateways with ${siteName.value}.`),
   ogType: 'website',
   ogUrl: canonicalUrl,
   twitterCard: 'summary_large_image'
@@ -28,6 +28,7 @@ useHead(() => ({
         :description="`Discover the approach behind ${siteName}: thoughtful, discreet airport concierge enquiries across the United Kingdom.`"
         path="/about"
         heading="A personal approach."
+        sr-heading="Heathrow Meet and Greet, Fast Track & Dedicated UK Airport Concierge"
         intro="Travel should feel calm, considered and comfortably your own."
       />
 

@@ -59,11 +59,11 @@ const { siteName, siteUrl } = useSiteMeta()
 const canonicalUrl = computed(() => `${siteUrl.value}/faq`)
 
 useSeoMeta({
-  title: computed(() => `Frequently Asked Questions | ${siteName.value} VIP Concierge`),
-  description: computed(() => `Answers to the most common questions about meet and greet, VIP terminal and accessibility services at UK airports.`),
-  keywords: computed(() => `airport assistance FAQ, ${siteName.value}, VIP meet and greet questions, airport fast track FAQ, UK airport concierge questions, Heathrow VIP FAQ, flight delay meet and greet`),
-  ogTitle: computed(() => `Frequently Asked Questions | ${siteName.value}`),
-  ogDescription: computed(() => `Answers to the most common questions about meet and greet, VIP terminal and accessibility services at UK airports.`),
+  title: computed(() => `Heathrow Meet and Greet & Fast Track FAQs | ${siteName.value}`),
+  description: computed(() => `Answers to common questions about London Heathrow meet and greet, priority fast track security, luggage assistance and VIP concierge across UK airports.`),
+  keywords: computed(() => `Heathrow meet and greet FAQ, fast track Heathrow, fastrack, airport assistance FAQ, ${siteName.value}, VIP meet and greet questions, airport fast track FAQ, UK airport concierge questions, Heathrow VIP FAQ, Gatwick meet and greet questions, Manchester airport assistance FAQ`),
+  ogTitle: computed(() => `Heathrow Meet and Greet & Fast Track FAQs | ${siteName.value}`),
+  ogDescription: computed(() => `Answers to common questions about London Heathrow meet and greet, priority fast track security, luggage assistance and VIP concierge across UK airports.`),
   ogType: 'website',
   ogUrl: canonicalUrl,
   twitterCard: 'summary_large_image'
@@ -100,6 +100,7 @@ useHead(() => ({
         <div class="container">
           <span class="luxe-kicker">BEFORE YOU TRAVEL</span>
           <h1 class="hero-title-light">
+            <span class="sr-only">Heathrow Meet and Greet, Fast Track &amp; UK Airport Concierge FAQs — </span>
             Questions, answered.  
           </h1>
           <p>Answers to the most common questions about meet and greet, VIP terminal and accessibility services at UK airports.</p>

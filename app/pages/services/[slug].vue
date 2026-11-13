@@ -22,7 +22,7 @@ const canonicalUrl = computed(() =>
 )
 
 const pageTitle = computed(() =>
-    `${service.name} at UK Airports | ${siteName.value}`
+    `${service.name} — Heathrow Meet and Greet & Fast Track UK | ${siteName.value}`
 )
 
 const pageDescription = computed(() =>
@@ -30,7 +30,7 @@ const pageDescription = computed(() =>
 )
 
 const keywords = computed(() =>
-    `${service.name}, ${service.name} UK, ${service.name} airport assistance, VIP airport service UK, meet and greet, ${siteName.value}`
+    `${service.name}, ${service.name} Heathrow, Heathrow meet and greet, fast track, fastrack, fast track Heathrow, ${service.name} UK airports, Gatwick meet and greet, Manchester airport VIP assistance, VIP airport service UK, ${siteName.value}`
 )
 
 useSeoMeta({
@@ -107,6 +107,7 @@ useHead(() => ({
             </p>
 
             <h1>
+                <span class="sr-only">{{ service.name }}, Fast Track, Fastrack &amp; Heathrow Meet and Greet Across UK Airports — </span>
                 {{ service.name }},
                 <em>reconsidered.</em>
             </h1>

@@ -47,13 +47,16 @@ const offer = selectAirport(airport.slug)
 const { siteName, siteUrl } = useSiteMeta()
 const canonicalUrl = computed(() => `${siteUrl.value}/airports/${airport.slug}`)
 
-const pageTitle = computed(() => `${airport.name} (${airport.code}) ${airport.is_vip ? 'VIP Airport Assistance & Pricing' : 'Airport Meet & Greet Assistance & Pricing'} | ${siteName.value}`)
-const pageDescription = computed(() => `Explore confirmed ${airport.is_vip ? 'VIP meet and greet, private suite and priority fast track' : 'meet and greet, priority fast track and luggage assistance'} services at ${airport.name} (${airport.code}) with transparent pricing. Compare arrival, dispatch and transit packages.`)
+const pageTitle = computed(() => (airport.slug === 'heathrow' || airport.slug === 'london-heathrow')
+  ? `Heathrow Meet and Greet & Fast Track Assistance (LHR) | ${siteName.value}`
+  : `${airport.name} Meet and Greet, Fast Track & VIP Assistance (${airport.code}) | ${siteName.value}`
+)
+const pageDescription = computed(() => `Book confirmed ${airport.name} (${airport.code}) meet and greet, priority fast track immigration & security, luggage porter and tarmac transfers. Compare VIP arrival, departure and transit services at ${airport.name}.`)
 
 useSeoMeta({
   title: pageTitle,
   description: pageDescription,
-  keywords: computed(() => `${airport.name} airport assistance, ${airport.code} ${airport.is_vip ? 'VIP meet and greet' : 'meet and greet'}, ${airport.name} fast track cost, ${airport.name} arrival concierge pricing, ${airport.code} departure assistance, ${siteName.value}`),
+  keywords: computed(() => `${airport.name} meet and greet, ${airport.code} meet and greet, Heathrow meet and greet, fast track ${airport.name}, fastrack ${airport.name}, ${airport.name} fast track cost, ${airport.code} VIP airport assistance, London airport meet and greet, arrival concierge ${airport.code}, departure assistance ${airport.name}, ${siteName.value}`),
   ogTitle: pageTitle,
   ogDescription: pageDescription,
   ogType: 'website',
@@ -71,25 +74,53 @@ useHead(() => ({
       type: 'application/ld+json',
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
+        '@graph': [
           {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Home',
-            item: siteUrl.value
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: siteUrl.value
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Airports',
+                item: `${siteUrl.value}/airports`
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: airport.name,
+                item: canonicalUrl.value
+              }
+            ]
           },
           {
-            '@type': 'ListItem',
-            position: 2,
-            name: 'Airports',
-            item: `${siteUrl.value}/airports`
-          },
-          {
-            '@type': 'ListItem',
-            position: 3,
-            name: airport.name,
-            item: canonicalUrl.value
+            '@type': 'Service',
+            name: `${airport.name} Meet and Greet & Fast Track Assistance`,
+            alternateName: [
+              `${airport.name} Airport Assistance`,
+              `${airport.code} Meet and Greet`,
+              `Fast Track ${airport.name}`,
+              `Fastrack ${airport.name}`,
+              'Heathrow Meet and Greet'
+            ],
+            serviceType: 'Airport Meet and Greet',
+            provider: {
+              '@type': 'Organization',
+              name: siteName.value,
+              url: siteUrl.value
+            },
+            areaServed: {
+              '@type': 'Airport',
+              name: airport.name,
+              iataCode: airport.code
+            },
+            description: pageDescription.value,
+            url: canonicalUrl.value
           }
         ]
       })
@@ -176,6 +207,7 @@ const airportFaqs = computed(() => [
           </div>
 
           <h1>
+            <span class="sr-only">{{ airport.name }} Meet and Greet, Fast Track &amp; Heathrow VIP Airport Services ({{ airport.code }}) — </span>
             <span class="hero-title-light">{{ airport.name }} </span>
             <em> assistance.</em>
           </h1>

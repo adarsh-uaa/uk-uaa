@@ -4,10 +4,10 @@ const { siteName, siteUrl } = useSiteMeta()
 const canonicalUrl = computed(() => `${siteUrl.value}/book`)
 
 useSeoMeta({
-  title: computed(() => `Book VIP Airport Assistance | ${siteName.value}`),
-  description: computed(() => `Book premium VIP airport assistance across all 98 UK airports with ${siteName.value}. Reserve arrival, departure or transit concierge services, fast track and meet & greet in minutes.`),
-  keywords: computed(() => `book airport assistance UK, ${siteName.value}, reserve VIP meet and greet, airport fast track booking, Heathrow concierge booking, Gatwick meet and assist reservation, airport luggage assistance`),
-  ogTitle: computed(() => `Book VIP Airport Assistance | ${siteName.value}`),
+  title: computed(() => `Book Heathrow Meet and Greet & Fast Track Assistance | ${siteName.value}`),
+  description: computed(() => `Book premium Heathrow meet and greet, priority fast track and VIP concierge across all 98 UK airports with ${siteName.value}. Reserve arrival, departure or transit assistance in minutes.`),
+  keywords: computed(() => `book Heathrow meet and greet, Heathrow meet and greet reservation, book airport assistance UK, ${siteName.value}, reserve VIP meet and greet, airport fast track booking, fastrack Heathrow, Gatwick meet and assist reservation, airport luggage assistance`),
+  ogTitle: computed(() => `Book Heathrow Meet and Greet & VIP Assistance | ${siteName.value}`),
   ogDescription: computed(() => `Reserve bespoke VIP airport assistance across the UK with ${siteName.value}. Tailored arrival, departure and connection concierge services.`),
   ogType: 'website',
   ogUrl: canonicalUrl,
@@ -67,7 +67,10 @@ watch(
       <section class="interior-hero">
         <div class="container">
           <span class="luxe-kicker">EXCLUSIVE UK AIRPORT ASSISTANCE</span>
-          <h1 class="hero-title-light">Arrange your journey. </h1>
+          <h1 class="hero-title-light">
+            <span class="sr-only">Book Heathrow Meet and Greet, Fast Track &amp; UK Airport Concierge — </span>
+            Arrange your journey. 
+          </h1>
           <p>Tell us a little about your travel plans. We’ll help coordinate the finer details.</p>
         </div>
       </section>

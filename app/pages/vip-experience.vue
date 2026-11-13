@@ -34,10 +34,10 @@ function selectVipAirport(slug: string) {
 }
 
 useSeoMeta({
-  title: computed(() => `VIP Airport Experience UK | ${siteName.value}`),
+  title: computed(() => `VIP Heathrow Meet and Greet & Luxury Airport Concierge | ${siteName.value}`),
   description: computed(() => `Experience the epitome of luxury travel across the UK with ${siteName.value}. Dedicated VIP greeters, priority fast track, luxury airport lounges and seamless arrivals, departures and connections.`),
-  keywords: computed(() => `VIP airport experience, luxury airport concierge, ${siteName.value}, private terminal London, executive airport meet and greet, fast track security UK, luxury airport lounge UK`),
-  ogTitle: computed(() => `VIP Airport Experience UK | ${siteName.value}`),
+  keywords: computed(() => `Heathrow meet and greet, VIP airport experience, luxury airport concierge, fast track Heathrow, fastrack, London Heathrow VIP terminal, private suite London, executive airport meet and greet, fast track security UK, luxury airport lounge UK, Gatwick VIP, Manchester VIP concierge, ${siteName.value}`),
+  ogTitle: computed(() => `VIP Heathrow Meet and Greet & Airport Concierge | ${siteName.value}`),
   ogDescription: 'More than a service. A considered way to travel, shaped around your comfort, privacy and time.',
   ogType: 'website',
   ogUrl: canonicalUrl,
@@ -59,6 +59,7 @@ useHead(() => ({
         description="Explore a personalised VIP airport experience with assistance, private lounge arrangements and seamless airport journeys where available."
         path="/vip-experience"
         heading="The VIP experience."
+        sr-heading="VIP Heathrow Meet and Greet, Fast Track & Luxury Airport Concierge"
         intro="More than a service. A considered way to travel, shaped around your comfort, privacy and time."
       />
 

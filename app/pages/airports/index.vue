@@ -5,10 +5,10 @@ const { siteName, siteUrl } = useSiteMeta()
 const canonicalUrl = computed(() => `${siteUrl.value}/airports`)
 
 useSeoMeta({
-  title: computed(() => `UK Airports Directory | ${siteName.value}`),
+  title: computed(() => `Heathrow Meet and Greet, Fast Track & UK Airports Directory | ${siteName.value}`),
   description: computed(() => `Explore and book VIP meet and greet services across all 98 UK airports with ${siteName.value}, including London Heathrow (LHR), Gatwick (LGW), Manchester (MAN), Edinburgh (EDI) and Birmingham (BHX).`),
-  keywords: computed(() => `UK airports list, ${siteName.value}, London Heathrow VIP, Gatwick meet and greet, Manchester airport assistance, Edinburgh airport concierge, Birmingham airport fast track, UK airport services`),
-  ogTitle: computed(() => `UK Airports Directory | ${siteName.value}`),
+  keywords: computed(() => `Heathrow meet and greet, London Heathrow VIP, fast track, fastrack, Gatwick meet and greet, Manchester airport assistance, Edinburgh airport concierge, Birmingham airport fast track, Stansted fast track, UK airports directory, meet and greet all UK airports, ${siteName.value}`),
+  ogTitle: computed(() => `Heathrow Meet and Greet & UK Airports Directory | ${siteName.value}`),
   ogDescription: 'Personalised arrival, departure and transit assistance options across major UK gateways and regional airfields.',
   ogType: 'website',
   ogUrl: canonicalUrl,
@@ -29,6 +29,7 @@ useHead(() => ({
         <div class="container">
           <span class="luxe-kicker">OUR AIRPORTS</span>
           <h1>
+            <span class="sr-only">Heathrow Meet and Greet, Fast Track &amp; All 98 UK Airports Assistance Directory — </span>
             <span class="hero-title-light">Choose your gateway.</span>
           </h1>
           <p>
