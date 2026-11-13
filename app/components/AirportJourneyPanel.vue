@@ -144,7 +144,7 @@ function formatPrice(
 
 function cleanServiceName(title: string): string {
     if (!title) return ''
-    return title.replace(/^[A-Z]{2,4}\s*[-–-:]?\s*/i, '').trim()
+    return title.replace(/^[A-Z]{2,4}\s*[\-–:]?\s*/i, '').trim()
 }
 
 // Carry selections to booking form

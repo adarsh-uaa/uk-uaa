@@ -47,7 +47,7 @@ const searchInputRef = ref<HTMLInputElement | null>(null);
 
 function cleanServiceName(title: string): string {
     if (!title) return "";
-    return title.replace(/^[A-Z]{2,4}\s*[-–-:]?\s*/i, "").trim();
+    return title.replace(/^[A-Z]{2,4}\s*[\-–:]?\s*/i, "").trim();
 }
 
 function toggleDropdown() {

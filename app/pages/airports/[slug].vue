@@ -125,7 +125,7 @@ const currentPackages = computed<ServiceDetails[]>(() => {
 
 function cleanServiceName(title: string): string {
   if (!title) return ''
-  return title.replace(/^[A-Z]{3,4}\s*[-–-:]?\s*/i, '').trim()
+  return title.replace(/^[A-Z]{3,4}\s*[\-–:]?\s*/i, '').trim()
 }
 
 function scrollToSection(id: string) {
